@@ -13,7 +13,7 @@ public class DateOfVisit {
 
     private void validate(int date) {
         if (isInvalidDate(date)) {
-            throw new IllegalArgumentException("유효하지 않은 날짜입니다.");
+            throw new IllegalArgumentException("1일부터 31일 사이의 날짜만 입력 가능합니다.");
         }
     }
 
