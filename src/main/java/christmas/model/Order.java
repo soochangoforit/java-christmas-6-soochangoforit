@@ -17,6 +17,10 @@ public class Order {
         return new Order(menu, menuQuantity);
     }
 
+    public int calculatePrice() {
+        return menu.calculatePrice(quantity);
+    }
+
     public Menu getMenu() {
         return menu;
     }

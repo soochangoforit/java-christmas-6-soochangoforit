@@ -48,4 +48,12 @@ public class OrderGroup {
     public static OrderGroup of(List<Order> orders) {
         return new OrderGroup(orders);
     }
+
+    public TotalPrice calculateTotalPrice() {
+        int totalPrice = orders.stream()
+                .mapToInt(Order::calculatePrice)
+                .sum();
+
+        return TotalPrice.from(totalPrice);
+    }
 }

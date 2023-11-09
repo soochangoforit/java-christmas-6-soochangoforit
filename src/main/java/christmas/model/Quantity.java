@@ -24,6 +24,10 @@ public final class Quantity {
         return new Quantity(count);
     }
 
+    public int calculatePrice(int menuPrice) {
+        return count * menuPrice;
+    }
+
     public int getCount() {
         return count;
     }

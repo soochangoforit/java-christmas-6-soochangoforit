@@ -8,6 +8,7 @@ import christmas.dto.request.OrderInfoDto;
 import christmas.model.DateOfVisit;
 import christmas.model.OrderGroup;
 import christmas.model.OrderService;
+import christmas.model.TotalPrice;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
@@ -26,6 +27,7 @@ public class ChristmasEventController {
         outputView.printWelcomeMessage();
         DateOfVisit dateOfVisit = retryOnException(this::createDateOfVisit);
         OrderGroup orderGroup = retryOnException(this::createOrderGroup);
+        TotalPrice totalPrice = orderGroup.calculateTotalPrice();
 
     }
 

@@ -36,6 +36,10 @@ public enum Menu {
                 .orElseThrow(() -> new IllegalArgumentException("메뉴에 해당하는 이름이 없습니다."));
     }
 
+    public int calculatePrice(Quantity quantity) {
+        return quantity.calculatePrice(price);
+    }
+
     public boolean isBeverage() {
         return category == Category.BEVERAGE;
     }
