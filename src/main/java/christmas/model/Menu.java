@@ -43,4 +43,8 @@ public enum Menu {
     public boolean isBeverage() {
         return category == Category.BEVERAGE;
     }
+
+    public String getMenuName() {
+        return menuName;
+    }
 }

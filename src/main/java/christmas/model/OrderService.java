@@ -5,12 +5,12 @@ import christmas.dto.request.OrderInfoDto;
 
 public class OrderService {
 
-    public OrderGroup createOrderGroup(List<OrderInfoDto> orderInfos) {
+    public OrderGroup createOrderGroup(DateOfVisit dateOfVisit, List<OrderInfoDto> orderInfos) {
         List<Order> orders = orderInfos.stream()
                 .map(this::createOrder)
                 .toList();
 
-        return OrderGroup.of(orders);
+        return OrderGroup.from(orders);
     }
 
     private Order createOrder(OrderInfoDto orderInfoDto) {

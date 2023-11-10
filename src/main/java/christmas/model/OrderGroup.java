@@ -45,15 +45,19 @@ public class OrderGroup {
                 .allMatch(Menu::isBeverage);
     }
 
-    public static OrderGroup of(List<Order> orders) {
+    public static OrderGroup from(List<Order> orders) {
         return new OrderGroup(orders);
     }
 
-    public TotalPrice calculateTotalPrice() {
+    private int sumTotalPrice() {
         int totalPrice = orders.stream()
                 .mapToInt(Order::calculatePrice)
                 .sum();
 
-        return TotalPrice.from(totalPrice);
+        return totalPrice;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 }
