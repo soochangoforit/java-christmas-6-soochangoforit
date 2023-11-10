@@ -6,9 +6,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import christmas.dto.request.DateOfVisitDto;
 import christmas.dto.request.OrderInfoDto;
+import christmas.dto.response.AppliedDiscountsDto;
 import christmas.dto.response.DateOfVisitInfoDto;
 import christmas.dto.response.OrderResultDto;
+import christmas.model.AppliedDiscounts;
 import christmas.model.DateOfVisit;
+import christmas.model.DiscountPolicyManager;
 import christmas.model.OrderGroup;
 import christmas.model.OrderResult;
 import christmas.model.OrderService;
@@ -20,11 +23,14 @@ public class ChristmasEventController {
     private final InputView inputView;
     private final OutputView outputView;
     private final OrderService orderService;
+    private final DiscountPolicyManager discountPolicyManager;
 
-    public ChristmasEventController(InputView inputView, OutputView outputView, OrderService orderService) {
+    public ChristmasEventController(InputView inputView, OutputView outputView, OrderService orderService,
+                                    DiscountPolicyManager discountPolicyManager) {
         this.inputView = inputView;
         this.outputView = outputView;
         this.orderService = orderService;
+        this.discountPolicyManager = discountPolicyManager;
     }
 
     public void run() {
@@ -32,10 +38,18 @@ public class ChristmasEventController {
         DateOfVisit dateOfVisit = retryOnException(this::createDateOfVisit);
         OrderGroup orderGroup = retryOnException(this::createOrderGroup);
         OrderResult orderResult = OrderResult.of(orderGroup, dateOfVisit);
+        AppliedDiscounts appliedDiscounts = discountPolicyManager.applyDiscountPolicies(orderResult);
         printDiscountPreviewMessage(dateOfVisit);
         printCustomerOrders(orderResult);
         printTotalPriceBeforeDiscount(orderResult);
         printPromotionMessage(orderResult);
+        printAppliedDiscounts(appliedDiscounts);
+
+    }
+
+    private void printAppliedDiscounts(AppliedDiscounts appliedDiscounts) {
+        AppliedDiscountsDto appliedDiscountsDto = AppliedDiscountsDto.from(appliedDiscounts);
+        outputView.printAppliedDiscounts(appliedDiscountsDto);
     }
 
     private void printPromotionMessage(OrderResult orderResult) {

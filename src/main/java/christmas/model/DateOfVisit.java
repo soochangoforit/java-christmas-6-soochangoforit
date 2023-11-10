@@ -33,12 +33,16 @@ public class DateOfVisit {
         return new DateOfVisit(dayOfMonth);
     }
 
-    public boolean isOrderedIn(EnumSet<DayOfWeek> weekdays) {
-        return weekdays.contains(date.getDayOfWeek());
+    public int calculateDaysFrom(LocalDate startDate) {
+        return (int) startDate.datesUntil(date).count();
     }
 
-    public boolean isOrderedIn(Set<Integer> specialDays) {
-        return specialDays.contains(date.getDayOfMonth());
+    public boolean isOrderedIn(EnumSet<DayOfWeek> dayOfWeek) {
+        return dayOfWeek.contains(date.getDayOfWeek());
+    }
+
+    public boolean isOrderedIn(Set<Integer> days) {
+        return days.contains(date.getDayOfMonth());
     }
 
     public boolean isBetween(LocalDate startDate, LocalDate endDate) {

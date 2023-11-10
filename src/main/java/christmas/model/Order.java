@@ -21,6 +21,10 @@ public class Order {
         return menu.calculatePrice(quantity);
     }
 
+    public boolean belongsTo(Category category) {
+        return menu.belongsTo(category);
+    }
+
     public Menu getMenu() {
         return menu;
     }

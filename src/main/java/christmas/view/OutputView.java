@@ -1,9 +1,12 @@
 package christmas.view;
 
+import java.util.Map;
 import java.util.Optional;
+import christmas.dto.response.AppliedDiscountsDto;
 import christmas.dto.response.DateOfVisitInfoDto;
 import christmas.dto.response.OrderInfoDto;
 import christmas.dto.response.OrderResultDto;
+import christmas.model.DiscountType;
 import christmas.model.Menu;
 import christmas.model.PromotionItem;
 
@@ -40,6 +43,25 @@ public class OutputView {
         System.out.println(String.format("%s %d개", menuName, quantity));
     }
 
+    public void printAppliedDiscounts(AppliedDiscountsDto appliedDiscountsDto) {
+        Map<DiscountType, Integer> appliedDiscounts = appliedDiscountsDto.getAppliedDiscounts();
+
+        System.out.println("<혜택 내역>");
+        if (appliedDiscounts.isEmpty()) {
+            System.out.println("없음");
+            System.out.println();
+            return;
+        }
+        appliedDiscounts.forEach(this::printAppliedDiscount);
+    }
+
+    private void printAppliedDiscount(DiscountType discountType, Integer integer) {
+        String discountName = discountType.getName();
+        int discountAmount = integer;
+
+        System.out.println(String.format("%s: -%,d원", discountName, discountAmount));
+    }
+
     public void printPromotionMessage(Optional<PromotionItem> matchingPromotion) {
         System.out.println("<증정 메뉴>");
         if (matchingPromotion.isPresent()) {
@@ -50,9 +72,11 @@ public class OutputView {
             int promotionItemQuantity = promotionItem.getQuantity();
 
             System.out.println(String.format("%s %d개", promotionItemName, promotionItemQuantity));
+            System.out.println();
             return;
         }
         System.out.println("없음");
+        System.out.println();
     }
 
     public void printTotalPriceBeforeDiscount(int totalPrice) {

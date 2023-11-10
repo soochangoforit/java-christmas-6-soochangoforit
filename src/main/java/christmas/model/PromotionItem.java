@@ -22,8 +22,14 @@ public enum PromotionItem {
                 .findFirst();
     }
 
-    private boolean isEligible(int totalPrice) {
+    public boolean isEligible(int totalPrice) {
         return totalPrice >= minimumAmountForEligibility;
+    }
+
+    public int calculateDiscountedAmount() {
+        int price = item.getPrice();
+
+        return price * quantity;
     }
 
     public int getQuantity() {

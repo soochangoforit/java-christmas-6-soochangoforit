@@ -49,10 +49,21 @@ public class OrderGroup {
         return new OrderGroup(orders);
     }
 
+    public boolean isQualifiedForPromotion(PromotionItem promotionItem) {
+        int totalPrice = calculateTotalPrice();
+        return promotionItem.isEligible(totalPrice);
+    }
+
     public int calculateTotalPrice() {
         return orders.stream()
                 .mapToInt(Order::calculatePrice)
                 .sum();
+    }
+
+    public int countOrdersIn(Category category) {
+        return (int) orders.stream()
+                .filter(order -> order.belongsTo(category))
+                .count();
     }
 
     public List<Order> getOrders() {
