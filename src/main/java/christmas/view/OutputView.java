@@ -1,8 +1,11 @@
 package christmas.view;
 
+import java.util.Optional;
 import christmas.dto.response.DateOfVisitInfoDto;
 import christmas.dto.response.OrderInfoDto;
 import christmas.dto.response.OrderResultDto;
+import christmas.model.Menu;
+import christmas.model.PromotionItem;
 
 public class OutputView {
     private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
@@ -35,6 +38,21 @@ public class OutputView {
         int quantity = orderInfoDto.getQuantity();
 
         System.out.println(String.format("%s %d개", menuName, quantity));
+    }
+
+    public void printPromotionMessage(Optional<PromotionItem> matchingPromotion) {
+        System.out.println("<증정 메뉴>");
+        if (matchingPromotion.isPresent()) {
+            PromotionItem promotionItem = matchingPromotion.get();
+            Menu item = promotionItem.getItem();
+
+            String promotionItemName = item.getName();
+            int promotionItemQuantity = promotionItem.getQuantity();
+
+            System.out.println(String.format("%s %d개", promotionItemName, promotionItemQuantity));
+            return;
+        }
+        System.out.println("없음");
     }
 
     public void printTotalPriceBeforeDiscount(int totalPrice) {

@@ -15,7 +15,7 @@ public class OrderInfoDto {
 
     public static OrderInfoDto from(Order order) {
         Menu menu = order.getMenu();
-        String menuName = menu.getMenuName();
+        String menuName = menu.getName();
         Quantity quantity = order.getQuantity();
         int menuQuantity = quantity.getCount();
 

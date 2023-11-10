@@ -19,19 +19,19 @@ public enum Menu {
     RED_WINE("레드와인", 60_000, Category.BEVERAGE),
     CHAMPAGNE("샴페인", 25_000, Category.BEVERAGE);
 
-    private final String menuName;
+    private final String name;
     private final int price;
     private final Category category;
 
-    Menu(String menuName, int price, Category category) {
-        this.menuName = menuName;
+    Menu(String name, int price, Category category) {
+        this.name = name;
         this.price = price;
         this.category = category;
     }
 
     public static Menu from(String menuName) {
         return Stream.of(values())
-                .filter(menu -> menu.menuName.equals(menuName))
+                .filter(menu -> menu.name.equals(menuName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("메뉴에 해당하는 이름이 없습니다."));
     }
@@ -44,7 +44,7 @@ public enum Menu {
         return category == Category.BEVERAGE;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public String getName() {
+        return name;
     }
 }

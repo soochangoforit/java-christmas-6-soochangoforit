@@ -5,7 +5,7 @@ import christmas.dto.request.OrderInfoDto;
 
 public class OrderService {
 
-    public OrderGroup createOrderGroup(DateOfVisit dateOfVisit, List<OrderInfoDto> orderInfos) {
+    public OrderGroup createOrderGroup(List<OrderInfoDto> orderInfos) {
         List<Order> orders = orderInfos.stream()
                 .map(this::createOrder)
                 .toList();

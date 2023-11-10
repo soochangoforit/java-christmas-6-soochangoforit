@@ -1,6 +1,7 @@
 package christmas.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import christmas.dto.request.DateOfVisitDto;
@@ -11,6 +12,7 @@ import christmas.model.DateOfVisit;
 import christmas.model.OrderGroup;
 import christmas.model.OrderResult;
 import christmas.model.OrderService;
+import christmas.model.PromotionItem;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
@@ -33,6 +35,13 @@ public class ChristmasEventController {
         printDiscountPreviewMessage(dateOfVisit);
         printCustomerOrders(orderResult);
         printTotalPriceBeforeDiscount(orderResult);
+        printPromotionMessage(orderResult);
+    }
+
+    private void printPromotionMessage(OrderResult orderResult) {
+        int totalPrice = orderResult.calculateTotalPrice();
+        Optional<PromotionItem> matchingPromotion = PromotionItem.findMatchingPromotion(totalPrice);
+        outputView.printPromotionMessage(matchingPromotion);
     }
 
     private int printTotalPriceBeforeDiscount(OrderResult orderResult) {
