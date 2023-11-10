@@ -13,6 +13,10 @@ public class OrderResult {
         return new OrderResult(orderGroup, dateOfVisit);
     }
 
+    public int calculateTotalPrice() {
+        return orderGroup.calculateTotalPrice();
+    }
+
     public OrderGroup getOrderGroup() {
         return orderGroup;
     }

@@ -28,10 +28,17 @@ public class ChristmasEventController {
     public void run() {
         outputView.printWelcomeMessage();
         DateOfVisit dateOfVisit = retryOnException(this::createDateOfVisit);
-        OrderGroup orderGroup = retryOnException(this::createOrderGroup, dateOfVisit);
+        OrderGroup orderGroup = retryOnException(this::createOrderGroup);
         OrderResult orderResult = OrderResult.of(orderGroup, dateOfVisit);
         printDiscountPreviewMessage(dateOfVisit);
         printCustomerOrders(orderResult);
+        printTotalPriceBeforeDiscount(orderResult);
+    }
+
+    private int printTotalPriceBeforeDiscount(OrderResult orderResult) {
+        int totalPrice = orderResult.calculateTotalPrice();
+        outputView.printTotalPriceBeforeDiscount(totalPrice);
+        return totalPrice;
     }
 
     private void printDiscountPreviewMessage(DateOfVisit dateOfVisit) {
@@ -44,9 +51,9 @@ public class ChristmasEventController {
         outputView.printOrderResult(orderResultDto);
     }
 
-    private OrderGroup createOrderGroup(DateOfVisit dateOfVisit) {
+    private OrderGroup createOrderGroup() {
         List<OrderInfoDto> orderInfoDtos = retryOnException(this::readCustomerOrders);
-        return orderService.createOrderGroup(dateOfVisit, orderInfoDtos);
+        return orderService.createOrderGroup(orderInfoDtos);
     }
 
     private List<OrderInfoDto> readCustomerOrders() {

@@ -49,12 +49,10 @@ public class OrderGroup {
         return new OrderGroup(orders);
     }
 
-    private int sumTotalPrice() {
-        int totalPrice = orders.stream()
+    public int calculateTotalPrice() {
+        return orders.stream()
                 .mapToInt(Order::calculatePrice)
                 .sum();
-
-        return totalPrice;
     }
 
     public List<Order> getOrders() {

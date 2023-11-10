@@ -27,6 +27,7 @@ public class OutputView {
     public void printOrderResult(OrderResultDto orderResultDto) {
         System.out.println("<주문 메뉴>");
         orderResultDto.getMenuInfoDtos().forEach(this::printOrderInfo);
+        System.out.println();
     }
 
     private void printOrderInfo(OrderInfoDto orderInfoDto) {
@@ -35,4 +36,11 @@ public class OutputView {
 
         System.out.println(String.format("%s %d개", menuName, quantity));
     }
+
+    public void printTotalPriceBeforeDiscount(int totalPrice) {
+        System.out.println("<할인 전 총주문 금액>");
+        System.out.println(String.format("%,d원", totalPrice));
+        System.out.println();
+    }
+
 }
