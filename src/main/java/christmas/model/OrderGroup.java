@@ -60,10 +60,14 @@ public class OrderGroup {
                 .sum();
     }
 
-    public int countOrdersIn(Category category) {
-        return (int) orders.stream()
+    public int totalMenuQuantityOfCategory(Category category) {
+        int totalMenuQuantity = orders.stream()
                 .filter(order -> order.belongsTo(category))
-                .count();
+                .map(Order::getQuantity)
+                .mapToInt(Quantity::getCount)
+                .sum();
+
+        return totalMenuQuantity;
     }
 
     public List<Order> getOrders() {

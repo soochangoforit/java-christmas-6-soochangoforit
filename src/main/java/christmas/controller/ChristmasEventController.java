@@ -44,7 +44,13 @@ public class ChristmasEventController {
         printTotalPriceBeforeDiscount(orderResult);
         printPromotionMessage(orderResult);
         printAppliedDiscounts(appliedDiscounts);
+        printTotalDiscountedAmount(appliedDiscounts);
 
+    }
+
+    private void printTotalDiscountedAmount(AppliedDiscounts appliedDiscounts) {
+        int totalDiscountedAmount = appliedDiscounts.calculateTotalDiscountedAmount();
+        outputView.printTotalDiscountedAmount(totalDiscountedAmount);
     }
 
     private void printAppliedDiscounts(AppliedDiscounts appliedDiscounts) {

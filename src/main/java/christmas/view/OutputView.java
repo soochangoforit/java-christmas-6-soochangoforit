@@ -43,6 +43,12 @@ public class OutputView {
         System.out.println(String.format("%s %d개", menuName, quantity));
     }
 
+    public void printTotalDiscountedAmount(int totalDiscountedAmount) {
+        System.out.println("<총혜택 금액>");
+        System.out.println(String.format("-%,d원", totalDiscountedAmount));
+        System.out.println();
+    }
+
     public void printAppliedDiscounts(AppliedDiscountsDto appliedDiscountsDto) {
         Map<DiscountType, Integer> appliedDiscounts = appliedDiscountsDto.getAppliedDiscounts();
 
@@ -53,6 +59,7 @@ public class OutputView {
             return;
         }
         appliedDiscounts.forEach(this::printAppliedDiscount);
+        System.out.println();
     }
 
     private void printAppliedDiscount(DiscountType discountType, Integer integer) {

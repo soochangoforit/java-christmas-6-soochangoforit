@@ -18,6 +18,12 @@ public class AppliedDiscounts {
         return new AppliedDiscounts(new EnumMap<>(DiscountType.class));
     }
 
+    public int calculateTotalDiscountedAmount() {
+        return discountResults.values().stream()
+                .mapToInt(DiscountedAmount::getAmount)
+                .sum();
+    }
+
     public Map<DiscountType, DiscountedAmount> getDiscountResults() {
         return new EnumMap<>(discountResults);
     }

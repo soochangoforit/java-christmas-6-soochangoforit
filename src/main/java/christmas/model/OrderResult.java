@@ -34,8 +34,8 @@ public class OrderResult {
         return dateOfVisit.isOrderedIn(dayOfWeek);
     }
 
-    public int countOrdersIn(Category category) {
-        return orderGroup.countOrdersIn(category);
+    public int totalMenuQuantityOfCategory(Category category) {
+        return orderGroup.totalMenuQuantityOfCategory(category);
     }
 
     public boolean isOrderedIn(Set<Integer> days) {
