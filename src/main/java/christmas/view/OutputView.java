@@ -7,6 +7,7 @@ import christmas.dto.response.DateOfVisitInfoDto;
 import christmas.dto.response.OrderInfoDto;
 import christmas.dto.response.OrderResultDto;
 import christmas.model.DiscountType;
+import christmas.model.EventBadge;
 import christmas.model.Menu;
 import christmas.model.PromotionItem;
 
@@ -43,6 +44,11 @@ public class OutputView {
         System.out.println(String.format("%s %d개", menuName, quantity));
     }
 
+    public void printEventBadge(EventBadge eventBadge) {
+        System.out.println("<12월 이벤트 배지>");
+        System.out.println(eventBadge.getName());
+    }
+
     public void printTotalPriceAfterDiscount(int totalPrice, int totalDiscountedAmount) {
         System.out.println("<할인 후 예상 결제 금액>");
         System.out.println(String.format("%,d원", totalPrice - totalDiscountedAmount));
@@ -51,7 +57,11 @@ public class OutputView {
 
     public void printTotalDiscountedAmount(int totalDiscountedAmount) {
         System.out.println("<총혜택 금액>");
-        System.out.println(String.format("-%,d원", totalDiscountedAmount));
+        String discountAmountMessage = String.format("-%,d원", totalDiscountedAmount);
+        if (totalDiscountedAmount == 0) {
+            discountAmountMessage = "0원";
+        }
+        System.out.println(discountAmountMessage);
         System.out.println();
     }
 

@@ -12,6 +12,7 @@ import christmas.dto.response.OrderResultDto;
 import christmas.model.AppliedDiscounts;
 import christmas.model.DateOfVisit;
 import christmas.model.DiscountPolicyManager;
+import christmas.model.EventBadge;
 import christmas.model.OrderGroup;
 import christmas.model.OrderResult;
 import christmas.model.OrderService;
@@ -50,6 +51,8 @@ public class ChristmasEventController {
         printAppliedDiscounts(appliedDiscounts);
         outputView.printTotalDiscountedAmount(totalDiscountedAmount);
         outputView.printTotalPriceAfterDiscount(totalPrice, totalDiscountedAmount);
+        EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmount);
+        outputView.printEventBadge(eventBadge);
 
     }
 
