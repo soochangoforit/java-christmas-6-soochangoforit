@@ -41,16 +41,16 @@ public class ChristmasEventController {
         AppliedDiscounts appliedDiscounts = discountPolicyManager.applyDiscountPolicies(orderResult);
         printDiscountPreviewMessage(dateOfVisit);
         printCustomerOrders(orderResult);
-        printTotalPriceBeforeDiscount(orderResult);
+
+        int totalPrice = orderResult.calculateTotalPrice();
+        int totalDiscountedAmount = appliedDiscounts.calculateTotalDiscountedAmount();
+
+        outputView.printTotalPriceBeforeDiscount(totalPrice);
         printPromotionMessage(orderResult);
         printAppliedDiscounts(appliedDiscounts);
-        printTotalDiscountedAmount(appliedDiscounts);
-
-    }
-
-    private void printTotalDiscountedAmount(AppliedDiscounts appliedDiscounts) {
-        int totalDiscountedAmount = appliedDiscounts.calculateTotalDiscountedAmount();
         outputView.printTotalDiscountedAmount(totalDiscountedAmount);
+        outputView.printTotalPriceAfterDiscount(totalPrice, totalDiscountedAmount);
+
     }
 
     private void printAppliedDiscounts(AppliedDiscounts appliedDiscounts) {
@@ -64,11 +64,11 @@ public class ChristmasEventController {
         outputView.printPromotionMessage(matchingPromotion);
     }
 
-    private int printTotalPriceBeforeDiscount(OrderResult orderResult) {
-        int totalPrice = orderResult.calculateTotalPrice();
-        outputView.printTotalPriceBeforeDiscount(totalPrice);
-        return totalPrice;
-    }
+//    private int printTotalPriceBeforeDiscount(OrderResult orderResult) {
+//        int totalPrice = orderResult.calculateTotalPrice();
+//        outputView.printTotalPriceBeforeDiscount(totalPrice);
+//        return totalPrice;
+//    }
 
     private void printDiscountPreviewMessage(DateOfVisit dateOfVisit) {
         DateOfVisitInfoDto dateOfVisitInfoDto = DateOfVisitInfoDto.from(dateOfVisit);

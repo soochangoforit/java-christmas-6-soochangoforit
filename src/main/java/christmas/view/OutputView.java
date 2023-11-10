@@ -43,6 +43,12 @@ public class OutputView {
         System.out.println(String.format("%s %d개", menuName, quantity));
     }
 
+    public void printTotalPriceAfterDiscount(int totalPrice, int totalDiscountedAmount) {
+        System.out.println("<할인 후 예상 결제 금액>");
+        System.out.println(String.format("%,d원", totalPrice - totalDiscountedAmount));
+        System.out.println();
+    }
+
     public void printTotalDiscountedAmount(int totalDiscountedAmount) {
         System.out.println("<총혜택 금액>");
         System.out.println(String.format("-%,d원", totalDiscountedAmount));
