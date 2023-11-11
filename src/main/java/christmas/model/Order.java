@@ -1,18 +1,20 @@
 package christmas.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Order {
+public final class Order {
     private static final String ORDERS_ARE_EMPTY = "주문 목록은 비어있을 수 없습니다.";
     private static final String DUPLICATED_MENU = "유효하지 않은 주문입니다.";
-    private static final String TOTAL_MENU_QUANTITY_IS_ABOVE_MAX_COUNT = "총 주문 가능한 메뉴 수량은 20개 이하입니다.";
+    private static final String OVER_MAX_TOTAL_ORDER_ITEM_QUANTITY = "총 주문 가능한 메뉴 수량은 %d개 이하입니다.";
     private static final String ONLY_BEVERAGE = "음료만 주문할 수 없습니다.";
-    private static final int TOTAL_MENU_QUANTITY_MAX_COUNT = 20;
+    private static final int MAX_TOTAL_ORDER_ITEM_QUANTITY = 20;
+
     private final List<OrderItem> orderItems;
 
-    private Order(List<OrderItem> orderItems) {
+    Order(List<OrderItem> orderItems) {
         validate(orderItems);
-        this.orderItems = orderItems;
+        this.orderItems = new ArrayList<>(orderItems);
     }
 
     private void validate(List<OrderItem> orderItems) {
@@ -22,7 +24,7 @@ public class Order {
         validateHasOnlyBeverage(orderItems);
     }
 
-    private static void validateEmpty(List<OrderItem> orderItems) {
+    private void validateEmpty(List<OrderItem> orderItems) {
         if (orderItems.isEmpty()) {
             throw new IllegalArgumentException(ORDERS_ARE_EMPTY);
         }
@@ -30,6 +32,7 @@ public class Order {
 
     private void validateDuplicateMenu(List<OrderItem> orderItems) {
         if (hasDuplicateMenu(orderItems)) {
+            // TODO : Exception Message 수정 필요
             throw new IllegalArgumentException("중복된 메뉴 이름이 있습니다.\n" + DUPLICATED_MENU);
         }
     }
@@ -46,16 +49,17 @@ public class Order {
     }
 
     private void validateTotalQuantity(List<OrderItem> orderItems) {
-        if (hasInvalidQuantity(orderItems)) {
-            throw new IllegalArgumentException(TOTAL_MENU_QUANTITY_IS_ABOVE_MAX_COUNT);
+        if (hasInvalidTotalOrderItemQuantity(orderItems)) {
+            String exceptionMessage = String.format(OVER_MAX_TOTAL_ORDER_ITEM_QUANTITY, MAX_TOTAL_ORDER_ITEM_QUANTITY);
+            throw new IllegalArgumentException(exceptionMessage);
         }
     }
 
-    private boolean hasInvalidQuantity(List<OrderItem> orderItems) {
-        return calculateTotalQuantity(orderItems) > TOTAL_MENU_QUANTITY_MAX_COUNT;
+    private boolean hasInvalidTotalOrderItemQuantity(List<OrderItem> orderItems) {
+        return sumTotalOrderItemQuantity(orderItems) > MAX_TOTAL_ORDER_ITEM_QUANTITY;
     }
 
-    private int calculateTotalQuantity(List<OrderItem> orderItems) {
+    private int sumTotalOrderItemQuantity(List<OrderItem> orderItems) {
         return orderItems.stream()
                 .map(OrderItem::getQuantity)
                 .mapToInt(Quantity::getCount)
@@ -74,11 +78,15 @@ public class Order {
     }
 
     public static Order from(List<OrderItemMapper> orderItemMappers) {
-        List<OrderItem> orderItems = orderItemMappers.stream()
-                .map(OrderItem::from)
-                .toList();
+        List<OrderItem> orderItems = createOrderItems(orderItemMappers);
 
         return new Order(orderItems);
+    }
+
+    private static List<OrderItem> createOrderItems(List<OrderItemMapper> orderItemMappers) {
+        return orderItemMappers.stream()
+                .map(OrderItem::from)
+                .toList();
     }
 
     public boolean isQualifiedForPromotion(PromotionItem promotionItem) {
@@ -88,28 +96,26 @@ public class Order {
     }
 
     public OrderAmounts calculateOrderAmounts() {
-        int orderAmounts = sumOrderItemAmounts();
+        int orderAmounts = sumTotalOrderItemAmounts();
 
         return OrderAmounts.from(orderAmounts);
     }
 
-    private int sumOrderItemAmounts() {
+    private int sumTotalOrderItemAmounts() {
         return orderItems.stream()
                 .mapToInt(OrderItem::calculateAmounts)
                 .sum();
     }
 
-    public int totalMenuQuantityOfCategory(Category category) {
-        int totalMenuQuantity = orderItems.stream()
+    public int sumTotalOrderItemQuantity(Category category) {
+        return orderItems.stream()
                 .filter(orderItem -> orderItem.belongsTo(category))
                 .map(OrderItem::getQuantity)
                 .mapToInt(Quantity::getCount)
                 .sum();
-
-        return totalMenuQuantity;
     }
 
     public List<OrderItem> getOrderItems() {
-        return orderItems;
+        return new ArrayList<>(orderItems);
     }
 }

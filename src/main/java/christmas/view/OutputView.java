@@ -12,11 +12,11 @@ import christmas.dto.response.TotalDiscountAmountsDto;
 import christmas.dto.response.VisitDateDto;
 
 public class OutputView {
+    public static final String WELCOME_MESSAGE_FORMAT = "안녕하세요! 우테코 식당 %d월 이벤트 플래너입니다.";
     public static final String ORDER_MENU_START_MESSAGE = "<주문 메뉴>";
     public static final String ITEM_FORMAT = "%s %d개";
     public static final String ZERO_TOTAL_DISCOUNT_AMOUNTS_MESSAGE = "0원";
     public static final String EVENT_BADGE_MESSAGE_FORMAT = "<%d월 이벤트 배지>";
-    public static final String WELCOME_MESSAGE_FORMAT = "안녕하세요! 우테코 식당 %d월 이벤트 플래너입니다.";
     private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
     private static final String EVENT_PREVIEW_MESSAGE_FORMAT = "%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
     private static final String ORDER_AMOUNTS_BEFORE_DISCOUNT_MESSAGE = "<할인 전 총주문 금액>";

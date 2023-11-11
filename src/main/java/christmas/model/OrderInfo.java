@@ -34,8 +34,8 @@ public class OrderInfo {
         return visitDate.matchesDayOfWeek(dayOfWeek);
     }
 
-    public int totalMenuQuantityOfCategory(Category category) {
-        return order.totalMenuQuantityOfCategory(category);
+    public int sumTotalOrderItemQuantity(Category category) {
+        return order.sumTotalOrderItemQuantity(category);
     }
 
     public boolean isOrderedIn(Set<Integer> days) {

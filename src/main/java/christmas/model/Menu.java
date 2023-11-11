@@ -21,9 +21,10 @@ public enum Menu {
     NONE("없음", 0, Category.NONE);
 
     private static final String MENU_NOT_FOUND = "유효하지 않은 주문입니다.";
-    private static final String MENU_NAME_BLANK = "메뉴 이름은 공백일 수 없습니다.";
-    private static final String MENU_PRICE_NEGATIVE = "메뉴 가격은 0원 이상이어야 합니다.";
+    private static final String MENU_NAME_IS_BLANK = "메뉴 이름은 공백일 수 없습니다.";
+    private static final String MENU_PRICE_IS_BELOW_MINIMUM = "메뉴 가격은 %,d원 이상이어야 합니다.";
     private static final int MINIMUM_PRICE = 0;
+
     private final String name;
     private final int price;
     private final Category category;
@@ -40,15 +41,16 @@ public enum Menu {
         validateMinimumPrice(price);
     }
 
-    private void validateMinimumPrice(int price) {
-        if (price < MINIMUM_PRICE) {
-            throw new IllegalArgumentException(MENU_PRICE_NEGATIVE);
+    private void validateBlank(String name) {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException(MENU_NAME_IS_BLANK);
         }
     }
 
-    private void validateBlank(String name) {
-        if (name.isBlank()) {
-            throw new IllegalArgumentException(MENU_NAME_BLANK);
+    private void validateMinimumPrice(int price) {
+        if (price < MINIMUM_PRICE) {
+            String exceptionMessage = String.format(MENU_PRICE_IS_BELOW_MINIMUM, MINIMUM_PRICE);
+            throw new IllegalArgumentException(exceptionMessage);
         }
     }
 
@@ -56,6 +58,7 @@ public enum Menu {
         return Stream.of(values())
                 .filter(menu -> menu.name.equals(menuName))
                 .findFirst()
+                // TODO : Exception Message 수정 필요
                 .orElseThrow(() -> new IllegalArgumentException("메뉴에 해당하는 이름이 없습니다.\n" + MENU_NOT_FOUND));
     }
 

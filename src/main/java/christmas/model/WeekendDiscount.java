@@ -11,7 +11,7 @@ public final class WeekendDiscount implements DiscountPolicy {
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
         if (isOrderedInWeekend(orderInfo)) {
-            int totalMainCount = orderInfo.totalMenuQuantityOfCategory(MAIN_CATEGORY);
+            int totalMainCount = orderInfo.sumTotalOrderItemQuantity(MAIN_CATEGORY);
             int discountAmount = totalMainCount * DISCOUNT_PER_MAIN;
             return DiscountAmounts.from(discountAmount);
         }

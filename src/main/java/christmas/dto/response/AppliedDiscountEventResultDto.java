@@ -7,6 +7,7 @@ import christmas.model.DiscountAmounts;
 import christmas.model.DiscountEventType;
 
 public class AppliedDiscountEventResultDto {
+    private static final int ZERO_AMOUNT = 0;
     private final Map<String, Integer> discountEventResult;
 
     private AppliedDiscountEventResultDto(Map<String, Integer> discountEventResult) {
@@ -18,7 +19,7 @@ public class AppliedDiscountEventResultDto {
         Map<String, Integer> discountEventResult = new HashMap<>();
 
         eventResult.forEach((discountType, discountedAmount) -> {
-            if (discountedAmount.getAmounts() > 0) {
+            if (discountedAmount.getAmounts() > ZERO_AMOUNT) {
                 discountEventResult.put(discountType.getName(), discountedAmount.getAmounts());
             }
         });

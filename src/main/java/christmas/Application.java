@@ -16,7 +16,14 @@ public class Application {
     public static void main(String[] args) {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
-        DiscountEventManager discountEventManager = DiscountEventManager.from(
+        DiscountEventManager discountEventManager = createDiscountManager();
+        ChristmasEventController christmasEventController = new ChristmasEventController(inputView, outputView,
+                discountEventManager);
+        christmasEventController.run();
+    }
+
+    private static DiscountEventManager createDiscountManager() {
+        return DiscountEventManager.from(
                 Map.of(
                         DiscountEventType.CHRISTMAS_DDAY_EVENT, new ChristmasDdayDiscount(),
                         DiscountEventType.WEEKDAY_EVENT, new WeekdayDiscount(),
@@ -25,8 +32,5 @@ public class Application {
                         DiscountEventType.PROMOTION_EVENT, new PromotionDiscount()
                 )
         );
-        ChristmasEventController christmasEventController = new ChristmasEventController(inputView, outputView,
-                discountEventManager);
-        christmasEventController.run();
     }
 }

@@ -2,11 +2,11 @@ package christmas.model;
 
 import christmas.dto.request.OrderItemInfoDto;
 
-public class OrderItemMapper {
+public final class OrderItemMapper {
     private final String menuName;
     private final int quantity;
 
-    private OrderItemMapper(String menuName, int quantity) {
+    OrderItemMapper(String menuName, int quantity) {
         this.menuName = menuName;
         this.quantity = quantity;
     }

@@ -1,7 +1,6 @@
 package christmas.model;
 
-public class OrderItem {
-
+public final class OrderItem {
     private final Menu menu;
     private final Quantity quantity;
 
@@ -9,7 +8,7 @@ public class OrderItem {
         this(Menu.from(menu), Quantity.from(quantity));
     }
 
-    private OrderItem(Menu menu, Quantity quantity) {
+    OrderItem(Menu menu, Quantity quantity) {
         this.menu = menu;
         this.quantity = quantity;
     }

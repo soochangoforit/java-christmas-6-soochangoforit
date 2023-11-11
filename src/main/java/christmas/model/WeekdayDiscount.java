@@ -10,7 +10,7 @@ public final class WeekdayDiscount implements DiscountPolicy {
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
         if (isOrderedInWeekday(orderInfo)) {
-            int totalDessertCount = orderInfo.totalMenuQuantityOfCategory(DESSERT_CATEGORY);
+            int totalDessertCount = orderInfo.sumTotalOrderItemQuantity(DESSERT_CATEGORY);
             int discountAmount = totalDessertCount * DISCOUNT_PER_DESSERT;
             return DiscountAmounts.from(discountAmount);
         }

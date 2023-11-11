@@ -10,21 +10,30 @@ import christmas.util.CustomerOrderValidator;
 import christmas.util.DigitsOnlyValidator;
 
 public class InputView {
-    private static final String VISIT_DAY_MESSAGE = "12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)";
+    private static final String VISIT_DAY_MESSAGE = "%d월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)";
     private static final String NUMBER_FORMAT_EXCEPTION = "숫자 형식의 문자만 입력할 수 있습니다.";
-    private static final String CUSTOMER_ORDERS_MESSAGE = "주문하실 메뉴를 메뉴와 개수를 알려 주세요. "
-            + "(e.g. 해산물파스타-2,레드와인-1,초코케이크-1)";
+    private static final String CUSTOMER_ORDERS_MESSAGE =
+            "주문하실 메뉴를 메뉴와 개수를 알려 주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1)";
     private static final String ORDER_ITEM_SEPARATOR = ",";
     private static final String MENU_QUANTITY_DELIMITER = "-";
     private static final int ZERO_INDEX = 0;
     private static final int FIRST_INDEX = 1;
 
-    public VisitDayDto readVisitDay() {
-        System.out.println(VISIT_DAY_MESSAGE);
+    public VisitDayDto readVisitDay(int eventMonth) {
+        String visitDayMessage = formatVisitDayMessage(eventMonth);
+        print(visitDayMessage);
         String rawVisitDay = Console.readLine();
         validateVisitDay(rawVisitDay);
         int visitDay = convertToInt(rawVisitDay);
         return new VisitDayDto(visitDay);
+    }
+
+    private String formatVisitDayMessage(int eventMonth) {
+        return String.format(VISIT_DAY_MESSAGE, eventMonth);
+    }
+
+    private void print(String message) {
+        System.out.println(message);
     }
 
     private void validateVisitDay(String rawVisitDay) {
@@ -41,7 +50,7 @@ public class InputView {
     }
 
     public List<OrderItemInfoDto> readCustomerOrder() {
-        System.out.println(CUSTOMER_ORDERS_MESSAGE);
+        print(CUSTOMER_ORDERS_MESSAGE);
         String rawCustomerOrder = Console.readLine();
         validateCustomerOrder(rawCustomerOrder);
         return convertFrom(rawCustomerOrder);

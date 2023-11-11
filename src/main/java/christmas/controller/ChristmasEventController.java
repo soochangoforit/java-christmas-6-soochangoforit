@@ -1,7 +1,6 @@
 package christmas.controller;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import christmas.dto.request.OrderItemInfoDto;
 import christmas.dto.request.VisitDayDto;
@@ -39,9 +38,9 @@ public class ChristmasEventController {
     }
 
     public void run() {
-        printWelcomeMessage();
-        VisitDate visitDate = fetchVisitDateFromCustomer();
-        Order order = fetchOrderFromCustomer();
+        printWelcomeMessage(); // 완료
+        VisitDate visitDate = fetchVisitDateFromCustomer(); // 완료
+        Order order = fetchOrderFromCustomer(); // 완료
 
         OrderInfo orderInfo = createOrderInfo(order, visitDate);
         AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
@@ -69,12 +68,12 @@ public class ChristmasEventController {
         outputView.printEventBadge(eventBadgeDto);
     }
 
-    private AppliedDiscountEventResult applyDiscountEvents(OrderInfo orderInfo) {
-        return discountEventManager.applyDiscountEvents(orderInfo);
-    }
-
     private void printWelcomeMessage() {
         outputView.printWelcomeMessage(EventSchedule.MAIN_EVENT_SEASON.getMonth());
+    }
+
+    private AppliedDiscountEventResult applyDiscountEvents(OrderInfo orderInfo) {
+        return discountEventManager.applyDiscountEvents(orderInfo);
     }
 
     private VisitDate fetchVisitDateFromCustomer() {
@@ -83,12 +82,14 @@ public class ChristmasEventController {
 
     private VisitDate createVisitDate() {
         VisitDayDto visitDayDto = retryOnException(this::readVisitDay);
+        int eventYear = EventSchedule.MAIN_EVENT_SEASON.getYear();
+        int eventMonth = EventSchedule.MAIN_EVENT_SEASON.getMonth();
         int visitDay = visitDayDto.getDay();
-        return VisitDate.from(visitDay);
+        return VisitDate.from(eventYear, eventMonth, visitDay);
     }
 
     private VisitDayDto readVisitDay() {
-        return inputView.readVisitDay();
+        return inputView.readVisitDay(EventSchedule.MAIN_EVENT_SEASON.getMonth());
     }
 
     private Order fetchOrderFromCustomer() {
@@ -104,6 +105,12 @@ public class ChristmasEventController {
 
     private List<OrderItemInfoDto> readCustomerOrder() {
         return inputView.readCustomerOrder();
+    }
+
+    private List<OrderItemMapper> convertFrom(List<OrderItemInfoDto> orderItemInfoDtos) {
+        return orderItemInfoDtos.stream()
+                .map(OrderItemMapper::from)
+                .toList();
     }
 
     private OrderInfo createOrderInfo(Order order, VisitDate visitDate) {
@@ -133,14 +140,6 @@ public class ChristmasEventController {
         outputView.printCustomerOrder(orderDto);
     }
 
-    private List<OrderItemMapper> convertFrom(List<OrderItemInfoDto> orderItemInfoDtos) {
-        List<OrderItemMapper> orderItemMappers = orderItemInfoDtos.stream()
-                .map(OrderItemMapper::from)
-                .toList();
-
-        return orderItemMappers;
-    }
-
     private <T> T retryOnException(Supplier<T> supplier) {
         try {
             return supplier.get();
@@ -149,14 +148,4 @@ public class ChristmasEventController {
             return retryOnException(supplier);
         }
     }
-
-    private <T, R> R retryOnException(Function<T, R> function, T input) {
-        try {
-            return function.apply(input);
-        } catch (IllegalArgumentException e) {
-            outputView.printExceptionMessage(e.getMessage());
-            return retryOnException(function, input);
-        }
-    }
-
 }
