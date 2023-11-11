@@ -2,7 +2,7 @@ package christmas.dto.response;
 
 import java.util.List;
 import christmas.model.Order;
-import christmas.model.OrderGroup;
+import christmas.model.OrderItem;
 import christmas.model.OrderResult;
 
 public class OrderResultDto {
@@ -13,10 +13,10 @@ public class OrderResultDto {
     }
 
     public static OrderResultDto from(OrderResult orderResult) {
-        OrderGroup orderGroup = orderResult.getOrderGroup();
-        List<Order> orders = orderGroup.getOrders();
+        Order order = orderResult.getOrderGroup();
+        List<OrderItem> orderItems = order.getOrders();
 
-        List<OrderInfoDto> orderInfoDtos = orders.stream()
+        List<OrderInfoDto> orderInfoDtos = orderItems.stream()
                 .map(OrderInfoDto::from)
                 .toList();
 

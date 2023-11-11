@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import christmas.dto.request.OrderInfoDto;
+import christmas.dto.request.OrderItemInfoDto;
 import christmas.dto.request.VisitDayDto;
 import christmas.dto.response.AppliedDiscountsDto;
 import christmas.dto.response.DateOfVisitInfoDto;
@@ -12,8 +12,8 @@ import christmas.dto.response.OrderResultDto;
 import christmas.model.AppliedDiscounts;
 import christmas.model.DiscountPolicyManager;
 import christmas.model.EventBadge;
-import christmas.model.OrderGroup;
-import christmas.model.OrderInfo;
+import christmas.model.Order;
+import christmas.model.OrderItemMapper;
 import christmas.model.OrderResult;
 import christmas.model.PromotionItem;
 import christmas.model.VisitDate;
@@ -35,8 +35,8 @@ public class ChristmasEventController {
     public void run() {
         outputView.printWelcomeMessage();
         VisitDate visitDate = retryOnException(this::createDateOfVisit);
-        OrderGroup orderGroup = retryOnException(this::createOrderGroup);
-        OrderResult orderResult = OrderResult.of(orderGroup, visitDate);
+        Order order = retryOnException(this::createOrder);
+        OrderResult orderResult = OrderResult.of(order, visitDate);
         AppliedDiscounts appliedDiscounts = discountPolicyManager.applyDiscountPolicies(orderResult);
         printDiscountPreviewMessage(visitDate);
         printCustomerOrders(orderResult);
@@ -75,23 +75,23 @@ public class ChristmasEventController {
         outputView.printOrderResult(orderResultDto);
     }
 
-    private OrderGroup createOrderGroup() {
-        List<OrderInfoDto> orderInfoDtos = retryOnException(this::readCustomerOrders);
-        List<OrderInfo> orderInfos = convertFrom(orderInfoDtos);
+    private Order createOrder() {
+        List<OrderItemInfoDto> orderItemInfoDtos = retryOnException(this::readCustomerOrder);
+        List<OrderItemMapper> orderItemMappers = convertFrom(orderItemInfoDtos);
 
-        return OrderGroup.from(orderInfos);
+        return Order.from(orderItemMappers);
     }
 
-    private List<OrderInfo> convertFrom(List<OrderInfoDto> orderInfoDtos) {
-        List<OrderInfo> orderInfos = orderInfoDtos.stream()
-                .map(OrderInfo::of)
+    private List<OrderItemMapper> convertFrom(List<OrderItemInfoDto> orderItemInfoDtos) {
+        List<OrderItemMapper> orderItemMappers = orderItemInfoDtos.stream()
+                .map(OrderItemMapper::from)
                 .toList();
 
-        return orderInfos;
+        return orderItemMappers;
     }
 
-    private List<OrderInfoDto> readCustomerOrders() {
-        return inputView.readCustomerOrders();
+    private List<OrderItemInfoDto> readCustomerOrder() {
+        return inputView.readCustomerOrder();
     }
 
     private VisitDate createDateOfVisit() {

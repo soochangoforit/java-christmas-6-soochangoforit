@@ -1,7 +1,7 @@
 package christmas.dto.response;
 
 import christmas.model.Menu;
-import christmas.model.Order;
+import christmas.model.OrderItem;
 import christmas.model.Quantity;
 
 public class OrderInfoDto {
@@ -13,10 +13,10 @@ public class OrderInfoDto {
         this.quantity = quantity;
     }
 
-    public static OrderInfoDto from(Order order) {
-        Menu menu = order.getMenu();
+    public static OrderInfoDto from(OrderItem orderItem) {
+        Menu menu = orderItem.getMenu();
         String menuName = menu.getName();
-        Quantity quantity = order.getQuantity();
+        Quantity quantity = orderItem.getQuantity();
         int menuQuantity = quantity.getCount();
 
         return new OrderInfoDto(menuName, menuQuantity);

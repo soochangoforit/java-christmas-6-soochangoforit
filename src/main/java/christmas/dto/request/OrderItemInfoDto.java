@@ -1,10 +1,10 @@
 package christmas.dto.request;
 
-public class OrderInfoDto {
+public class OrderItemInfoDto {
     private final String menuName;
     private final int quantity;
 
-    public OrderInfoDto(String menuName, int quantity) {
+    public OrderItemInfoDto(String menuName, int quantity) {
         this.menuName = menuName;
         this.quantity = quantity;
     }
