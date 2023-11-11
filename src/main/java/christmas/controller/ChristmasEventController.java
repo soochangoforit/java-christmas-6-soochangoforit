@@ -14,8 +14,8 @@ import christmas.model.DateOfVisit;
 import christmas.model.DiscountPolicyManager;
 import christmas.model.EventBadge;
 import christmas.model.OrderGroup;
+import christmas.model.OrderInfo;
 import christmas.model.OrderResult;
-import christmas.model.OrderService;
 import christmas.model.PromotionItem;
 import christmas.view.InputView;
 import christmas.view.OutputView;
@@ -23,14 +23,12 @@ import christmas.view.OutputView;
 public class ChristmasEventController {
     private final InputView inputView;
     private final OutputView outputView;
-    private final OrderService orderService;
     private final DiscountPolicyManager discountPolicyManager;
 
-    public ChristmasEventController(InputView inputView, OutputView outputView, OrderService orderService,
+    public ChristmasEventController(InputView inputView, OutputView outputView,
                                     DiscountPolicyManager discountPolicyManager) {
         this.inputView = inputView;
         this.outputView = outputView;
-        this.orderService = orderService;
         this.discountPolicyManager = discountPolicyManager;
     }
 
@@ -67,12 +65,6 @@ public class ChristmasEventController {
         outputView.printPromotionMessage(matchingPromotion);
     }
 
-//    private int printTotalPriceBeforeDiscount(OrderResult orderResult) {
-//        int totalPrice = orderResult.calculateTotalPrice();
-//        outputView.printTotalPriceBeforeDiscount(totalPrice);
-//        return totalPrice;
-//    }
-
     private void printDiscountPreviewMessage(DateOfVisit dateOfVisit) {
         DateOfVisitInfoDto dateOfVisitInfoDto = DateOfVisitInfoDto.from(dateOfVisit);
         outputView.printDiscountPreviewMessage(dateOfVisitInfoDto);
@@ -85,7 +77,17 @@ public class ChristmasEventController {
 
     private OrderGroup createOrderGroup() {
         List<OrderInfoDto> orderInfoDtos = retryOnException(this::readCustomerOrders);
-        return orderService.createOrderGroup(orderInfoDtos);
+        List<OrderInfo> orderInfos = convertTo(orderInfoDtos);
+
+        return OrderGroup.create(orderInfos);
+    }
+
+    private List<OrderInfo> convertTo(List<OrderInfoDto> orderInfoDtos) {
+        List<OrderInfo> orderInfos = orderInfoDtos.stream()
+                .map(OrderInfo::of)
+                .toList();
+
+        return orderInfos;
     }
 
     private List<OrderInfoDto> readCustomerOrders() {

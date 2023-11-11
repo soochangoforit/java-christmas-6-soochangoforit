@@ -45,6 +45,14 @@ public class OrderGroup {
                 .allMatch(Menu::isBeverage);
     }
 
+    public static OrderGroup create(List<OrderInfo> orderInfos) {
+        List<Order> orders = orderInfos.stream()
+                .map(Order::from)
+                .toList();
+
+        return new OrderGroup(orders);
+    }
+
     public static OrderGroup from(List<Order> orders) {
         return new OrderGroup(orders);
     }

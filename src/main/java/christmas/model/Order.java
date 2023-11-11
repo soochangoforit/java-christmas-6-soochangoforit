@@ -5,16 +5,20 @@ public class Order {
     private final Menu menu;
     private final Quantity quantity;
 
+    private Order(String menu, int quantity) {
+        this(Menu.from(menu), Quantity.from(quantity));
+    }
+
     private Order(Menu menu, Quantity quantity) {
         this.menu = menu;
         this.quantity = quantity;
     }
 
-    public static Order from(String menuName, int quantity) {
-        Menu menu = Menu.from(menuName);
-        Quantity menuQuantity = Quantity.from(quantity);
+    public static Order from(OrderInfo orderInfo) {
+        String menuName = orderInfo.getMenuName();
+        int quantity = orderInfo.getQuantity();
 
-        return new Order(menu, menuQuantity);
+        return new Order(menuName, quantity);
     }
 
     public int calculatePrice() {
