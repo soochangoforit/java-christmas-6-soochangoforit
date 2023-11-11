@@ -1,9 +1,9 @@
 package christmas.model;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public enum PromotionItem {
+    NONE(Menu.NONE, 0, 0),
     FREE_CHAMPAGNE(Menu.CHAMPAGNE, 120_000, 1);
 
     private final Menu item;
@@ -16,10 +16,11 @@ public enum PromotionItem {
         this.quantity = quantity;
     }
 
-    public static Optional<PromotionItem> findMatchingPromotion(OrderAmounts orderAmounts) {
+    public static PromotionItem findMatchingPromotion(OrderAmounts orderAmounts) {
         return Stream.of(values())
                 .filter(promotionItem -> promotionItem.isEligibleFor(orderAmounts))
-                .findFirst();
+                .findFirst()
+                .orElse(NONE);
     }
 
     public boolean isEligibleFor(OrderAmounts orderAmounts) {

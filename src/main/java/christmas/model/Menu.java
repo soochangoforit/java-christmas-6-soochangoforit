@@ -17,7 +17,8 @@ public enum Menu {
 
     ZERO_COLA("제로콜라", 3_000, Category.BEVERAGE),
     RED_WINE("레드와인", 60_000, Category.BEVERAGE),
-    CHAMPAGNE("샴페인", 25_000, Category.BEVERAGE);
+    CHAMPAGNE("샴페인", 25_000, Category.BEVERAGE),
+    NONE("없음", 0, Category.NONE);
 
     private static final String MENU_NOT_FOUND = "유효하지 않은 주문입니다.";
     private static final String MENU_NAME_BLANK = "메뉴 이름은 공백일 수 없습니다.";

@@ -1,15 +1,15 @@
 package christmas.controller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import christmas.dto.request.OrderItemInfoDto;
 import christmas.dto.request.VisitDayDto;
-import christmas.dto.response.AppliedDiscountsDto;
+import christmas.dto.response.AppliedDiscountEventResultDto;
 import christmas.dto.response.EventBadgeDto;
 import christmas.dto.response.OrderAmountsDto;
 import christmas.dto.response.OrderDto;
+import christmas.dto.response.PromotionItemDto;
 import christmas.dto.response.TotalDiscountAmountsDto;
 import christmas.dto.response.VisitDateDto;
 import christmas.model.AppliedDiscountEventResult;
@@ -111,15 +111,16 @@ public class ChristmasEventController {
     }
 
     private void printAppliedDiscounts(AppliedDiscountEventResult appliedDiscountEventResult) {
-        AppliedDiscountsDto appliedDiscountsDto = AppliedDiscountsDto.from(appliedDiscountEventResult);
-        outputView.printAppliedDiscounts(appliedDiscountsDto);
+        AppliedDiscountEventResultDto appliedDiscountEventResultDto = AppliedDiscountEventResultDto.from(
+                appliedDiscountEventResult);
+        outputView.printAppliedDiscounts(appliedDiscountEventResultDto);
     }
 
-    // TODO : Optional 말고 다른 해결책?
     private void printPromotionMessage(OrderInfo orderInfo) {
         OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
-        Optional<PromotionItem> matchingPromotion = PromotionItem.findMatchingPromotion(orderAmounts);
-        outputView.printPromotionMessage(matchingPromotion);
+        PromotionItem matchingPromotion = PromotionItem.findMatchingPromotion(orderAmounts);
+        PromotionItemDto promotionItemDto = PromotionItemDto.from(matchingPromotion);
+        outputView.printPromotionMessage(promotionItemDto);
     }
 
     private void printDiscountEventPreviewMessage(VisitDate visitDate) {

@@ -2,21 +2,18 @@ package christmas.view;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import christmas.dto.response.AppliedDiscountsDto;
+import christmas.dto.response.AppliedDiscountEventResultDto;
 import christmas.dto.response.EventBadgeDto;
 import christmas.dto.response.OrderAmountsDto;
 import christmas.dto.response.OrderDto;
 import christmas.dto.response.OrderItemDto;
+import christmas.dto.response.PromotionItemDto;
 import christmas.dto.response.TotalDiscountAmountsDto;
 import christmas.dto.response.VisitDateDto;
-import christmas.model.DiscountEventType;
-import christmas.model.Menu;
-import christmas.model.PromotionItem;
 
 public class OutputView {
     public static final String ORDER_MENU_START_MESSAGE = "<주문 메뉴>";
-    public static final String ORDER_ITEM_FORMAT = "%s %d개";
+    public static final String ITEM_FORMAT = "%s %d개";
     public static final String ZERO_TOTAL_DISCOUNT_AMOUNTS_MESSAGE = "0원";
     public static final String EVENT_BADGE_MESSAGE_FORMAT = "<%d월 이벤트 배지>";
     public static final String WELCOME_MESSAGE_FORMAT = "안녕하세요! 우테코 식당 %d월 이벤트 플래너입니다.";
@@ -28,6 +25,11 @@ public class OutputView {
     private static final int ZERO_TOTAL_DISCOUNT_AMOUNTS = 0;
     private static final String TOTAL_DISCOUNT_AMOUNTS_FORMAT = "-%,d원";
     private static final String ORDER_AMOUNTS_AFTER_DISCOUNT_MESSAGE = "<할인 후 예상 결제 금액>";
+    private static final String PROMOTION_RESULT_MESSAGE_FORMAT = "<증정 메뉴>\n%s";
+    private static final int PROMOTION_ZERO_QUANTITY = 0;
+    private static final String NOTHING = "없음";
+    private static final String APPLIED_DISCOUNTS_RESULT_MESSAGE = "<혜택 내역>";
+    private static final String APPLIED_DISCOUNT_FORMAT = "%s: -%,d원";
 
     public void printExceptionMessage(String message) {
         String exceptionMessage = String.format(EXCEPTION_FORMAT, message);
@@ -85,7 +87,7 @@ public class OutputView {
     }
 
     private String formatOrderItemMessage(String menuName, int quantity) {
-        return String.format(ORDER_ITEM_FORMAT, menuName, quantity);
+        return String.format(ITEM_FORMAT, menuName, quantity);
     }
 
     public void printEventBadge(EventBadgeDto eventBadgeDto) {
@@ -124,41 +126,38 @@ public class OutputView {
         return String.format(TOTAL_DISCOUNT_AMOUNTS_FORMAT, totalDiscountedAmount);
     }
 
-    public void printAppliedDiscounts(AppliedDiscountsDto appliedDiscountsDto) {
-        Map<DiscountEventType, Integer> appliedDiscounts = appliedDiscountsDto.getAppliedDiscounts();
+    public void printAppliedDiscounts(AppliedDiscountEventResultDto appliedDiscountEventResultDto) {
+        Map<String, Integer> discountEventResult = appliedDiscountEventResultDto.getDiscountEventResult();
 
-        print("<혜택 내역>");
-        if (appliedDiscounts.isEmpty()) {
-            print("없음");
+        print(APPLIED_DISCOUNTS_RESULT_MESSAGE);
+        if (discountEventResult.isEmpty()) {
+            print(NOTHING);
             printEmptyLine();
             return;
         }
-        appliedDiscounts.forEach(this::printAppliedDiscount);
+        discountEventResult.forEach(this::printAppliedDiscount);
         printEmptyLine();
     }
 
-    private void printAppliedDiscount(DiscountEventType discountEventType, Integer integer) {
-        String discountName = discountEventType.getName();
-        int discountAmount = integer;
-
-        print(String.format("%s: -%,d원", discountName, discountAmount));
+    private void printAppliedDiscount(String discountEventName, int discountedAmount) {
+        print(String.format(APPLIED_DISCOUNT_FORMAT, discountEventName, discountedAmount));
     }
 
-    public void printPromotionMessage(Optional<PromotionItem> matchingPromotion) {
-        print("<증정 메뉴>");
-        if (matchingPromotion.isPresent()) {
-            PromotionItem promotionItem = matchingPromotion.get();
-            Menu item = promotionItem.getItem();
+    public void printPromotionMessage(PromotionItemDto promotionItemDto) {
+        String itemName = promotionItemDto.getName();
+        int itemQuantity = promotionItemDto.getQuantity();
 
-            String promotionItemName = item.getName();
-            int promotionItemQuantity = promotionItem.getQuantity();
+        String promotionResult = formatPromotionResult(itemName, itemQuantity);
+        String promotionResultMessage = String.format(PROMOTION_RESULT_MESSAGE_FORMAT, promotionResult);
+        print(promotionResultMessage);
+        printEmptyLine();
+    }
 
-            print(String.format("%s %d개", promotionItemName, promotionItemQuantity));
-            printEmptyLine();
-            return;
+    private String formatPromotionResult(String itemName, int itemQuantity) {
+        if (itemQuantity == PROMOTION_ZERO_QUANTITY) {
+            return NOTHING;
         }
-        print("없음");
-        printEmptyLine();
+        return String.format(ITEM_FORMAT, itemName, itemQuantity);
     }
 
     public void printOrderAmountsBeforeDiscount(OrderAmountsDto orderAmountsDto) {
