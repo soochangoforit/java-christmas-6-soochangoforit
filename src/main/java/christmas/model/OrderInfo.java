@@ -48,4 +48,8 @@ public final class OrderInfo {
     public Order getOrder() {
         return order;
     }
+
+    public VisitDate getVisitDate() {
+        return visitDate;
+    }
 }

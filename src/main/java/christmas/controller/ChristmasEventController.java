@@ -43,29 +43,52 @@ public class ChristmasEventController {
         Order order = fetchOrderFromCustomer();
 
         OrderInfo orderInfo = createOrderInfo(order, visitDate);
-        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
-        printDiscountEventPreviewMessage(visitDate);
-        printCustomerOrder(orderInfo);
-
         OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
-        TotalDiscountAmounts totalDiscountedAmounts = appliedDiscountEventResult.calculateTotalDiscountAmounts();
+        printOrderDetails(orderInfo, orderAmounts);
 
-        OrderAmountsDto orderAmountsDto = OrderAmountsDto.from(orderAmounts);
-        outputView.printOrderAmountsBeforeDiscount(orderAmountsDto);
-
-        printPromotionMessage(orderInfo);
+        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
+        TotalDiscountAmounts totalDiscountAmounts = appliedDiscountEventResult.calculateTotalDiscountAmounts();
         printAppliedDiscounts(appliedDiscountEventResult);
+        printTotalDiscountAmounts(totalDiscountAmounts);
+        printOrderAmountsAfterDiscount(orderAmounts, totalDiscountAmounts);
+        printEventBadge(totalDiscountAmounts);
+    }
 
-        TotalDiscountAmountsDto totalDiscountAmountsDto = TotalDiscountAmountsDto.from(totalDiscountedAmounts);
-        outputView.printTotalDiscountAmounts(totalDiscountAmountsDto);
+    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmounts, TotalDiscountAmounts discountAmounts) {
+        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(discountAmounts);
+        printOrderAmountsAfterDiscount(orderAmountsAfterDiscount);
+    }
 
-        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(totalDiscountedAmounts);
-        OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
-        outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
-
+    private void printEventBadge(TotalDiscountAmounts totalDiscountedAmounts) {
         EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmounts);
+        printEventBadge(eventBadge);
+    }
+
+    private void printEventBadge(EventBadge eventBadge) {
         EventBadgeDto eventBadgeDto = EventBadgeDto.from(EventSchedule.MAIN_EVENT_SEASON.getMonth(), eventBadge);
         outputView.printEventBadge(eventBadgeDto);
+    }
+
+    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsAfterDiscount) {
+        OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
+        outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
+    }
+
+    private void printTotalDiscountAmounts(TotalDiscountAmounts totalDiscountedAmounts) {
+        TotalDiscountAmountsDto totalDiscountAmountsDto = TotalDiscountAmountsDto.from(totalDiscountedAmounts);
+        outputView.printTotalDiscountAmounts(totalDiscountAmountsDto);
+    }
+
+    private void printOrderDetails(OrderInfo orderInfo, OrderAmounts orderAmounts) {
+        printDiscountEventPreviewMessage(orderInfo.getVisitDate());
+        printCustomerOrder(orderInfo);
+        printOrderAmountsBeforeDiscount(orderAmounts);
+        printPromotionMessage(orderInfo);
+    }
+
+    private void printOrderAmountsBeforeDiscount(OrderAmounts orderAmounts) {
+        OrderAmountsDto orderAmountsDto = OrderAmountsDto.from(orderAmounts);
+        outputView.printOrderAmountsBeforeDiscount(orderAmountsDto);
     }
 
     private void printWelcomeMessage() {
