@@ -56,10 +56,10 @@ public final class Order {
     }
 
     private boolean hasInvalidTotalOrderItemQuantity(List<OrderItem> orderItems) {
-        return sumTotalOrderItemQuantity(orderItems) > MAX_TOTAL_ORDER_ITEM_QUANTITY;
+        return sumTotalOrderItemQuantityIn(orderItems) > MAX_TOTAL_ORDER_ITEM_QUANTITY;
     }
 
-    private int sumTotalOrderItemQuantity(List<OrderItem> orderItems) {
+    private int sumTotalOrderItemQuantityIn(List<OrderItem> orderItems) {
         return orderItems.stream()
                 .map(OrderItem::getQuantity)
                 .mapToInt(Quantity::getCount)
@@ -89,7 +89,7 @@ public final class Order {
                 .toList();
     }
 
-    public boolean isQualifiedForPromotion(PromotionItem promotionItem) {
+    public boolean isEligibleFor(PromotionItem promotionItem) {
         OrderAmounts orderAmounts = calculateOrderAmounts();
 
         return promotionItem.isEligibleFor(orderAmounts);
@@ -107,7 +107,7 @@ public final class Order {
                 .sum();
     }
 
-    public int sumTotalOrderItemQuantity(Category category) {
+    public int sumTotalOrderItemQuantityIn(Category category) {
         return orderItems.stream()
                 .filter(orderItem -> orderItem.belongsTo(category))
                 .map(OrderItem::getQuantity)

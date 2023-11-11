@@ -2,24 +2,30 @@ package christmas.model;
 
 import java.time.DayOfWeek;
 import java.util.EnumSet;
+import java.util.Set;
 
 public final class WeekendDiscount implements DiscountPolicy {
-    private static final int DISCOUNT_PER_MAIN = 2023;
-    private static final EnumSet<DayOfWeek> WEEKEND_DAYS = EnumSet.of(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY);
+    private static final Set<DayOfWeek> DISCOUNT_DAYS_OF_WEEK = EnumSet.of(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY);
+    private static final int DISCOUNT_AMOUNT_FOR_EACH_MAIN = 1000;
     private static final Category MAIN_CATEGORY = Category.MAIN;
 
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
         if (isOrderedInWeekend(orderInfo)) {
-            int totalMainCount = orderInfo.sumTotalOrderItemQuantity(MAIN_CATEGORY);
-            int discountAmount = totalMainCount * DISCOUNT_PER_MAIN;
-            return DiscountAmounts.from(discountAmount);
+            int totalMainQuantity = orderInfo.sumTotalOrderItemQuantityIn(MAIN_CATEGORY);
+            int discountAmounts = calculateDiscountAmounts(totalMainQuantity);
+
+            return DiscountAmounts.from(discountAmounts);
         }
 
-        return DiscountAmounts.zero();
+        return DiscountAmounts.noDiscount();
+    }
+
+    private int calculateDiscountAmounts(int totalMainQuantity) {
+        return totalMainQuantity * DISCOUNT_AMOUNT_FOR_EACH_MAIN;
     }
 
     private boolean isOrderedInWeekend(OrderInfo orderInfo) {
-        return orderInfo.isOrderedIn(WEEKEND_DAYS);
+        return orderInfo.isOrderedInDaysOfWeek(DISCOUNT_DAYS_OF_WEEK);
     }
 }

@@ -3,15 +3,15 @@ package christmas.model;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class AppliedDiscountEventResult {
+public final class AppliedDiscountEventResult {
     private final Map<DiscountEventType, DiscountAmounts> discountEventResult;
 
     private AppliedDiscountEventResult(Map<DiscountEventType, DiscountAmounts> discountEventResult) {
-        this.discountEventResult = discountEventResult;
+        this.discountEventResult = new EnumMap<>(discountEventResult);
     }
 
     public static AppliedDiscountEventResult from(Map<DiscountEventType, DiscountAmounts> discountEventResult) {
-        return new AppliedDiscountEventResult(new EnumMap<>(discountEventResult));
+        return new AppliedDiscountEventResult(discountEventResult);
     }
 
     public TotalDiscountAmounts calculateTotalDiscountAmounts() {

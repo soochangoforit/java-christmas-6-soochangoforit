@@ -34,11 +34,11 @@ public final class VisitDate {
                 .count();
     }
 
-    public boolean matchesDayOfWeek(Set<DayOfWeek> dayOfWeek) {
-        return dayOfWeek.contains(date.getDayOfWeek());
+    public boolean isInDayOfWeek(Set<DayOfWeek> daysOfWeek) {
+        return daysOfWeek.contains(date.getDayOfWeek());
     }
 
-    public boolean matchesDays(Set<Integer> days) {
+    public boolean isInDays(Set<Integer> days) {
         return days.contains(date.getDayOfMonth());
     }
 
@@ -46,12 +46,12 @@ public final class VisitDate {
         return isSince(startDate) && isUntil(endDate);
     }
 
-    private boolean isUntil(LocalDate endDate) {
-        return date.isEqual(endDate) || date.isBefore(endDate);
-    }
-
     private boolean isSince(LocalDate startDate) {
         return date.isEqual(startDate) || date.isAfter(startDate);
+    }
+
+    private boolean isUntil(LocalDate endDate) {
+        return date.isEqual(endDate) || date.isBefore(endDate);
     }
 
     public LocalDate getDate() {

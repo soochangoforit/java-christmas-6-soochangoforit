@@ -11,7 +11,7 @@ public class TotalDiscountAmounts {
         return new TotalDiscountAmounts(amounts);
     }
 
-    public int calculateAmountsAfterDiscount(int orderAmounts) {
+    public int calculateOrderAmountsAfterDiscount(int orderAmounts) {
         return orderAmounts - this.discountAmounts;
     }
 

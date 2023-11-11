@@ -16,24 +16,26 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class VisitDateTest {
+    private static final int YEAR = 2023;
+    private static final int MONTH = 12;
 
     @ParameterizedTest
     @ValueSource(ints = {0, 32})
     void 유효하지_않은_방문_날짜를_입력하면_예외가_발생한다(int day) {
-        assertThatThrownBy(() -> VisitDate.from(day))
+        assertThatThrownBy(() -> VisitDate.from(YEAR, MONTH, day))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1, 31})
     void 유효한_날짜를_입력하면_예외가_발생하지_않는다(int day) {
-        assertDoesNotThrow(() -> VisitDate.from(day));
+        assertDoesNotThrow(() -> VisitDate.from(YEAR, MONTH, day));
     }
 
     @ParameterizedTest
     @MethodSource("방문날짜_지나온_일수")
     void 특정날짜로부터_방문날짜까지_일수를_구할_수_있다(int visitDay, int expectedDaysSince) {
-        VisitDate visitDate = VisitDate.from(visitDay);
+        VisitDate visitDate = VisitDate.from(YEAR, MONTH, visitDay);
         LocalDate startDate = LocalDate.of(2023, 12, 1);
 
         int daysSince = visitDate.daysSince(startDate);
@@ -46,7 +48,7 @@ class VisitDateTest {
     void 방문날짜가_특정요일에_속하는지_알_수_있다(LocalDate date, Set<DayOfWeek> dayOfWeeks, boolean expectedResult) {
         VisitDate visitDate = new VisitDate(date);
 
-        boolean actualResult = visitDate.matchesDayOfWeek(dayOfWeeks);
+        boolean actualResult = visitDate.isInDayOfWeek(dayOfWeeks);
 
         assertThat(actualResult).isEqualTo(expectedResult);
     }
@@ -56,7 +58,7 @@ class VisitDateTest {
     void 방문날짜가_특정일수에_포함되는지_알_수_있다(LocalDate date, Set<Integer> days, boolean expectedResult) {
         VisitDate visitDate = new VisitDate(date);
 
-        boolean actualResult = visitDate.matchesDays(days);
+        boolean actualResult = visitDate.isInDays(days);
 
         assertThat(actualResult).isEqualTo(expectedResult);
     }

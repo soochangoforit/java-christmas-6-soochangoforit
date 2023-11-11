@@ -42,8 +42,8 @@ public class ChristmasEventController {
         VisitDate visitDate = fetchVisitDateFromCustomer(); // 완료
         Order order = fetchOrderFromCustomer(); // 완료
 
-        OrderInfo orderInfo = createOrderInfo(order, visitDate);
-        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
+        OrderInfo orderInfo = createOrderInfo(order, visitDate); // 완료
+        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo); // 완료
         printDiscountEventPreviewMessage(visitDate);
         printCustomerOrder(orderInfo);
 
@@ -59,7 +59,7 @@ public class ChristmasEventController {
         TotalDiscountAmountsDto totalDiscountAmountsDto = TotalDiscountAmountsDto.from(totalDiscountedAmounts);
         outputView.printTotalDiscountAmounts(totalDiscountAmountsDto);
 
-        OrderAmounts orderAmountsAfterDiscount = orderAmounts.subtract(totalDiscountedAmounts);
+        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(totalDiscountedAmounts);
         OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
         outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
 

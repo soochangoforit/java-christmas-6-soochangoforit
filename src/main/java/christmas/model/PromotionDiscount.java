@@ -5,10 +5,14 @@ public final class PromotionDiscount implements DiscountPolicy {
 
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
-        if (orderInfo.isQualifiedForPromotion(PROMOTION_ITEM)) {
-            int discountedAmount = PROMOTION_ITEM.calculateDiscountedAmount();
-            return DiscountAmounts.from(discountedAmount);
+        if (isEligibleForPromotion(orderInfo)) {
+            int discountAmounts = PROMOTION_ITEM.calculateTotalPrice();
+            return DiscountAmounts.from(discountAmounts);
         }
-        return DiscountAmounts.zero();
+        return DiscountAmounts.noDiscount();
+    }
+
+    private boolean isEligibleForPromotion(OrderInfo orderInfo) {
+        return orderInfo.isEligibleFor(PROMOTION_ITEM);
     }
 }

@@ -62,8 +62,12 @@ public enum Menu {
                 .orElseThrow(() -> new IllegalArgumentException("메뉴에 해당하는 이름이 없습니다.\n" + MENU_NOT_FOUND));
     }
 
+    public int calculateTotalPrice(int quantity) {
+        return price * quantity;
+    }
+
     public int calculateAmounts(Quantity quantity) {
-        return quantity.calculateAmounts(price);
+        return quantity.multiply(price);
     }
 
     public boolean belongsTo(Category category) {
@@ -76,9 +80,5 @@ public enum Menu {
 
     public String getName() {
         return name;
-    }
-
-    public int getPrice() {
-        return price;
     }
 }

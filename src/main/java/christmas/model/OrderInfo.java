@@ -2,10 +2,9 @@ package christmas.model;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.EnumSet;
 import java.util.Set;
 
-public class OrderInfo {
+public final class OrderInfo {
     private final Order order;
     private final VisitDate visitDate;
 
@@ -30,20 +29,20 @@ public class OrderInfo {
         return visitDate.daysSince(startDate);
     }
 
-    public boolean isOrderedIn(EnumSet<DayOfWeek> dayOfWeek) {
-        return visitDate.matchesDayOfWeek(dayOfWeek);
+    public boolean isOrderedInDaysOfWeek(Set<DayOfWeek> dayOfWeek) {
+        return visitDate.isInDayOfWeek(dayOfWeek);
     }
 
-    public int sumTotalOrderItemQuantity(Category category) {
-        return order.sumTotalOrderItemQuantity(category);
+    public boolean isOrderedInDays(Set<Integer> days) {
+        return visitDate.isInDays(days);
     }
 
-    public boolean isOrderedIn(Set<Integer> days) {
-        return visitDate.matchesDays(days);
+    public int sumTotalOrderItemQuantityIn(Category category) {
+        return order.sumTotalOrderItemQuantityIn(category);
     }
 
-    public boolean isQualifiedForPromotion(PromotionItem promotionItem) {
-        return order.isQualifiedForPromotion(promotionItem);
+    public boolean isEligibleFor(PromotionItem promotionItem) {
+        return order.isEligibleFor(promotionItem);
     }
 
     public Order getOrder() {

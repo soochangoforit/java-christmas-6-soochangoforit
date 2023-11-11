@@ -3,23 +3,25 @@ package christmas.model;
 import java.util.Objects;
 
 public final class DiscountAmounts {
-    private static final String DISCOUNT_AMOUNT_IS_NEGATIVE = "할인 금액은 음수가 될 수 없습니다";
-    private static final int ZERO = 0;
+    private static final String INVALID_DISCOUNT = "할인 금액은 %d원 이상이어야 합니다.";
+    private static final int NO_DISCOUNT_AMOUNT = 0;
+
     private final int amounts;
 
     private DiscountAmounts(int amounts) {
-        validatePositive(amounts);
+        validateAmount(amounts);
         this.amounts = amounts;
     }
 
-    private void validatePositive(int amounts) {
-        if (amounts < ZERO) {
-            throw new IllegalArgumentException(DISCOUNT_AMOUNT_IS_NEGATIVE);
+    private void validateAmount(int amounts) {
+        if (amounts < NO_DISCOUNT_AMOUNT) {
+            String exceptionMessage = String.format(INVALID_DISCOUNT, NO_DISCOUNT_AMOUNT);
+            throw new IllegalArgumentException(exceptionMessage);
         }
     }
 
-    public static DiscountAmounts zero() {
-        return new DiscountAmounts(ZERO);
+    public static DiscountAmounts noDiscount() {
+        return new DiscountAmounts(NO_DISCOUNT_AMOUNT);
     }
 
     public static DiscountAmounts from(int amounts) {

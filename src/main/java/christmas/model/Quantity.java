@@ -24,7 +24,7 @@ public final class Quantity {
         return new Quantity(count);
     }
 
-    public int calculateAmounts(int menuPrice) {
+    public int multiply(int menuPrice) {
         return count * menuPrice;
     }
 
