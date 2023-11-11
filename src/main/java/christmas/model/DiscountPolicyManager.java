@@ -15,11 +15,11 @@ public class DiscountPolicyManager {
         return new DiscountPolicyManager(discountPolicies);
     }
 
-    public AppliedDiscounts applyDiscountPolicies(OrderResult orderResult) {
+    public AppliedDiscounts applyDiscountPolicies(OrderInfo orderInfo) {
         Map<DiscountType, DiscountedAmount> discountResults = new EnumMap<>(DiscountType.class);
-        if (isEligibleForDiscount(orderResult)) {
+        if (isEligibleForDiscount(orderInfo)) {
             policyRegistry.forEach((discountType, discountPolicy) -> {
-                DiscountedAmount discountedAmount = discountPolicy.applyDiscount(orderResult);
+                DiscountedAmount discountedAmount = discountPolicy.applyDiscount(orderInfo);
                 discountResults.put(discountType, discountedAmount);
             });
         }
@@ -27,8 +27,8 @@ public class DiscountPolicyManager {
         return AppliedDiscounts.from(discountResults);
     }
 
-    private boolean isEligibleForDiscount(OrderResult orderResult) {
-        int totalPrice = orderResult.calculateTotalPrice();
+    private boolean isEligibleForDiscount(OrderInfo orderInfo) {
+        int totalPrice = orderInfo.calculateTotalPrice();
 
         return totalPrice >= MINIMUM_PRICE_FOR_DISCOUNT;
     }

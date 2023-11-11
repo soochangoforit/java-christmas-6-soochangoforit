@@ -2,8 +2,8 @@ package christmas.dto.response;
 
 import java.util.List;
 import christmas.model.Order;
+import christmas.model.OrderInfo;
 import christmas.model.OrderItem;
-import christmas.model.OrderResult;
 
 public class OrderResultDto {
     private final List<OrderInfoDto> orderInfoDtos;
@@ -12,8 +12,8 @@ public class OrderResultDto {
         this.orderInfoDtos = orderInfoDtos;
     }
 
-    public static OrderResultDto from(OrderResult orderResult) {
-        Order order = orderResult.getOrderGroup();
+    public static OrderResultDto from(OrderInfo orderInfo) {
+        Order order = orderInfo.getOrderGroup();
         List<OrderItem> orderItems = order.getOrders();
 
         List<OrderInfoDto> orderInfoDtos = orderItems.stream()

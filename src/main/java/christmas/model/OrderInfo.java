@@ -5,17 +5,17 @@ import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.Set;
 
-public class OrderResult {
+public class OrderInfo {
     private final Order order;
     private final VisitDate visitDate;
 
-    private OrderResult(Order order, VisitDate visitDate) {
+    private OrderInfo(Order order, VisitDate visitDate) {
         this.order = order;
         this.visitDate = visitDate;
     }
 
-    public static OrderResult of(Order order, VisitDate visitDate) {
-        return new OrderResult(order, visitDate);
+    public static OrderInfo of(Order order, VisitDate visitDate) {
+        return new OrderInfo(order, visitDate);
     }
 
     public int calculateTotalPrice() {

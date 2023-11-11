@@ -9,9 +9,9 @@ public class WeekendDiscount implements DiscountPolicy {
     private static final Category MAIN_CATEGORY = Category.MAIN;
 
     @Override
-    public DiscountedAmount applyDiscount(OrderResult orderResult) {
-        if (isOrderedInWeekend(orderResult)) {
-            int totalMainCount = orderResult.totalMenuQuantityOfCategory(MAIN_CATEGORY);
+    public DiscountedAmount applyDiscount(OrderInfo orderInfo) {
+        if (isOrderedInWeekend(orderInfo)) {
+            int totalMainCount = orderInfo.totalMenuQuantityOfCategory(MAIN_CATEGORY);
             int discountAmount = totalMainCount * DISCOUNT_PER_MAIN;
             return DiscountedAmount.from(discountAmount);
         }
@@ -19,7 +19,7 @@ public class WeekendDiscount implements DiscountPolicy {
         return DiscountedAmount.zero();
     }
 
-    private boolean isOrderedInWeekend(OrderResult orderResult) {
-        return orderResult.isOrderedIn(WEEKEND_DAYS);
+    private boolean isOrderedInWeekend(OrderInfo orderInfo) {
+        return orderInfo.isOrderedIn(WEEKEND_DAYS);
     }
 }

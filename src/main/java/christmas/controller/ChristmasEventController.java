@@ -13,8 +13,8 @@ import christmas.model.AppliedDiscounts;
 import christmas.model.DiscountPolicyManager;
 import christmas.model.EventBadge;
 import christmas.model.Order;
+import christmas.model.OrderInfo;
 import christmas.model.OrderItemMapper;
-import christmas.model.OrderResult;
 import christmas.model.PromotionItem;
 import christmas.model.VisitDate;
 import christmas.view.InputView;
@@ -36,16 +36,16 @@ public class ChristmasEventController {
         outputView.printWelcomeMessage();
         VisitDate visitDate = retryOnException(this::createDateOfVisit);
         Order order = retryOnException(this::createOrder);
-        OrderResult orderResult = OrderResult.of(order, visitDate);
-        AppliedDiscounts appliedDiscounts = discountPolicyManager.applyDiscountPolicies(orderResult);
+        OrderInfo orderInfo = OrderInfo.of(order, visitDate);
+        AppliedDiscounts appliedDiscounts = discountPolicyManager.applyDiscountPolicies(orderInfo);
         printDiscountPreviewMessage(visitDate);
-        printCustomerOrders(orderResult);
+        printCustomerOrders(orderInfo);
 
-        int totalPrice = orderResult.calculateTotalPrice();
+        int totalPrice = orderInfo.calculateTotalPrice();
         int totalDiscountedAmount = appliedDiscounts.calculateTotalDiscountedAmount();
 
         outputView.printTotalPriceBeforeDiscount(totalPrice);
-        printPromotionMessage(orderResult);
+        printPromotionMessage(orderInfo);
         printAppliedDiscounts(appliedDiscounts);
         outputView.printTotalDiscountedAmount(totalDiscountedAmount);
         outputView.printTotalPriceAfterDiscount(totalPrice, totalDiscountedAmount);
@@ -59,8 +59,8 @@ public class ChristmasEventController {
         outputView.printAppliedDiscounts(appliedDiscountsDto);
     }
 
-    private void printPromotionMessage(OrderResult orderResult) {
-        int totalPrice = orderResult.calculateTotalPrice();
+    private void printPromotionMessage(OrderInfo orderInfo) {
+        int totalPrice = orderInfo.calculateTotalPrice();
         Optional<PromotionItem> matchingPromotion = PromotionItem.findMatchingPromotion(totalPrice);
         outputView.printPromotionMessage(matchingPromotion);
     }
@@ -70,8 +70,8 @@ public class ChristmasEventController {
         outputView.printDiscountPreviewMessage(dateOfVisitInfoDto);
     }
 
-    private void printCustomerOrders(OrderResult orderResult) {
-        OrderResultDto orderResultDto = OrderResultDto.from(orderResult);
+    private void printCustomerOrders(OrderInfo orderInfo) {
+        OrderResultDto orderResultDto = OrderResultDto.from(orderInfo);
         outputView.printOrderResult(orderResultDto);
     }
 

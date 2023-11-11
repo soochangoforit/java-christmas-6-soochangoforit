@@ -10,9 +10,9 @@ public class ChristmasDdayDiscount implements DiscountPolicy {
     private static final int DAILY_INCREMENT = 100;
 
     @Override
-    public DiscountedAmount applyDiscount(OrderResult orderResult) {
-        if (isWithinDiscountPeriod(orderResult)) {
-            int daysElapsed = orderResult.daysSinceStartDate(START_DATE);
+    public DiscountedAmount applyDiscount(OrderInfo orderInfo) {
+        if (isWithinDiscountPeriod(orderInfo)) {
+            int daysElapsed = orderInfo.daysSinceStartDate(START_DATE);
             int discountAmount = START_DISCOUNT + (daysElapsed * DAILY_INCREMENT);
             return DiscountedAmount.from(discountAmount);
         }
@@ -20,7 +20,7 @@ public class ChristmasDdayDiscount implements DiscountPolicy {
         return DiscountedAmount.zero();
     }
 
-    private boolean isWithinDiscountPeriod(OrderResult orderResult) {
-        return orderResult.isOrderedBetween(START_DATE, END_DATE);
+    private boolean isWithinDiscountPeriod(OrderInfo orderInfo) {
+        return orderInfo.isOrderedBetween(START_DATE, END_DATE);
     }
 }

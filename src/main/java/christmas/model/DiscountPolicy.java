@@ -2,5 +2,5 @@ package christmas.model;
 
 @FunctionalInterface
 public interface DiscountPolicy {
-    DiscountedAmount applyDiscount(OrderResult orderResult);
+    DiscountedAmount applyDiscount(OrderInfo orderInfo);
 }
