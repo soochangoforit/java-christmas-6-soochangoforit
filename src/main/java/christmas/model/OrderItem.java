@@ -21,8 +21,8 @@ public class OrderItem {
         return new OrderItem(menuName, quantity);
     }
 
-    public int calculatePrice() {
-        return menu.calculatePrice(quantity);
+    public int calculateAmounts() {
+        return menu.calculateAmounts(quantity);
     }
 
     public boolean belongsTo(Category category) {

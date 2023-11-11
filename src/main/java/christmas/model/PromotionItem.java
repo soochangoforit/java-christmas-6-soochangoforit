@@ -16,14 +16,14 @@ public enum PromotionItem {
         this.quantity = quantity;
     }
 
-    public static Optional<PromotionItem> findMatchingPromotion(int totalPrice) {
+    public static Optional<PromotionItem> findMatchingPromotion(OrderAmounts orderAmounts) {
         return Stream.of(values())
-                .filter(promotionItem -> promotionItem.isEligible(totalPrice))
+                .filter(promotionItem -> promotionItem.isEligibleFor(orderAmounts))
                 .findFirst();
     }
 
-    public boolean isEligible(int totalPrice) {
-        return totalPrice >= minimumAmountForEligibility;
+    public boolean isEligibleFor(OrderAmounts orderAmounts) {
+        return orderAmounts.isEligibleFor(minimumAmountForEligibility);
     }
 
     public int calculateDiscountedAmount() {

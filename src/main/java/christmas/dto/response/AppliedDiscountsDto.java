@@ -3,8 +3,8 @@ package christmas.dto.response;
 import java.util.EnumMap;
 import java.util.Map;
 import christmas.model.AppliedDiscountEventResult;
+import christmas.model.DiscountAmounts;
 import christmas.model.DiscountEventType;
-import christmas.model.DiscountedAmount;
 
 public class AppliedDiscountsDto {
     private final Map<DiscountEventType, Integer> appliedDiscounts;
@@ -14,12 +14,12 @@ public class AppliedDiscountsDto {
     }
 
     public static AppliedDiscountsDto from(AppliedDiscountEventResult appliedDiscountEventResult) {
-        Map<DiscountEventType, DiscountedAmount> discountResults = appliedDiscountEventResult.getDiscountEventResult();
+        Map<DiscountEventType, DiscountAmounts> discountResults = appliedDiscountEventResult.getDiscountEventResult();
         Map<DiscountEventType, Integer> discountAmounts = new EnumMap<>(DiscountEventType.class);
 
         discountResults.forEach((discountType, discountedAmount) -> {
-            if (discountedAmount.getAmount() > 0) {
-                discountAmounts.put(discountType, discountedAmount.getAmount());
+            if (discountedAmount.getAmounts() > 0) {
+                discountAmounts.put(discountType, discountedAmount.getAmounts());
             }
         });
 

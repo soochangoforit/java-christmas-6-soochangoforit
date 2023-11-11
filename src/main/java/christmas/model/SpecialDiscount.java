@@ -7,11 +7,11 @@ public final class SpecialDiscount implements DiscountPolicy {
     private static final int DISCOUNT_AMOUNT = 1000;
 
     @Override
-    public DiscountedAmount applyDiscount(OrderInfo orderInfo) {
+    public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
         if (isOrderedInSpecialDay(orderInfo)) {
-            return DiscountedAmount.from(DISCOUNT_AMOUNT);
+            return DiscountAmounts.from(DISCOUNT_AMOUNT);
         }
-        return DiscountedAmount.zero();
+        return DiscountAmounts.zero();
     }
 
     private boolean isOrderedInSpecialDay(OrderInfo orderInfo) {

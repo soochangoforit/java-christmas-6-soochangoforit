@@ -8,8 +8,8 @@ import java.util.Set;
 
 public final class VisitDate {
     private static final String INVALID_DATE = "유효하지 않은 날짜입니다.";
-    private static final int YEAR = 2023;
-    private static final int MONTH = 12;
+    private static final int YEAR = EventSchedule.MAIN_EVENT_SEASON.getYear();
+    private static final int MONTH = EventSchedule.MAIN_EVENT_SEASON.getMonth();
 
     private final LocalDate date;
 

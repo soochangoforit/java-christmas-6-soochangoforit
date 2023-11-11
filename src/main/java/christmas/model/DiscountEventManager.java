@@ -16,13 +16,13 @@ public final class DiscountEventManager {
     }
 
     public AppliedDiscountEventResult applyDiscountEvents(OrderInfo orderInfo) {
-        Map<DiscountEventType, DiscountedAmount> discountEventResult = generateDiscountEventResult(orderInfo);
+        Map<DiscountEventType, DiscountAmounts> discountEventResult = generateDiscountEventResult(orderInfo);
 
         return AppliedDiscountEventResult.from(discountEventResult);
     }
 
-    private Map<DiscountEventType, DiscountedAmount> generateDiscountEventResult(OrderInfo orderInfo) {
-        Map<DiscountEventType, DiscountedAmount> discountEventResult = new EnumMap<>(DiscountEventType.class);
+    private Map<DiscountEventType, DiscountAmounts> generateDiscountEventResult(OrderInfo orderInfo) {
+        Map<DiscountEventType, DiscountAmounts> discountEventResult = new EnumMap<>(DiscountEventType.class);
         if (isEligibleForDiscount(orderInfo)) {
             applyDiscounts(orderInfo, discountEventResult);
         }
@@ -31,19 +31,19 @@ public final class DiscountEventManager {
     }
 
     private boolean isEligibleForDiscount(OrderInfo orderInfo) {
-        int totalPrice = orderInfo.calculateTotalPrice();
+        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
 
-        return totalPrice >= MINIMUM_PRICE_FOR_DISCOUNT;
+        return orderAmounts.isEligibleFor(MINIMUM_PRICE_FOR_DISCOUNT);
     }
 
-    private void applyDiscounts(OrderInfo orderInfo, Map<DiscountEventType, DiscountedAmount> discountEventResult) {
+    private void applyDiscounts(OrderInfo orderInfo, Map<DiscountEventType, DiscountAmounts> discountEventResult) {
         discountEventRegistry.forEach((discountType, discountPolicy) -> {
-            DiscountedAmount discountedAmount = applyDiscount(orderInfo, discountPolicy);
-            discountEventResult.put(discountType, discountedAmount);
+            DiscountAmounts discountAmounts = applyDiscount(orderInfo, discountPolicy);
+            discountEventResult.put(discountType, discountAmounts);
         });
     }
 
-    private DiscountedAmount applyDiscount(OrderInfo orderInfo, DiscountPolicy discountPolicy) {
+    private DiscountAmounts applyDiscount(OrderInfo orderInfo, DiscountPolicy discountPolicy) {
         return discountPolicy.applyDiscount(orderInfo);
     }
 

@@ -82,13 +82,20 @@ public class Order {
     }
 
     public boolean isQualifiedForPromotion(PromotionItem promotionItem) {
-        int totalPrice = calculateTotalPrice();
-        return promotionItem.isEligible(totalPrice);
+        OrderAmounts orderAmounts = calculateOrderAmounts();
+
+        return promotionItem.isEligibleFor(orderAmounts);
     }
 
-    public int calculateTotalPrice() {
+    public OrderAmounts calculateOrderAmounts() {
+        int orderAmounts = sumOrderItemAmounts();
+
+        return OrderAmounts.from(orderAmounts);
+    }
+
+    private int sumOrderItemAmounts() {
         return orderItems.stream()
-                .mapToInt(OrderItem::calculatePrice)
+                .mapToInt(OrderItem::calculateAmounts)
                 .sum();
     }
 

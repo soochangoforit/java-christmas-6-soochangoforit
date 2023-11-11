@@ -9,22 +9,22 @@ public enum EventBadge {
     SANTA("산타", 20_000);
 
     private final String name;
-    private final int eligiblePrice;
+    private final int minimumAmountForEligibility;
 
-    EventBadge(String name, int eligiblePrice) {
+    EventBadge(String name, int minimumAmountForEligibility) {
         this.name = name;
-        this.eligiblePrice = eligiblePrice;
+        this.minimumAmountForEligibility = minimumAmountForEligibility;
     }
 
-    public static EventBadge findMatchingEventBadge(int totalDiscountedAmount) {
+    public static EventBadge findMatchingEventBadge(TotalDiscountAmounts totalDiscountedAmount) {
         return Stream.of(values())
-                .filter(eventBadge -> eventBadge.isEligible(totalDiscountedAmount))
+                .filter(eventBadge -> eventBadge.isEligibleFor(totalDiscountedAmount))
                 .findFirst()
                 .orElse(NONE);
     }
 
-    private boolean isEligible(int totalDiscountedAmount) {
-        return totalDiscountedAmount >= eligiblePrice;
+    private boolean isEligibleFor(TotalDiscountAmounts totalDiscountedAmount) {
+        return totalDiscountedAmount.isEligibleFor(minimumAmountForEligibility);
     }
 
     public String getName() {

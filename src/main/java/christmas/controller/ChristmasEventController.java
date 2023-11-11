@@ -7,15 +7,21 @@ import java.util.function.Supplier;
 import christmas.dto.request.OrderItemInfoDto;
 import christmas.dto.request.VisitDayDto;
 import christmas.dto.response.AppliedDiscountsDto;
+import christmas.dto.response.EventBadgeDto;
+import christmas.dto.response.OrderAmountsDto;
 import christmas.dto.response.OrderDto;
+import christmas.dto.response.TotalDiscountAmountsDto;
 import christmas.dto.response.VisitDateDto;
 import christmas.model.AppliedDiscountEventResult;
 import christmas.model.DiscountEventManager;
 import christmas.model.EventBadge;
+import christmas.model.EventSchedule;
 import christmas.model.Order;
+import christmas.model.OrderAmounts;
 import christmas.model.OrderInfo;
 import christmas.model.OrderItemMapper;
 import christmas.model.PromotionItem;
+import christmas.model.TotalDiscountAmounts;
 import christmas.model.VisitDate;
 import christmas.view.InputView;
 import christmas.view.OutputView;
@@ -33,25 +39,75 @@ public class ChristmasEventController {
     }
 
     public void run() {
-        outputView.printWelcomeMessage();
-        VisitDate visitDate = retryOnException(this::createDateOfVisit);
-        Order order = retryOnException(this::createOrder);
-        OrderInfo orderInfo = OrderInfo.of(order, visitDate);
-        AppliedDiscountEventResult appliedDiscountEventResult = discountEventManager.applyDiscountEvents(orderInfo);
+        printWelcomeMessage();
+        VisitDate visitDate = fetchVisitDateFromCustomer();
+        Order order = fetchOrderFromCustomer();
+
+        OrderInfo orderInfo = createOrderInfo(order, visitDate);
+        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
         printDiscountEventPreviewMessage(visitDate);
         printCustomerOrder(orderInfo);
 
-        int totalPrice = orderInfo.calculateTotalPrice();
-        int totalDiscountedAmount = appliedDiscountEventResult.calculateTotalDiscountedAmount();
+        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
+        TotalDiscountAmounts totalDiscountedAmounts = appliedDiscountEventResult.calculateTotalDiscountAmounts();
 
-        outputView.printTotalPriceBeforeDiscount(totalPrice);
+        OrderAmountsDto orderAmountsDto = OrderAmountsDto.from(orderAmounts);
+        outputView.printOrderAmountsBeforeDiscount(orderAmountsDto);
+
         printPromotionMessage(orderInfo);
         printAppliedDiscounts(appliedDiscountEventResult);
-        outputView.printTotalDiscountedAmount(totalDiscountedAmount);
-        outputView.printTotalPriceAfterDiscount(totalPrice, totalDiscountedAmount);
-        EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmount);
-        outputView.printEventBadge(eventBadge);
 
+        TotalDiscountAmountsDto totalDiscountAmountsDto = TotalDiscountAmountsDto.from(totalDiscountedAmounts);
+        outputView.printTotalDiscountAmounts(totalDiscountAmountsDto);
+
+        OrderAmounts orderAmountsAfterDiscount = orderAmounts.subtract(totalDiscountedAmounts);
+        OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
+        outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
+
+        EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmounts);
+        EventBadgeDto eventBadgeDto = EventBadgeDto.from(eventBadge);
+        outputView.printEventBadge(eventBadgeDto);
+    }
+
+    private AppliedDiscountEventResult applyDiscountEvents(OrderInfo orderInfo) {
+        return discountEventManager.applyDiscountEvents(orderInfo);
+    }
+
+    private void printWelcomeMessage() {
+        outputView.printWelcomeMessage(EventSchedule.MAIN_EVENT_SEASON.getMonth());
+    }
+
+    private VisitDate fetchVisitDateFromCustomer() {
+        return retryOnException(this::createVisitDate);
+    }
+
+    private VisitDate createVisitDate() {
+        VisitDayDto visitDayDto = retryOnException(this::readVisitDay);
+        int visitDay = visitDayDto.getDay();
+        return VisitDate.from(visitDay);
+    }
+
+    private VisitDayDto readVisitDay() {
+        return inputView.readVisitDay();
+    }
+
+    private Order fetchOrderFromCustomer() {
+        return retryOnException(this::createOrder);
+    }
+
+    private Order createOrder() {
+        List<OrderItemInfoDto> orderItemInfoDtos = retryOnException(this::readCustomerOrder);
+        List<OrderItemMapper> orderItemMappers = convertFrom(orderItemInfoDtos);
+
+        return Order.from(orderItemMappers);
+    }
+
+    private List<OrderItemInfoDto> readCustomerOrder() {
+        return inputView.readCustomerOrder();
+    }
+
+    private OrderInfo createOrderInfo(Order order, VisitDate visitDate) {
+        return OrderInfo.of(order, visitDate);
     }
 
     private void printAppliedDiscounts(AppliedDiscountEventResult appliedDiscountEventResult) {
@@ -59,9 +115,10 @@ public class ChristmasEventController {
         outputView.printAppliedDiscounts(appliedDiscountsDto);
     }
 
+    // TODO : Optional 말고 다른 해결책?
     private void printPromotionMessage(OrderInfo orderInfo) {
-        int totalPrice = orderInfo.calculateTotalPrice();
-        Optional<PromotionItem> matchingPromotion = PromotionItem.findMatchingPromotion(totalPrice);
+        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
+        Optional<PromotionItem> matchingPromotion = PromotionItem.findMatchingPromotion(orderAmounts);
         outputView.printPromotionMessage(matchingPromotion);
     }
 
@@ -75,33 +132,12 @@ public class ChristmasEventController {
         outputView.printCustomerOrder(orderDto);
     }
 
-    private Order createOrder() {
-        List<OrderItemInfoDto> orderItemInfoDtos = retryOnException(this::readCustomerOrder);
-        List<OrderItemMapper> orderItemMappers = convertFrom(orderItemInfoDtos);
-
-        return Order.from(orderItemMappers);
-    }
-
     private List<OrderItemMapper> convertFrom(List<OrderItemInfoDto> orderItemInfoDtos) {
         List<OrderItemMapper> orderItemMappers = orderItemInfoDtos.stream()
                 .map(OrderItemMapper::from)
                 .toList();
 
         return orderItemMappers;
-    }
-
-    private List<OrderItemInfoDto> readCustomerOrder() {
-        return inputView.readCustomerOrder();
-    }
-
-    private VisitDate createDateOfVisit() {
-        VisitDayDto visitDayDto = retryOnException(this::readVisitDay);
-        int visitDay = visitDayDto.getDay();
-        return VisitDate.from(visitDay);
-    }
-
-    private VisitDayDto readVisitDay() {
-        return inputView.readVisitDay();
     }
 
     private <T> T retryOnException(Supplier<T> supplier) {
@@ -121,4 +157,5 @@ public class ChristmasEventController {
             return retryOnException(function, input);
         }
     }
+
 }

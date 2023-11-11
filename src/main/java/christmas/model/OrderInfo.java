@@ -18,8 +18,8 @@ public class OrderInfo {
         return new OrderInfo(order, visitDate);
     }
 
-    public int calculateTotalPrice() {
-        return order.calculateTotalPrice();
+    public OrderAmounts calculateOrderAmounts() {
+        return order.calculateOrderAmounts();
     }
 
     public boolean isOrderedBetween(LocalDate startDate, LocalDate endDate) {
