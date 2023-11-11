@@ -3,8 +3,8 @@ package christmas.model;
 import java.util.stream.Stream;
 
 public enum PromotionItem {
-    NONE(Menu.NONE, 0, 0),
-    FREE_CHAMPAGNE(Menu.CHAMPAGNE, 120_000, 1);
+    FREE_CHAMPAGNE(Menu.CHAMPAGNE, 120_000, 1),
+    NONE(Menu.NONE, 0, 0);
 
     private final Menu item;
     private final int minimumAmountForEligibility;
