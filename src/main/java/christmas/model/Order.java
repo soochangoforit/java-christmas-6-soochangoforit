@@ -29,6 +29,10 @@ public class Order {
         return menu.belongsTo(category);
     }
 
+    public boolean isBeverage() {
+        return menu.isBeverage();
+    }
+
     public Menu getMenu() {
         return menu;
     }

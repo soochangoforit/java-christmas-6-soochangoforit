@@ -77,12 +77,12 @@ public class ChristmasEventController {
 
     private OrderGroup createOrderGroup() {
         List<OrderInfoDto> orderInfoDtos = retryOnException(this::readCustomerOrders);
-        List<OrderInfo> orderInfos = convertTo(orderInfoDtos);
+        List<OrderInfo> orderInfos = convertFrom(orderInfoDtos);
 
-        return OrderGroup.create(orderInfos);
+        return OrderGroup.from(orderInfos);
     }
 
-    private List<OrderInfo> convertTo(List<OrderInfoDto> orderInfoDtos) {
+    private List<OrderInfo> convertFrom(List<OrderInfoDto> orderInfoDtos) {
         List<OrderInfo> orderInfos = orderInfoDtos.stream()
                 .map(OrderInfo::of)
                 .toList();

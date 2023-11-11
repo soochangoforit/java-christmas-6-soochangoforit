@@ -19,21 +19,43 @@ public enum Menu {
     RED_WINE("레드와인", 60_000, Category.BEVERAGE),
     CHAMPAGNE("샴페인", 25_000, Category.BEVERAGE);
 
+    private static final String MENU_NOT_FOUND = "유효하지 않은 주문입니다.";
+    private static final String MENU_NAME_BLANK = "메뉴 이름은 공백일 수 없습니다.";
+    private static final String MENU_PRICE_NEGATIVE = "메뉴 가격은 0원 이상이어야 합니다.";
+    private static final int MINIMUM_PRICE = 0;
     private final String name;
     private final int price;
     private final Category category;
 
     Menu(String name, int price, Category category) {
+        validate(name, price);
         this.name = name;
         this.price = price;
         this.category = category;
+    }
+
+    private void validate(String name, int price) {
+        validateBlank(name);
+        validateMinimumPrice(price);
+    }
+
+    private void validateMinimumPrice(int price) {
+        if (price < MINIMUM_PRICE) {
+            throw new IllegalArgumentException(MENU_PRICE_NEGATIVE);
+        }
+    }
+
+    private void validateBlank(String name) {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException(MENU_NAME_BLANK);
+        }
     }
 
     public static Menu from(String menuName) {
         return Stream.of(values())
                 .filter(menu -> menu.name.equals(menuName))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("메뉴에 해당하는 이름이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("메뉴에 해당하는 이름이 없습니다.\n" + MENU_NOT_FOUND));
     }
 
     public int calculatePrice(Quantity quantity) {
