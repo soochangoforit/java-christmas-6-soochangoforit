@@ -10,7 +10,7 @@ public class TotalDiscountAmountsDto {
     }
 
     public static TotalDiscountAmountsDto from(TotalDiscountAmounts totalDiscountAmounts) {
-        int amounts = totalDiscountAmounts.getDiscountAmounts();
+        int amounts = totalDiscountAmounts.getAmounts();
 
         return new TotalDiscountAmountsDto(amounts);
     }

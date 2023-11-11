@@ -16,16 +16,16 @@ public class OutputView {
     public static final String ORDER_MENU_START_MESSAGE = "<주문 메뉴>";
     public static final String ITEM_FORMAT = "%s %d개";
     public static final String ZERO_TOTAL_DISCOUNT_AMOUNTS_MESSAGE = "0원";
-    public static final String EVENT_BADGE_MESSAGE_FORMAT = "<%d월 이벤트 배지>";
+    public static final String EVENT_BADGE_MESSAGE = "<%d월 이벤트 배지>";
     private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
-    private static final String EVENT_PREVIEW_MESSAGE_FORMAT = "%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
+    private static final String EVENT_PREVIEW_MESSAGE = "%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
     private static final String ORDER_AMOUNTS_BEFORE_DISCOUNT_MESSAGE = "<할인 전 총주문 금액>";
     private static final String ORDER_AMOUNTS_FORMAT = "%,d원";
     private static final String TOTAL_DISCOUNT_AMOUNTS_MESSAGE = "<총혜택 금액>";
     private static final int ZERO_TOTAL_DISCOUNT_AMOUNTS = 0;
     private static final String TOTAL_DISCOUNT_AMOUNTS_FORMAT = "-%,d원";
     private static final String ORDER_AMOUNTS_AFTER_DISCOUNT_MESSAGE = "<할인 후 예상 결제 금액>";
-    private static final String PROMOTION_RESULT_MESSAGE_FORMAT = "<증정 메뉴>\n%s";
+    private static final String PROMOTION_RESULT_MESSAGE = "<증정 메뉴>\n%s";
     private static final int PROMOTION_ZERO_QUANTITY = 0;
     private static final String NOTHING = "없음";
     private static final String APPLIED_DISCOUNTS_RESULT_MESSAGE = "<혜택 내역>";
@@ -63,7 +63,7 @@ public class OutputView {
     }
 
     private String formatEventPreviewMessage(int month, int day) {
-        return String.format(EVENT_PREVIEW_MESSAGE_FORMAT, month, day);
+        return String.format(EVENT_PREVIEW_MESSAGE, month, day);
     }
 
     public void printCustomerOrder(OrderDto orderDto) {
@@ -93,7 +93,8 @@ public class OutputView {
     public void printEventBadge(EventBadgeDto eventBadgeDto) {
         int eventMonth = eventBadgeDto.getEventMonth();
         String eventBadgeName = eventBadgeDto.getBadgeName();
-        String eventBadgeMessage = String.format(EVENT_BADGE_MESSAGE_FORMAT, eventMonth);
+
+        String eventBadgeMessage = String.format(EVENT_BADGE_MESSAGE, eventMonth);
         print(eventBadgeMessage);
         print(eventBadgeName);
     }
@@ -126,21 +127,26 @@ public class OutputView {
         return String.format(TOTAL_DISCOUNT_AMOUNTS_FORMAT, totalDiscountedAmount);
     }
 
-    public void printAppliedDiscounts(AppliedDiscountEventResultDto appliedDiscountEventResultDto) {
-        Map<String, Integer> discountEventResult = appliedDiscountEventResultDto.getDiscountEventResult();
+    public void printAppliedDiscountEventResult(AppliedDiscountEventResultDto appliedDiscountEventResultDto) {
+        Map<String, Integer> appliedDiscountEventResult = appliedDiscountEventResultDto.getDiscountEventResult();
 
         print(APPLIED_DISCOUNTS_RESULT_MESSAGE);
-        if (discountEventResult.isEmpty()) {
-            print(NOTHING);
-            printEmptyLine();
+        if (appliedDiscountEventResult.isEmpty()) {
+            printNothingMessage();
             return;
         }
-        discountEventResult.forEach(this::printAppliedDiscount);
+        appliedDiscountEventResult.forEach(this::printAppliedDiscount);
+        printEmptyLine();
+    }
+
+    private void printNothingMessage() {
+        print(NOTHING);
         printEmptyLine();
     }
 
     private void printAppliedDiscount(String discountEventName, int discountedAmount) {
-        print(String.format(APPLIED_DISCOUNT_FORMAT, discountEventName, discountedAmount));
+        String appliedDiscount = String.format(APPLIED_DISCOUNT_FORMAT, discountEventName, discountedAmount);
+        print(appliedDiscount);
     }
 
     public void printPromotionMessage(PromotionItemDto promotionItemDto) {
@@ -148,7 +154,7 @@ public class OutputView {
         int itemQuantity = promotionItemDto.getQuantity();
 
         String promotionResult = formatPromotionResult(itemName, itemQuantity);
-        String promotionResultMessage = String.format(PROMOTION_RESULT_MESSAGE_FORMAT, promotionResult);
+        String promotionResultMessage = String.format(PROMOTION_RESULT_MESSAGE, promotionResult);
         print(promotionResultMessage);
         printEmptyLine();
     }

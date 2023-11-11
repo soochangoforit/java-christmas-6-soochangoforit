@@ -38,12 +38,12 @@ public class ChristmasEventController {
     }
 
     public void run() {
-        printWelcomeMessage(); // 완료
-        VisitDate visitDate = fetchVisitDateFromCustomer(); // 완료
-        Order order = fetchOrderFromCustomer(); // 완료
+        printWelcomeMessage();
+        VisitDate visitDate = fetchVisitDateFromCustomer();
+        Order order = fetchOrderFromCustomer();
 
-        OrderInfo orderInfo = createOrderInfo(order, visitDate); // 완료
-        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo); // 완료
+        OrderInfo orderInfo = createOrderInfo(order, visitDate);
+        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
         printDiscountEventPreviewMessage(visitDate);
         printCustomerOrder(orderInfo);
 
@@ -64,7 +64,7 @@ public class ChristmasEventController {
         outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
 
         EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmounts);
-        EventBadgeDto eventBadgeDto = EventBadgeDto.from(eventBadge);
+        EventBadgeDto eventBadgeDto = EventBadgeDto.from(EventSchedule.MAIN_EVENT_SEASON.getMonth(), eventBadge);
         outputView.printEventBadge(eventBadgeDto);
     }
 
@@ -120,7 +120,7 @@ public class ChristmasEventController {
     private void printAppliedDiscounts(AppliedDiscountEventResult appliedDiscountEventResult) {
         AppliedDiscountEventResultDto appliedDiscountEventResultDto = AppliedDiscountEventResultDto.from(
                 appliedDiscountEventResult);
-        outputView.printAppliedDiscounts(appliedDiscountEventResultDto);
+        outputView.printAppliedDiscountEventResult(appliedDiscountEventResultDto);
     }
 
     private void printPromotionMessage(OrderInfo orderInfo) {

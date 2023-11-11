@@ -28,6 +28,10 @@ public final class DiscountAmounts {
         return new DiscountAmounts(amounts);
     }
 
+    public boolean isOverZeroAmounts() {
+        return amounts > NO_DISCOUNT_AMOUNT;
+    }
+
     public int getAmounts() {
         return amounts;
     }
