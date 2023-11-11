@@ -4,19 +4,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import christmas.dto.request.DateOfVisitDto;
 import christmas.dto.request.OrderInfoDto;
+import christmas.dto.request.VisitDayDto;
 import christmas.dto.response.AppliedDiscountsDto;
 import christmas.dto.response.DateOfVisitInfoDto;
 import christmas.dto.response.OrderResultDto;
 import christmas.model.AppliedDiscounts;
-import christmas.model.DateOfVisit;
 import christmas.model.DiscountPolicyManager;
 import christmas.model.EventBadge;
 import christmas.model.OrderGroup;
 import christmas.model.OrderInfo;
 import christmas.model.OrderResult;
 import christmas.model.PromotionItem;
+import christmas.model.VisitDate;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
@@ -34,11 +34,11 @@ public class ChristmasEventController {
 
     public void run() {
         outputView.printWelcomeMessage();
-        DateOfVisit dateOfVisit = retryOnException(this::createDateOfVisit);
+        VisitDate visitDate = retryOnException(this::createDateOfVisit);
         OrderGroup orderGroup = retryOnException(this::createOrderGroup);
-        OrderResult orderResult = OrderResult.of(orderGroup, dateOfVisit);
+        OrderResult orderResult = OrderResult.of(orderGroup, visitDate);
         AppliedDiscounts appliedDiscounts = discountPolicyManager.applyDiscountPolicies(orderResult);
-        printDiscountPreviewMessage(dateOfVisit);
+        printDiscountPreviewMessage(visitDate);
         printCustomerOrders(orderResult);
 
         int totalPrice = orderResult.calculateTotalPrice();
@@ -65,8 +65,8 @@ public class ChristmasEventController {
         outputView.printPromotionMessage(matchingPromotion);
     }
 
-    private void printDiscountPreviewMessage(DateOfVisit dateOfVisit) {
-        DateOfVisitInfoDto dateOfVisitInfoDto = DateOfVisitInfoDto.from(dateOfVisit);
+    private void printDiscountPreviewMessage(VisitDate visitDate) {
+        DateOfVisitInfoDto dateOfVisitInfoDto = DateOfVisitInfoDto.from(visitDate);
         outputView.printDiscountPreviewMessage(dateOfVisitInfoDto);
     }
 
@@ -94,14 +94,14 @@ public class ChristmasEventController {
         return inputView.readCustomerOrders();
     }
 
-    private DateOfVisit createDateOfVisit() {
-        DateOfVisitDto dateOfVisitDto = retryOnException(this::readDateOfVisit);
-        int date = dateOfVisitDto.getDate();
-        return DateOfVisit.from(date);
+    private VisitDate createDateOfVisit() {
+        VisitDayDto visitDayDto = retryOnException(this::readVisitDay);
+        int visitDay = visitDayDto.getDay();
+        return VisitDate.from(visitDay);
     }
 
-    private DateOfVisitDto readDateOfVisit() {
-        return inputView.readDateOfVisit();
+    private VisitDayDto readVisitDay() {
+        return inputView.readVisitDay();
     }
 
     private <T> T retryOnException(Supplier<T> supplier) {

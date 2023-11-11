@@ -7,15 +7,15 @@ import java.util.Set;
 
 public class OrderResult {
     private final OrderGroup orderGroup;
-    private final DateOfVisit dateOfVisit;
+    private final VisitDate visitDate;
 
-    private OrderResult(OrderGroup orderGroup, DateOfVisit dateOfVisit) {
+    private OrderResult(OrderGroup orderGroup, VisitDate visitDate) {
         this.orderGroup = orderGroup;
-        this.dateOfVisit = dateOfVisit;
+        this.visitDate = visitDate;
     }
 
-    public static OrderResult of(OrderGroup orderGroup, DateOfVisit dateOfVisit) {
-        return new OrderResult(orderGroup, dateOfVisit);
+    public static OrderResult of(OrderGroup orderGroup, VisitDate visitDate) {
+        return new OrderResult(orderGroup, visitDate);
     }
 
     public int calculateTotalPrice() {
@@ -23,15 +23,15 @@ public class OrderResult {
     }
 
     public boolean isOrderedBetween(LocalDate startDate, LocalDate endDate) {
-        return dateOfVisit.isBetween(startDate, endDate);
+        return visitDate.isBetween(startDate, endDate);
     }
 
-    public int calculateDaysFrom(LocalDate startDate) {
-        return dateOfVisit.calculateDaysFrom(startDate);
+    public int daysSinceStartDate(LocalDate startDate) {
+        return visitDate.daysSince(startDate);
     }
 
     public boolean isOrderedIn(EnumSet<DayOfWeek> dayOfWeek) {
-        return dateOfVisit.isOrderedIn(dayOfWeek);
+        return visitDate.matchesDayOfWeek(dayOfWeek);
     }
 
     public int totalMenuQuantityOfCategory(Category category) {
@@ -39,7 +39,7 @@ public class OrderResult {
     }
 
     public boolean isOrderedIn(Set<Integer> days) {
-        return dateOfVisit.isOrderedIn(days);
+        return visitDate.matchesDays(days);
     }
 
     public boolean isQualifiedForPromotion(PromotionItem promotionItem) {
@@ -50,7 +50,7 @@ public class OrderResult {
         return orderGroup;
     }
 
-    public DateOfVisit getDateOfVisit() {
-        return dateOfVisit;
+    public VisitDate getDateOfVisit() {
+        return visitDate;
     }
 }

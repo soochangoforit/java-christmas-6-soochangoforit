@@ -12,8 +12,8 @@ public class ChristmasDdayDiscount implements DiscountPolicy {
     @Override
     public DiscountedAmount applyDiscount(OrderResult orderResult) {
         if (isWithinDiscountPeriod(orderResult)) {
-            int daysFromStart = orderResult.calculateDaysFrom(START_DATE);
-            int discountAmount = START_DISCOUNT + (daysFromStart * DAILY_INCREMENT);
+            int daysElapsed = orderResult.daysSinceStartDate(START_DATE);
+            int discountAmount = START_DISCOUNT + (daysElapsed * DAILY_INCREMENT);
             return DiscountedAmount.from(discountAmount);
         }
 

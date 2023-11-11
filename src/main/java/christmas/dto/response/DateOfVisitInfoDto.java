@@ -1,7 +1,7 @@
 package christmas.dto.response;
 
 import java.time.LocalDate;
-import christmas.model.DateOfVisit;
+import christmas.model.VisitDate;
 
 public class DateOfVisitInfoDto {
     private final int month;
@@ -12,8 +12,8 @@ public class DateOfVisitInfoDto {
         this.day = day;
     }
 
-    public static DateOfVisitInfoDto from(DateOfVisit dateOfVisit) {
-        LocalDate date = dateOfVisit.getDate();
+    public static DateOfVisitInfoDto from(VisitDate visitDate) {
+        LocalDate date = visitDate.getDate();
 
         return new DateOfVisitInfoDto(date.getMonthValue(), date.getDayOfMonth());
     }
