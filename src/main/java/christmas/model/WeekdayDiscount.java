@@ -3,7 +3,7 @@ package christmas.model;
 import java.time.DayOfWeek;
 import java.util.EnumSet;
 
-public class WeekdayDiscount implements DiscountPolicy {
+public final class WeekdayDiscount implements DiscountPolicy {
     private static final int DISCOUNT_PER_DESSERT = 2023;
     private static final Category DESSERT_CATEGORY = Category.DESSERT;
 

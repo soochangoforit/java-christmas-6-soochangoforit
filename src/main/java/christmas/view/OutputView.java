@@ -3,90 +3,104 @@ package christmas.view;
 import java.util.Map;
 import java.util.Optional;
 import christmas.dto.response.AppliedDiscountsDto;
-import christmas.dto.response.DateOfVisitInfoDto;
 import christmas.dto.response.OrderInfoDto;
 import christmas.dto.response.OrderResultDto;
-import christmas.model.DiscountType;
+import christmas.dto.response.VisitDateDto;
+import christmas.model.DiscountEventType;
 import christmas.model.EventBadge;
 import christmas.model.Menu;
 import christmas.model.PromotionItem;
 
 public class OutputView {
     private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
+    private static final String EVENT_PREVIEW_MESSAGE_FORMAT = "%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
 
     public void printExceptionMessage(String message) {
         String exceptionMessage = String.format(EXCEPTION_FORMAT, message);
-        System.out.println(exceptionMessage);
+        print(exceptionMessage);
+    }
+
+    private void print(String message) {
+        System.out.println(message);
     }
 
     public void printWelcomeMessage() {
-        System.out.println("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
+        print("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.");
     }
 
-    public void printDiscountPreviewMessage(DateOfVisitInfoDto dateOfVisitInfoDto) {
-        int day = dateOfVisitInfoDto.getDay();
-        int month = dateOfVisitInfoDto.getMonth();
+    public void printDiscountEventPreviewMessage(VisitDateDto visitDateDto) {
+        int month = visitDateDto.getMonth();
+        int day = visitDateDto.getDay();
 
-        System.out.println(String.format("%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!", month, day));
+        String eventPreviewMessage = formatEventPreviewMessage(month, day);
+        print(eventPreviewMessage);
+        printEmptyLine();
+    }
+
+    private void printEmptyLine() {
         System.out.println();
+    }
+
+    private static String formatEventPreviewMessage(int month, int day) {
+        return String.format(EVENT_PREVIEW_MESSAGE_FORMAT, month, day);
     }
 
     public void printOrderResult(OrderResultDto orderResultDto) {
-        System.out.println("<주문 메뉴>");
+        print("<주문 메뉴>");
         orderResultDto.getMenuInfoDtos().forEach(this::printOrderInfo);
-        System.out.println();
+        printEmptyLine();
     }
 
     private void printOrderInfo(OrderInfoDto orderInfoDto) {
         String menuName = orderInfoDto.getMenuName();
         int quantity = orderInfoDto.getQuantity();
 
-        System.out.println(String.format("%s %d개", menuName, quantity));
+        print(String.format("%s %d개", menuName, quantity));
     }
 
     public void printEventBadge(EventBadge eventBadge) {
-        System.out.println("<12월 이벤트 배지>");
-        System.out.println(eventBadge.getName());
+        print("<12월 이벤트 배지>");
+        print(eventBadge.getName());
     }
 
     public void printTotalPriceAfterDiscount(int totalPrice, int totalDiscountedAmount) {
-        System.out.println("<할인 후 예상 결제 금액>");
-        System.out.println(String.format("%,d원", totalPrice - totalDiscountedAmount));
-        System.out.println();
+        print("<할인 후 예상 결제 금액>");
+        print(String.format("%,d원", totalPrice - totalDiscountedAmount));
+        printEmptyLine();
     }
 
     public void printTotalDiscountedAmount(int totalDiscountedAmount) {
-        System.out.println("<총혜택 금액>");
+        print("<총혜택 금액>");
         String discountAmountMessage = String.format("-%,d원", totalDiscountedAmount);
         if (totalDiscountedAmount == 0) {
             discountAmountMessage = "0원";
         }
-        System.out.println(discountAmountMessage);
-        System.out.println();
+        print(discountAmountMessage);
+        printEmptyLine();
     }
 
     public void printAppliedDiscounts(AppliedDiscountsDto appliedDiscountsDto) {
-        Map<DiscountType, Integer> appliedDiscounts = appliedDiscountsDto.getAppliedDiscounts();
+        Map<DiscountEventType, Integer> appliedDiscounts = appliedDiscountsDto.getAppliedDiscounts();
 
-        System.out.println("<혜택 내역>");
+        print("<혜택 내역>");
         if (appliedDiscounts.isEmpty()) {
-            System.out.println("없음");
-            System.out.println();
+            print("없음");
+            printEmptyLine();
             return;
         }
         appliedDiscounts.forEach(this::printAppliedDiscount);
-        System.out.println();
+        printEmptyLine();
     }
 
-    private void printAppliedDiscount(DiscountType discountType, Integer integer) {
-        String discountName = discountType.getName();
+    private void printAppliedDiscount(DiscountEventType discountEventType, Integer integer) {
+        String discountName = discountEventType.getName();
         int discountAmount = integer;
 
-        System.out.println(String.format("%s: -%,d원", discountName, discountAmount));
+        print(String.format("%s: -%,d원", discountName, discountAmount));
     }
 
     public void printPromotionMessage(Optional<PromotionItem> matchingPromotion) {
-        System.out.println("<증정 메뉴>");
+        print("<증정 메뉴>");
         if (matchingPromotion.isPresent()) {
             PromotionItem promotionItem = matchingPromotion.get();
             Menu item = promotionItem.getItem();
@@ -94,18 +108,18 @@ public class OutputView {
             String promotionItemName = item.getName();
             int promotionItemQuantity = promotionItem.getQuantity();
 
-            System.out.println(String.format("%s %d개", promotionItemName, promotionItemQuantity));
-            System.out.println();
+            print(String.format("%s %d개", promotionItemName, promotionItemQuantity));
+            printEmptyLine();
             return;
         }
-        System.out.println("없음");
-        System.out.println();
+        print("없음");
+        printEmptyLine();
     }
 
     public void printTotalPriceBeforeDiscount(int totalPrice) {
-        System.out.println("<할인 전 총주문 금액>");
-        System.out.println(String.format("%,d원", totalPrice));
-        System.out.println();
+        print("<할인 전 총주문 금액>");
+        print(String.format("%,d원", totalPrice));
+        printEmptyLine();
     }
 
 }

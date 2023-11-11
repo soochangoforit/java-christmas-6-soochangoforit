@@ -3,19 +3,21 @@ package christmas.dto.response;
 import java.time.LocalDate;
 import christmas.model.VisitDate;
 
-public class DateOfVisitInfoDto {
+public class VisitDateDto {
     private final int month;
     private final int day;
 
-    private DateOfVisitInfoDto(int month, int day) {
+    private VisitDateDto(int month, int day) {
         this.month = month;
         this.day = day;
     }
 
-    public static DateOfVisitInfoDto from(VisitDate visitDate) {
+    public static VisitDateDto from(VisitDate visitDate) {
         LocalDate date = visitDate.getDate();
+        int month = date.getMonthValue();
+        int day = date.getDayOfMonth();
 
-        return new DateOfVisitInfoDto(date.getMonthValue(), date.getDayOfMonth());
+        return new VisitDateDto(month, day);
     }
 
     public int getMonth() {

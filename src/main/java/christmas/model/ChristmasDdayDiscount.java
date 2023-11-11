@@ -2,7 +2,7 @@ package christmas.model;
 
 import java.time.LocalDate;
 
-public class ChristmasDdayDiscount implements DiscountPolicy {
+public final class ChristmasDdayDiscount implements DiscountPolicy {
     private static final LocalDate START_DATE = LocalDate.of(2023, 12, 1);
     private static final LocalDate END_DATE = LocalDate.of(2023, 12, 25);
 

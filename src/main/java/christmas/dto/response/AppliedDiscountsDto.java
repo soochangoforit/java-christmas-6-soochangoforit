@@ -2,20 +2,20 @@ package christmas.dto.response;
 
 import java.util.EnumMap;
 import java.util.Map;
-import christmas.model.AppliedDiscounts;
-import christmas.model.DiscountType;
+import christmas.model.AppliedDiscountEventResult;
+import christmas.model.DiscountEventType;
 import christmas.model.DiscountedAmount;
 
 public class AppliedDiscountsDto {
-    private final Map<DiscountType, Integer> appliedDiscounts;
+    private final Map<DiscountEventType, Integer> appliedDiscounts;
 
-    private AppliedDiscountsDto(Map<DiscountType, Integer> appliedDiscounts) {
+    private AppliedDiscountsDto(Map<DiscountEventType, Integer> appliedDiscounts) {
         this.appliedDiscounts = appliedDiscounts;
     }
 
-    public static AppliedDiscountsDto from(AppliedDiscounts appliedDiscounts) {
-        Map<DiscountType, DiscountedAmount> discountResults = appliedDiscounts.getDiscountResults();
-        Map<DiscountType, Integer> discountAmounts = new EnumMap<>(DiscountType.class);
+    public static AppliedDiscountsDto from(AppliedDiscountEventResult appliedDiscountEventResult) {
+        Map<DiscountEventType, DiscountedAmount> discountResults = appliedDiscountEventResult.getDiscountEventResult();
+        Map<DiscountEventType, Integer> discountAmounts = new EnumMap<>(DiscountEventType.class);
 
         discountResults.forEach((discountType, discountedAmount) -> {
             if (discountedAmount.getAmount() > 0) {
@@ -26,7 +26,7 @@ public class AppliedDiscountsDto {
         return new AppliedDiscountsDto(discountAmounts);
     }
 
-    public Map<DiscountType, Integer> getAppliedDiscounts() {
+    public Map<DiscountEventType, Integer> getAppliedDiscounts() {
         return appliedDiscounts;
     }
 }

@@ -3,8 +3,8 @@ package christmas;
 import java.util.Map;
 import christmas.controller.ChristmasEventController;
 import christmas.model.ChristmasDdayDiscount;
-import christmas.model.DiscountPolicyManager;
-import christmas.model.DiscountType;
+import christmas.model.DiscountEventManager;
+import christmas.model.DiscountEventType;
 import christmas.model.PromotionDiscount;
 import christmas.model.SpecialDiscount;
 import christmas.model.WeekdayDiscount;
@@ -16,14 +16,17 @@ public class Application {
     public static void main(String[] args) {
         InputView inputView = new InputView();
         OutputView outputView = new OutputView();
-        DiscountPolicyManager policies = DiscountPolicyManager.from(
-                Map.of(DiscountType.CHRISTMAS_DDAY, new ChristmasDdayDiscount()
-                        , DiscountType.WEEKDAY, new WeekdayDiscount()
-                        , DiscountType.WEEKEND, new WeekendDiscount()
-                        , DiscountType.SPECIAL, new SpecialDiscount()
-                        , DiscountType.PROMOTION, new PromotionDiscount()));
+        DiscountEventManager discountEventManager = DiscountEventManager.from(
+                Map.of(
+                        DiscountEventType.CHRISTMAS_DDAY_EVENT, new ChristmasDdayDiscount(),
+                        DiscountEventType.WEEKDAY_EVENT, new WeekdayDiscount(),
+                        DiscountEventType.WEEKEND_EVENT, new WeekendDiscount(),
+                        DiscountEventType.SPECIAL_EVENT, new SpecialDiscount(),
+                        DiscountEventType.PROMOTION_EVENT, new PromotionDiscount()
+                )
+        );
         ChristmasEventController christmasEventController = new ChristmasEventController(inputView, outputView,
-                policies);
+                discountEventManager);
         christmasEventController.run();
     }
 }

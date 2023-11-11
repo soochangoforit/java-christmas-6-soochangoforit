@@ -1,6 +1,6 @@
 package christmas.model;
 
-public class PromotionDiscount implements DiscountPolicy {
+public final class PromotionDiscount implements DiscountPolicy {
     private static final PromotionItem PROMOTION_ITEM = PromotionItem.FREE_CHAMPAGNE;
 
     @Override
