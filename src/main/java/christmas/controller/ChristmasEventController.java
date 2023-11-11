@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import christmas.dto.request.OrderItemInfoDto;
 import christmas.dto.request.VisitDayDto;
 import christmas.dto.response.AppliedDiscountsDto;
-import christmas.dto.response.OrderResultDto;
+import christmas.dto.response.OrderDto;
 import christmas.dto.response.VisitDateDto;
 import christmas.model.AppliedDiscountEventResult;
 import christmas.model.DiscountEventManager;
@@ -39,7 +39,7 @@ public class ChristmasEventController {
         OrderInfo orderInfo = OrderInfo.of(order, visitDate);
         AppliedDiscountEventResult appliedDiscountEventResult = discountEventManager.applyDiscountEvents(orderInfo);
         printDiscountEventPreviewMessage(visitDate);
-        printCustomerOrders(orderInfo);
+        printCustomerOrder(orderInfo);
 
         int totalPrice = orderInfo.calculateTotalPrice();
         int totalDiscountedAmount = appliedDiscountEventResult.calculateTotalDiscountedAmount();
@@ -70,9 +70,9 @@ public class ChristmasEventController {
         outputView.printDiscountEventPreviewMessage(visitDateDto);
     }
 
-    private void printCustomerOrders(OrderInfo orderInfo) {
-        OrderResultDto orderResultDto = OrderResultDto.from(orderInfo);
-        outputView.printOrderResult(orderResultDto);
+    private void printCustomerOrder(OrderInfo orderInfo) {
+        OrderDto orderDto = OrderDto.from(orderInfo);
+        outputView.printCustomerOrder(orderDto);
     }
 
     private Order createOrder() {

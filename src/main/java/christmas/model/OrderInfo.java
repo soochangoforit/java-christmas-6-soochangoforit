@@ -46,11 +46,7 @@ public class OrderInfo {
         return order.isQualifiedForPromotion(promotionItem);
     }
 
-    public Order getOrderGroup() {
+    public Order getOrder() {
         return order;
-    }
-
-    public VisitDate getDateOfVisit() {
-        return visitDate;
     }
 }

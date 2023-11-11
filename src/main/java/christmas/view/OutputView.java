@@ -1,10 +1,11 @@
 package christmas.view;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import christmas.dto.response.AppliedDiscountsDto;
-import christmas.dto.response.OrderInfoDto;
-import christmas.dto.response.OrderResultDto;
+import christmas.dto.response.OrderDto;
+import christmas.dto.response.OrderItemDto;
 import christmas.dto.response.VisitDateDto;
 import christmas.model.DiscountEventType;
 import christmas.model.EventBadge;
@@ -12,6 +13,8 @@ import christmas.model.Menu;
 import christmas.model.PromotionItem;
 
 public class OutputView {
+    public static final String ORDER_MENU_START_MESSAGE = "<주문 메뉴>";
+    public static final String ORDER_ITEM_FORMAT = "%s %d개";
     private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
     private static final String EVENT_PREVIEW_MESSAGE_FORMAT = "%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
 
@@ -41,21 +44,32 @@ public class OutputView {
         System.out.println();
     }
 
-    private static String formatEventPreviewMessage(int month, int day) {
+    private String formatEventPreviewMessage(int month, int day) {
         return String.format(EVENT_PREVIEW_MESSAGE_FORMAT, month, day);
     }
 
-    public void printOrderResult(OrderResultDto orderResultDto) {
-        print("<주문 메뉴>");
-        orderResultDto.getMenuInfoDtos().forEach(this::printOrderInfo);
+    public void printCustomerOrder(OrderDto orderDto) {
+        print(ORDER_MENU_START_MESSAGE);
+        printOrder(orderDto);
         printEmptyLine();
     }
 
-    private void printOrderInfo(OrderInfoDto orderInfoDto) {
-        String menuName = orderInfoDto.getMenuName();
-        int quantity = orderInfoDto.getQuantity();
+    private void printOrder(OrderDto orderDto) {
+        List<OrderItemDto> orderItemDtos = orderDto.getOrderItemDtos();
 
-        print(String.format("%s %d개", menuName, quantity));
+        orderItemDtos.forEach(this::printOrderItem);
+    }
+
+    private void printOrderItem(OrderItemDto orderItemDto) {
+        String menuName = orderItemDto.getMenuName();
+        int quantity = orderItemDto.getQuantity();
+
+        String orderItemMessage = formatOrderItemMessage(menuName, quantity);
+        print(orderItemMessage);
+    }
+
+    private String formatOrderItemMessage(String menuName, int quantity) {
+        return String.format(ORDER_ITEM_FORMAT, menuName, quantity);
     }
 
     public void printEventBadge(EventBadge eventBadge) {

@@ -102,7 +102,7 @@ public class Order {
         return totalMenuQuantity;
     }
 
-    public List<OrderItem> getOrders() {
+    public List<OrderItem> getOrderItems() {
         return orderItems;
     }
 }
