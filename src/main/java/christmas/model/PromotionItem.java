@@ -52,6 +52,10 @@ public enum PromotionItem {
     }
 
     public int calculateDiscountAmounts() {
+        if (quantity == ZERO) {
+            return ZERO;
+        }
+
         return item.calculateDiscountAmountsForPromotion(quantity);
     }
 
