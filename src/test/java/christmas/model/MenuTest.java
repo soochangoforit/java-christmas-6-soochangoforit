@@ -59,6 +59,30 @@ class MenuTest {
         assertThat(result).isEqualTo(isBeverage);
     }
 
+    @Test
+    void 서로_같은_값을_가지는_메뉴는_같은_객체이다() {
+        Menu actualMenu = Menu.from("양송이수프");
+        Menu expectedMenu = Menu.from("양송이수프");
+
+        assertThat(actualMenu).isSameAs(expectedMenu);
+    }
+
+    @Test
+    void 서로_다른_값을_가지는_메뉴는_다른_객체이다() {
+        Menu actualMenu = Menu.from("양송이수프");
+        Menu expectedMenu = Menu.from("타파스");
+
+        assertThat(actualMenu).isNotSameAs(expectedMenu);
+    }
+
+    @Test
+    void 서로_같은_값을_가지는_메뉴는_해시코드가_같다() {
+        Menu actualMenu = Menu.from("양송이수프");
+        Menu expectedMenu = Menu.from("양송이수프");
+
+        assertThat(actualMenu).hasSameHashCodeAs(expectedMenu);
+    }
+
     private static Stream<Arguments> 메뉴_음료_여부() {
         return Stream.of(
                 Arguments.of(Menu.MUSHROOM_SOUP, false),
