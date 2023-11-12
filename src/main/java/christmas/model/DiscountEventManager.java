@@ -27,7 +27,11 @@ public final class DiscountEventManager {
             return applyDiscounts(orderInfo);
         }
 
-        return Map.of();
+        return emptyDiscountEventResult();
+    }
+
+    private Map<DiscountEventType, DiscountAmounts> emptyDiscountEventResult() {
+        return new EnumMap<>(DiscountEventType.class);
     }
 
     private boolean isEligibleForDiscount(OrderInfo orderInfo) {
