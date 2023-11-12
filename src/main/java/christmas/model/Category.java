@@ -5,5 +5,5 @@ public enum Category {
     MAIN,
     DESSERT,
     BEVERAGE,
-    NONE;
+    NONE
 }

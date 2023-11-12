@@ -27,8 +27,8 @@ public enum PromotionItem {
         return orderAmounts.isEligibleFor(minimumAmountForEligibility);
     }
 
-    public int calculateTotalPrice() {
-        return item.calculateTotalPrice(quantity);
+    public int calculateDiscountAmounts() {
+        return item.calculateDiscountAmountsForPromotion(quantity);
     }
 
     public int getQuantity() {

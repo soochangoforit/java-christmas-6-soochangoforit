@@ -15,12 +15,12 @@ public final class AppliedDiscountEventResult {
     }
 
     public TotalDiscountAmounts calculateTotalDiscountAmounts() {
-        int totalDiscountAmounts = sumDiscountAmounts();
+        int totalDiscountAmounts = sumTotalDiscountAmounts();
 
         return TotalDiscountAmounts.from(totalDiscountAmounts);
     }
 
-    private int sumDiscountAmounts() {
+    private int sumTotalDiscountAmounts() {
         return discountEventResult.values()
                 .stream()
                 .mapToInt(DiscountAmounts::getAmounts)

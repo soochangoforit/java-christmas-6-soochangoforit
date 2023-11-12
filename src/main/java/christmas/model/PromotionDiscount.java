@@ -6,9 +6,10 @@ public final class PromotionDiscount implements DiscountPolicy {
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
         if (isEligibleForPromotion(orderInfo)) {
-            int discountAmounts = PROMOTION_ITEM.calculateTotalPrice();
+            int discountAmounts = PROMOTION_ITEM.calculateDiscountAmounts();
             return DiscountAmounts.from(discountAmounts);
         }
+
         return DiscountAmounts.noDiscount();
     }
 
