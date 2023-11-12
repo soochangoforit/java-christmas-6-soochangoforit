@@ -16,22 +16,23 @@ public class AppliedDiscountEventResultDto {
     public static AppliedDiscountEventResultDto from(AppliedDiscountEventResult appliedDiscountEventResult) {
         Map<DiscountEventType, DiscountAmounts> eventResult = appliedDiscountEventResult.getDiscountEventResult();
 
-        Map<String, Integer> discountEventResult = generateEventResult(eventResult);
+        Map<String, Integer> discountEventResult = generateAppliedDiscountEventResult(eventResult);
 
         return new AppliedDiscountEventResultDto(discountEventResult);
     }
 
-    private static Map<String, Integer> generateEventResult(Map<DiscountEventType, DiscountAmounts> eventResult) {
+    private static Map<String, Integer> generateAppliedDiscountEventResult(
+            Map<DiscountEventType, DiscountAmounts> eventResult) {
         Map<String, Integer> discountEventResult = new HashMap<>();
         eventResult.forEach((discountEventType, discountAmounts) -> {
-            putDiscountAmounts(discountEventType, discountAmounts, discountEventResult);
+            putDiscountEventResult(discountEventType, discountAmounts, discountEventResult);
         });
 
         return discountEventResult;
     }
 
-    private static void putDiscountAmounts(DiscountEventType discountEventType, DiscountAmounts discountAmounts,
-                                           Map<String, Integer> discountEventResult) {
+    private static void putDiscountEventResult(DiscountEventType discountEventType, DiscountAmounts discountAmounts,
+                                               Map<String, Integer> discountEventResult) {
         if (discountAmounts.isOverZeroAmounts()) {
             discountEventResult.put(discountEventType.getName(), discountAmounts.getAmounts());
         }

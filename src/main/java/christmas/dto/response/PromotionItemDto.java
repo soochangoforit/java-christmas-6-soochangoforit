@@ -12,10 +12,10 @@ public class PromotionItemDto {
     }
 
     public static PromotionItemDto from(PromotionItem promotionItem) {
-        String name = promotionItem.getItem().getName();
-        int quantity = promotionItem.getQuantity();
+        String itemName = promotionItem.getItem().getName();
+        int itemQuantity = promotionItem.getQuantity();
 
-        return new PromotionItemDto(name, quantity);
+        return new PromotionItemDto(itemName, itemQuantity);
     }
 
     public String getName() {

@@ -145,20 +145,12 @@ public class ChristmasEventController {
 
     private void printOrderAmountsAfterDiscount(OrderAmounts orderAmounts, TotalDiscountAmounts discountAmounts) {
         OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(discountAmounts);
-        printOrderAmountsAfterDiscount(orderAmountsAfterDiscount);
-    }
-
-    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsAfterDiscount) {
         OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
         outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
     }
 
     private void printEventBadge(TotalDiscountAmounts totalDiscountedAmounts) {
         EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmounts);
-        printEventBadge(eventBadge);
-    }
-
-    private void printEventBadge(EventBadge eventBadge) {
         EventBadgeDto eventBadgeDto = EventBadgeDto.from(EventSchedule.MAIN_EVENT_SEASON.getMonth(), eventBadge);
         outputView.printEventBadge(eventBadgeDto);
     }
