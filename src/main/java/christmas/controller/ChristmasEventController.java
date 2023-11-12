@@ -54,49 +54,8 @@ public class ChristmasEventController {
         printEventBadge(totalDiscountAmounts);
     }
 
-    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmounts, TotalDiscountAmounts discountAmounts) {
-        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(discountAmounts);
-        printOrderAmountsAfterDiscount(orderAmountsAfterDiscount);
-    }
-
-    private void printEventBadge(TotalDiscountAmounts totalDiscountedAmounts) {
-        EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmounts);
-        printEventBadge(eventBadge);
-    }
-
-    private void printEventBadge(EventBadge eventBadge) {
-        EventBadgeDto eventBadgeDto = EventBadgeDto.from(EventSchedule.MAIN_EVENT_SEASON.getMonth(), eventBadge);
-        outputView.printEventBadge(eventBadgeDto);
-    }
-
-    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsAfterDiscount) {
-        OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
-        outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
-    }
-
-    private void printTotalDiscountAmounts(TotalDiscountAmounts totalDiscountedAmounts) {
-        TotalDiscountAmountsDto totalDiscountAmountsDto = TotalDiscountAmountsDto.from(totalDiscountedAmounts);
-        outputView.printTotalDiscountAmounts(totalDiscountAmountsDto);
-    }
-
-    private void printOrderDetails(OrderInfo orderInfo, OrderAmounts orderAmounts) {
-        printDiscountEventPreviewMessage(orderInfo.getVisitDate());
-        printCustomerOrder(orderInfo);
-        printOrderAmountsBeforeDiscount(orderAmounts);
-        printPromotionMessage(orderInfo);
-    }
-
-    private void printOrderAmountsBeforeDiscount(OrderAmounts orderAmounts) {
-        OrderAmountsDto orderAmountsDto = OrderAmountsDto.from(orderAmounts);
-        outputView.printOrderAmountsBeforeDiscount(orderAmountsDto);
-    }
-
     private void printWelcomeMessage() {
         outputView.printWelcomeMessage(EventSchedule.MAIN_EVENT_SEASON.getMonth());
-    }
-
-    private AppliedDiscountEventResult applyDiscountEvents(OrderInfo orderInfo) {
-        return discountEventManager.applyDiscountEvents(orderInfo);
     }
 
     private VisitDate fetchVisitDateFromCustomer() {
@@ -140,17 +99,11 @@ public class ChristmasEventController {
         return OrderInfo.of(order, visitDate);
     }
 
-    private void printAppliedDiscounts(AppliedDiscountEventResult appliedDiscountEventResult) {
-        AppliedDiscountEventResultDto appliedDiscountEventResultDto = AppliedDiscountEventResultDto.from(
-                appliedDiscountEventResult);
-        outputView.printAppliedDiscountEventResult(appliedDiscountEventResultDto);
-    }
-
-    private void printPromotionMessage(OrderInfo orderInfo) {
-        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
-        PromotionItem matchingPromotion = PromotionItem.findMatchingPromotion(orderAmounts);
-        PromotionItemDto promotionItemDto = PromotionItemDto.from(matchingPromotion);
-        outputView.printPromotionMessage(promotionItemDto);
+    private void printOrderDetails(OrderInfo orderInfo, OrderAmounts orderAmounts) {
+        printDiscountEventPreviewMessage(orderInfo.getVisitDate());
+        printCustomerOrder(orderInfo);
+        printOrderAmountsBeforeDiscount(orderAmounts);
+        printPromotionMessage(orderInfo);
     }
 
     private void printDiscountEventPreviewMessage(VisitDate visitDate) {
@@ -161,6 +114,53 @@ public class ChristmasEventController {
     private void printCustomerOrder(OrderInfo orderInfo) {
         OrderDto orderDto = OrderDto.from(orderInfo);
         outputView.printCustomerOrder(orderDto);
+    }
+
+    private void printOrderAmountsBeforeDiscount(OrderAmounts orderAmounts) {
+        OrderAmountsDto orderAmountsDto = OrderAmountsDto.from(orderAmounts);
+        outputView.printOrderAmountsBeforeDiscount(orderAmountsDto);
+    }
+
+    private void printPromotionMessage(OrderInfo orderInfo) {
+        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
+        PromotionItem matchingPromotion = PromotionItem.findMatchingPromotion(orderAmounts);
+        PromotionItemDto promotionItemDto = PromotionItemDto.from(matchingPromotion);
+        outputView.printPromotionMessage(promotionItemDto);
+    }
+
+    private AppliedDiscountEventResult applyDiscountEvents(OrderInfo orderInfo) {
+        return discountEventManager.applyDiscountEvents(orderInfo);
+    }
+
+    private void printAppliedDiscounts(AppliedDiscountEventResult appliedDiscountEventResult) {
+        AppliedDiscountEventResultDto appliedDiscountEventResultDto = AppliedDiscountEventResultDto.from(
+                appliedDiscountEventResult);
+        outputView.printAppliedDiscountEventResult(appliedDiscountEventResultDto);
+    }
+
+    private void printTotalDiscountAmounts(TotalDiscountAmounts totalDiscountedAmounts) {
+        TotalDiscountAmountsDto totalDiscountAmountsDto = TotalDiscountAmountsDto.from(totalDiscountedAmounts);
+        outputView.printTotalDiscountAmounts(totalDiscountAmountsDto);
+    }
+
+    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmounts, TotalDiscountAmounts discountAmounts) {
+        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(discountAmounts);
+        printOrderAmountsAfterDiscount(orderAmountsAfterDiscount);
+    }
+
+    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsAfterDiscount) {
+        OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
+        outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
+    }
+
+    private void printEventBadge(TotalDiscountAmounts totalDiscountedAmounts) {
+        EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmounts);
+        printEventBadge(eventBadge);
+    }
+
+    private void printEventBadge(EventBadge eventBadge) {
+        EventBadgeDto eventBadgeDto = EventBadgeDto.from(EventSchedule.MAIN_EVENT_SEASON.getMonth(), eventBadge);
+        outputView.printEventBadge(eventBadgeDto);
     }
 
     private <T> T retryOnException(Supplier<T> supplier) {
