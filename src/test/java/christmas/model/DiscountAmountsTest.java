@@ -12,8 +12,8 @@ class DiscountAmountsTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-1, -1000})
-    void 할임금액은_음수값을_가지면_예외가_발생한다(int amounts) {
-        assertThatThrownBy(() -> DiscountAmounts.from(amounts))
+    void 할임금액은_음수값을_가지면_예외가_발생한다(int negativeAmounts) {
+        assertThatThrownBy(() -> DiscountAmounts.from(negativeAmounts))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -27,13 +27,13 @@ class DiscountAmountsTest {
     void 할임금액이_없으면_0원을_갖는다() {
         DiscountAmounts discountAmounts = DiscountAmounts.noDiscount();
 
-        assertThat(discountAmounts).usingRecursiveComparison()
-                .isEqualTo(DiscountAmounts.from(0));
+        assertThat(discountAmounts).isEqualTo(DiscountAmounts.from(0));
     }
 
-    @Test
-    void 할인금액이_0원_이상이면_참을_반환한다() {
-        DiscountAmounts discountAmounts = DiscountAmounts.from(1_000);
+    @ParameterizedTest
+    @ValueSource(ints = {1, 1_000})
+    void 할인금액이_0원_보다_큰_값을_가지면_참을_반환한다(int amounts) {
+        DiscountAmounts discountAmounts = DiscountAmounts.from(amounts);
 
         boolean isOverZero = discountAmounts.isOverZeroAmounts();
 
@@ -41,7 +41,7 @@ class DiscountAmountsTest {
     }
 
     @Test
-    void 할인금액이_0원_보다_작으면_거짓을_반환한다() {
+    void 할인금액이_0원_아하의_값을_가지면_거짓을_반환한다() {
         DiscountAmounts discountAmounts = DiscountAmounts.from(0);
 
         boolean isOverZero = discountAmounts.isOverZeroAmounts();

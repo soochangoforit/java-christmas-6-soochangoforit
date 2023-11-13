@@ -45,8 +45,11 @@ class EventBadgeTest {
 
     private static Stream<Arguments> 이벤트_배지_찾기_테스트_데이터() {
         return Stream.of(
+                Arguments.of(TotalDiscountAmounts.from(25_000), EventBadge.SANTA),
                 Arguments.of(TotalDiscountAmounts.from(20_000), EventBadge.SANTA),
+                Arguments.of(TotalDiscountAmounts.from(15_000), EventBadge.TREE),
                 Arguments.of(TotalDiscountAmounts.from(10_000), EventBadge.TREE),
+                Arguments.of(TotalDiscountAmounts.from(7_500), EventBadge.STAR),
                 Arguments.of(TotalDiscountAmounts.from(5_000), EventBadge.STAR),
                 Arguments.of(TotalDiscountAmounts.from(500), EventBadge.NONE)
         );

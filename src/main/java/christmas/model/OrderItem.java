@@ -4,7 +4,7 @@ public final class OrderItem {
     private final Menu menu;
     private final Quantity quantity;
 
-    private OrderItem(String menu, int quantity) {
+    OrderItem(String menu, int quantity) {
         this(Menu.from(menu), Quantity.from(quantity));
     }
 

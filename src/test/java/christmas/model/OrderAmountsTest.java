@@ -24,21 +24,21 @@ class OrderAmountsTest {
     }
 
     @Test
-    void 총주문금액이_최소_자격요건을_만족하면_참을_반환한다() {
+    void 총주문금액이_특정한_최소_금액_자격요건을_만족하면_참을_반환한다() {
         OrderAmounts orderAmounts = OrderAmounts.from(10_000);
 
-        boolean isEligibleForPromotion = orderAmounts.isEligibleFor(10_000);
+        boolean isEligible = orderAmounts.isEligibleFor(10_000);
 
-        assertThat(isEligibleForPromotion).isTrue();
+        assertThat(isEligible).isTrue();
     }
 
     @Test
-    void 총주문금액이_최소_자격요건을_만족하지_않으면_거짓을_반환한다() {
+    void 총주문금액이_특정한_최소_금액_자격요건을_만족하지_않으면_거짓을_반환한다() {
         OrderAmounts orderAmounts = OrderAmounts.from(9_999);
 
-        boolean isEligibleForPromotion = orderAmounts.isEligibleFor(10_000);
+        boolean isEligible = orderAmounts.isEligibleFor(10_000);
 
-        assertThat(isEligibleForPromotion).isFalse();
+        assertThat(isEligible).isFalse();
     }
 
     @Test
@@ -48,19 +48,21 @@ class OrderAmountsTest {
 
         OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(totalDiscountAmounts);
 
+        OrderAmounts expectedOrderAmounts = OrderAmounts.from(9_000);
         assertThat(orderAmountsAfterDiscount).usingRecursiveComparison()
-                .isEqualTo(OrderAmounts.from(9_000));
+                .isEqualTo(expectedOrderAmounts);
     }
 
     @Test
-    void 총주문금액만큼_할인_혜택금액을_차감할_수_있다() {
+    void 총주문금액만큼_할인_혜택금액을_차감함으로서_총주문금액은_0원을_가질_수_있다() {
         OrderAmounts orderAmounts = OrderAmounts.from(10_000);
         TotalDiscountAmounts totalDiscountAmounts = TotalDiscountAmounts.from(10_000);
 
         OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(totalDiscountAmounts);
 
+        OrderAmounts expectedOrderAmounts = OrderAmounts.from(0);
         assertThat(orderAmountsAfterDiscount).usingRecursiveComparison()
-                .isEqualTo(OrderAmounts.from(0));
+                .isEqualTo(expectedOrderAmounts);
     }
 
     @Test
@@ -86,5 +88,5 @@ class OrderAmountsTest {
 
         assertThat(orderAmounts).hasSameHashCodeAs(sameOrderAmounts);
     }
-    
+
 }

@@ -16,9 +16,9 @@ public final class VisitDate {
     }
 
     public static VisitDate from(int year, int month, int day) {
-        LocalDate localDate = createLocalDate(year, month, day);
+        LocalDate visitDate = createLocalDate(year, month, day);
 
-        return new VisitDate(localDate);
+        return new VisitDate(visitDate);
     }
 
     private static LocalDate createLocalDate(int year, int month, int day) {

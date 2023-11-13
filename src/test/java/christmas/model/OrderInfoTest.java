@@ -6,31 +6,44 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class OrderInfoTest {
 
     @Test
     void 주문과_방문날짜를_통해서_주문정보를_생성할_수_있다() {
-        VisitDate date = VisitDate.from(2023, 12, 25);
-        Order order = new Order(List.of(new OrderItem(Menu.CHOCOLATE_CAKE, Quantity.from(1))));
+        VisitDate date = createVisitDate(2023, 12, 25);
+        Order order = createOrder(
+                createOrderItem(Menu.CHOCOLATE_CAKE, 1)
+        );
 
         OrderInfo orderInfo = OrderInfo.of(order, date);
 
         assertThat(orderInfo).isNotNull();
     }
 
+    private static OrderItem createOrderItem(Menu menu, int quantity) {
+        return new OrderItem(menu, Quantity.from(quantity));
+    }
+
+    private static Order createOrder(OrderItem... orderItems) {
+        return new Order(List.of(orderItems));
+    }
+
+    private VisitDate createVisitDate(int year, int month, int day) {
+        return VisitDate.from(year, month, day);
+    }
+
     @Test
     void 주문_총금액을_계산할_수_있다() {
-        VisitDate date = VisitDate.from(2023, 12, 25);
-        Order order = new Order(List.of(
-                new OrderItem(Menu.CHOCOLATE_CAKE, Quantity.from(1)),
-                new OrderItem(Menu.T_BONE_STEAK, Quantity.from(1))
-        ));
+        VisitDate date = createVisitDate(2023, 12, 25);
+        Order order = createOrder(
+                createOrderItem(Menu.CHOCOLATE_CAKE, 1),
+                createOrderItem(Menu.T_BONE_STEAK, 1)
+        );
         OrderInfo orderInfo = OrderInfo.of(order, date);
 
         OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
@@ -40,39 +53,63 @@ class OrderInfoTest {
     }
 
     @ParameterizedTest
-    @MethodSource("방문_날짜가_시작날짜와_종료날짜에_포함되는지_테스트_케이스")
-    void 주문날짜가_시작날짜와_종료날짜에_포함되면_참을_반환한다(VisitDate visitDate, boolean expected) {
-        LocalDate startDate = LocalDate.of(2023, 12, 25);
-        LocalDate endDate = LocalDate.of(2023, 12, 30);
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)))),
-                visitDate
+    @ValueSource(ints = {25, 27, 30})
+    void 주문날짜가_시작날짜와_종료날짜에_포함되면_참을_반환한다(int visitDay) {
+        LocalDate startDate = createLocalDate(2023, 12, 25);
+        LocalDate endDate = createLocalDate(2023, 12, 30);
+        Order order = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1)
         );
+        VisitDate visitDate = createVisitDate(2023, 12, visitDay);
+        OrderInfo orderInfo = OrderInfo.of(order, visitDate);
 
         boolean isOrderedIn = orderInfo.isOrderedBetween(startDate, endDate);
 
-        assertThat(isOrderedIn).isEqualTo(expected);
+        assertThat(isOrderedIn).isTrue();
     }
 
-    @Test
-    void 주문날짜가_특정한_시작날짜로부터_며칠_지났는지_계산할_수_있다() {
-        LocalDate startDate = LocalDate.of(2023, 12, 25);
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)))),
-                VisitDate.from(2023, 12, 27)
+    private static LocalDate createLocalDate(int year, int month, int day) {
+        return LocalDate.of(year, month, day);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {24, 31})
+    void 주문날짜가_시작날짜와_종료날짜에_포함되지_않으면_거짓을_반환한다(int visitDay) {
+        LocalDate startDate = createLocalDate(2023, 12, 25);
+        LocalDate endDate = createLocalDate(2023, 12, 30);
+        Order order = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1)
         );
+        VisitDate visitDate = createVisitDate(2023, 12, visitDay);
+        OrderInfo orderInfo = OrderInfo.of(order, visitDate);
+
+        boolean isOrderedIn = orderInfo.isOrderedBetween(startDate, endDate);
+
+        assertThat(isOrderedIn).isFalse();
+    }
+
+    @ParameterizedTest
+    @CsvSource({"25,27,2", "27,27,0"})
+    void 주문날짜가_특정_시작날짜로부터_며칠_지났는지_계산할_수_있다(int startDay, int visitDay, int expectedDaysFrom) {
+        LocalDate startDate = createLocalDate(2023, 12, startDay);
+        Order order = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1)
+        );
+        VisitDate visitDate = createVisitDate(2023, 12, visitDay);
+        OrderInfo orderInfo = OrderInfo.of(order, visitDate);
 
         int daysFrom = orderInfo.daysSinceStartDate(startDate);
 
-        assertThat(daysFrom).isEqualTo(2);
+        assertThat(daysFrom).isEqualTo(expectedDaysFrom);
     }
 
     @Test
-    void 주문날짜가_특정한_요일에_속하면_참을_반환한다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)))),
-                VisitDate.from(2023, 12, 27)
+    void 주문날짜가_특정_요일에_속하면_참을_반환한다() {
+        VisitDate visitDateIsWednesday = createVisitDate(2023, 12, 27);
+        Order order = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(order, visitDateIsWednesday);
 
         boolean isInDayOfWeek = orderInfo.isOrderedInDaysOfWeek(Set.of(DayOfWeek.WEDNESDAY));
 
@@ -81,10 +118,11 @@ class OrderInfoTest {
 
     @Test
     void 주문날짜가_특정한_요일에_속하지_않으면_거짓을_반환한다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)))),
-                VisitDate.from(2023, 12, 27)
+        VisitDate visitDateIsWednesday = createVisitDate(2023, 12, 27);
+        Order order = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(order, visitDateIsWednesday);
 
         boolean isInDayOfWeek = orderInfo.isOrderedInDaysOfWeek(Set.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY));
 
@@ -93,10 +131,11 @@ class OrderInfoTest {
 
     @Test
     void 주문날짜가_특정_일수에_속하면_참을_반환한다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)))),
-                VisitDate.from(2023, 12, 27)
+        VisitDate visitDate = createVisitDate(2023, 12, 27);
+        Order order = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(order, visitDate);
 
         boolean isInDays = orderInfo.isOrderedInDays(Set.of(27));
 
@@ -105,10 +144,11 @@ class OrderInfoTest {
 
     @Test
     void 주문날짜가_특정_일수에_속하지_않으면_거짓을_반환한다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)))),
-                VisitDate.from(2023, 12, 27)
+        VisitDate visitDate = createVisitDate(2023, 12, 27);
+        Order order = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(order, visitDate);
 
         boolean isInDays = orderInfo.isOrderedInDays(Set.of(25, 26, 28, 29, 30));
 
@@ -117,14 +157,13 @@ class OrderInfoTest {
 
     @Test
     void 주문에_포함된_특정_카테고리의_주문_항목_수량을_찾을_수_없으면_0을_반환한다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(
-                        new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)),
-                        new OrderItem(Menu.CHOCOLATE_CAKE, Quantity.from(1)),
-                        new OrderItem(Menu.T_BONE_STEAK, Quantity.from(1))
-                )),
-                VisitDate.from(2023, 12, 27)
+        VisitDate visitDate = createVisitDate(2023, 12, 27);
+        Order orderHasNoBeverageMenu = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1),
+                createOrderItem(Menu.CHOCOLATE_CAKE, 1),
+                createOrderItem(Menu.T_BONE_STEAK, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(orderHasNoBeverageMenu, visitDate);
 
         int totalOrderItemQuantityIn = orderInfo.sumTotalOrderItemQuantityIn(Category.BEVERAGE);
 
@@ -133,14 +172,13 @@ class OrderInfoTest {
 
     @Test
     void 주문에_포함된_특정_카테고리의_주문_항목_수량을_찾을_수_있다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(
-                        new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)),
-                        new OrderItem(Menu.CHOCOLATE_CAKE, Quantity.from(1)),
-                        new OrderItem(Menu.T_BONE_STEAK, Quantity.from(1))
-                )),
-                VisitDate.from(2023, 12, 27)
+        VisitDate visitDate = createVisitDate(2023, 12, 27);
+        Order orderHasMainMenu = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1),
+                createOrderItem(Menu.CHOCOLATE_CAKE, 1),
+                createOrderItem(Menu.T_BONE_STEAK, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(orderHasMainMenu, visitDate);
 
         int totalOrderItemQuantityIn = orderInfo.sumTotalOrderItemQuantityIn(Category.MAIN);
 
@@ -149,14 +187,13 @@ class OrderInfoTest {
 
     @Test
     void 주문이_특정_프로모션_받을_자격이_되면_참을_반환한다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(
-                        new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)),
-                        new OrderItem(Menu.CHOCOLATE_CAKE, Quantity.from(1)),
-                        new OrderItem(Menu.T_BONE_STEAK, Quantity.from(1))
-                )),
-                VisitDate.from(2023, 12, 27)
+        VisitDate visitDate = createVisitDate(2023, 12, 27);
+        Order orderIsEligibleForPromotion = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1),
+                createOrderItem(Menu.CHOCOLATE_CAKE, 1),
+                createOrderItem(Menu.T_BONE_STEAK, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(orderIsEligibleForPromotion, visitDate);
 
         boolean isEligibleForPromotion = orderInfo.isEligibleFor(PromotionItem.FREE_CHAMPAGNE);
 
@@ -165,26 +202,15 @@ class OrderInfoTest {
 
     @Test
     void 주문이_특정_프로모션_받을_자격이_되지_않으면_거짓을_반환한다() {
-        OrderInfo orderInfo = OrderInfo.of(
-                new Order(List.of(
-                        new OrderItem(Menu.BBQ_RIBS, Quantity.from(1)),
-                        new OrderItem(Menu.CHOCOLATE_CAKE, Quantity.from(1))
-                )),
-                VisitDate.from(2023, 12, 27)
+        VisitDate visitDate = createVisitDate(2023, 12, 27);
+        Order orderIsNotEligibleForPromotion = createOrder(
+                createOrderItem(Menu.BBQ_RIBS, 1),
+                createOrderItem(Menu.CHOCOLATE_CAKE, 1)
         );
+        OrderInfo orderInfo = OrderInfo.of(orderIsNotEligibleForPromotion, visitDate);
 
         boolean isEligibleForPromotion = orderInfo.isEligibleFor(PromotionItem.FREE_CHAMPAGNE);
 
         assertThat(isEligibleForPromotion).isFalse();
-    }
-
-    private static Stream<Arguments> 방문_날짜가_시작날짜와_종료날짜에_포함되는지_테스트_케이스() {
-        return Stream.of(
-                Arguments.of(VisitDate.from(2023, 12, 24), false),
-                Arguments.of(VisitDate.from(2023, 12, 25), true),
-                Arguments.of(VisitDate.from(2023, 12, 27), true),
-                Arguments.of(VisitDate.from(2023, 12, 30), true),
-                Arguments.of(VisitDate.from(2023, 12, 31), false)
-        );
     }
 }

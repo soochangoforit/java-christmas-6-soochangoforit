@@ -28,7 +28,7 @@ class QuantityTest {
 
     @ParameterizedTest
     @MethodSource("수량_가격_곱셈결과")
-    void 수량과_가격을_통해서_곱셈을_할_수_있다(int count, int menuPrice, int expectedTotal) {
+    void 수량과_가격을_통해서_곱겜결과를_얻을_수_있다(int count, int menuPrice, int expectedTotal) {
         Quantity quantity = Quantity.from(count);
 
         int total = quantity.multiply(menuPrice);

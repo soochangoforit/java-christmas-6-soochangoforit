@@ -25,17 +25,19 @@ class TotalDiscountAmountsTest {
 
     @Test
     void 총할인_금액을_총주문_금액에서_차감할_수_있다() {
-        TotalDiscountAmounts totalDiscountAmounts = TotalDiscountAmounts.from(1_000);
         int orderAmounts = 10_000;
+        TotalDiscountAmounts totalDiscountAmounts = TotalDiscountAmounts.from(1_000);
 
         int orderAmountsAfterDiscount = totalDiscountAmounts.calculateOrderAmountsAfterDiscount(orderAmounts);
 
-        assertThat(orderAmountsAfterDiscount).isEqualTo(9_000);
+        int expectedOrderAmountsAfterDiscount = 9_000;
+        assertThat(orderAmountsAfterDiscount).isEqualTo(expectedOrderAmountsAfterDiscount);
     }
 
-    @Test
-    void 총할인_금액이_최소_자격요건을_만족하면_참을_반환한다() {
-        TotalDiscountAmounts totalDiscountAmounts = TotalDiscountAmounts.from(10_000);
+    @ParameterizedTest
+    @ValueSource(ints = {10_000, 10_001})
+    void 총할인_금액이_최소_자격요건을_만족하면_참을_반환한다(int amounts) {
+        TotalDiscountAmounts totalDiscountAmounts = TotalDiscountAmounts.from(amounts);
 
         boolean isEligible = totalDiscountAmounts.isEligibleFor(10_000);
 

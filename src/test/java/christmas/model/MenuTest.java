@@ -29,18 +29,18 @@ class MenuTest {
 
     @ParameterizedTest
     @MethodSource("메뉴_수량_예상_금액")
-    void 메뉴별_수량에_따른_지불_금액을_계산_할_수_있다(Menu menu, Quantity quantity, int expectedTotal) {
+    void 메뉴별_수량에_따른_지불_금액을_계산_할_수_있다(Menu menu, Quantity quantity, int expectedTotalAmounts) {
         int totalAmount = menu.calculateAmounts(quantity);
 
-        assertThat(totalAmount).isEqualTo(expectedTotal);
+        assertThat(totalAmount).isEqualTo(expectedTotalAmounts);
     }
 
     @ParameterizedTest
     @MethodSource("메뉴_수량_예상_할인금액")
-    void 메뉴별_수량에_따른_프로모션_할인_금액을_계산_할_수_있다(Menu menu, int quantity, int expectedTotal) {
+    void 메뉴별_수량에_따른_프로모션_할인_금액을_계산_할_수_있다(Menu menu, int quantity, int expectedTotalAmounts) {
         int totalAmount = menu.calculateDiscountAmountsForPromotion(quantity);
 
-        assertThat(totalAmount).isEqualTo(expectedTotal);
+        assertThat(totalAmount).isEqualTo(expectedTotalAmounts);
     }
 
     @ParameterizedTest
@@ -87,9 +87,9 @@ class MenuTest {
         return Stream.of(
                 Arguments.of(Menu.MUSHROOM_SOUP, false),
                 Arguments.of(Menu.TAPAS, false),
+                Arguments.of(Menu.ICE_CREAM, false),
                 Arguments.of(Menu.RED_WINE, true),
-                Arguments.of(Menu.CHAMPAGNE, true),
-                Arguments.of(Menu.ICE_CREAM, false)
+                Arguments.of(Menu.CHAMPAGNE, true)
         );
     }
 

@@ -10,41 +10,40 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class VisitDateTest {
-    private static final int YEAR = 2023;
-    private static final int MONTH = 12;
 
     @ParameterizedTest
     @ValueSource(ints = {0, 32})
     void 유효하지_않은_방문_날짜를_입력하면_예외가_발생한다(int day) {
-        assertThatThrownBy(() -> VisitDate.from(YEAR, MONTH, day))
+        assertThatThrownBy(() -> VisitDate.from(2023, 12, day))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1, 31})
     void 유효한_날짜를_입력하면_예외가_발생하지_않는다(int day) {
-        assertDoesNotThrow(() -> VisitDate.from(YEAR, MONTH, day));
+        assertDoesNotThrow(() -> VisitDate.from(2023, 12, day));
     }
 
     @ParameterizedTest
     @MethodSource("방문날짜_지나온_일수")
-    void 특정날짜로부터_방문날짜까지_일수를_구할_수_있다(int visitDay, int expectedDaysSince) {
-        VisitDate visitDate = VisitDate.from(YEAR, MONTH, visitDay);
+    void 특정날짜로부터_방문날짜까지_일수를_구할_수_있다(int visitDay, int expectedDaysSinceCount) {
+        VisitDate visitDate = VisitDate.from(2023, 12, visitDay);
         LocalDate startDate = LocalDate.of(2023, 12, 1);
 
-        int daysSince = visitDate.daysSince(startDate);
+        int actualDaysSinceCount = visitDate.daysSince(startDate);
 
-        assertThat(daysSince).isEqualTo(expectedDaysSince);
+        assertThat(actualDaysSinceCount).isEqualTo(expectedDaysSinceCount);
     }
 
     @ParameterizedTest
-    @MethodSource("방문일자_특정요일_특저일자에_속한_여부")
+    @MethodSource("방문일자_특정요일_특정요일에_속한_여부")
     void 방문날짜가_특정요일에_속하는지_알_수_있다(LocalDate date, Set<DayOfWeek> dayOfWeeks, boolean expectedResult) {
         VisitDate visitDate = new VisitDate(date);
 
@@ -64,7 +63,7 @@ class VisitDateTest {
     }
 
     @ParameterizedTest
-    @MethodSource("방문날짜_시작날짜_종료날짜_범위_포함_여부")
+    @MethodSource("방문날짜_시작날짜_종료날짜_기간범위_포함_여부")
     void 방문날짜가_시작날짜와_종료날짜_사이에_포함되는지_알_수_있다(LocalDate date, LocalDate startDate, LocalDate endDate,
                                            boolean expectedResult) {
         VisitDate visitDate = new VisitDate(date);
@@ -74,17 +73,39 @@ class VisitDateTest {
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 
-    private static Stream<Arguments> 방문날짜_시작날짜_종료날짜_범위_포함_여부() {
-        LocalDate startDate = java.time.LocalDate.of(2023, 12, 1);
-        LocalDate endDate = LocalDate.of(2023, 12, 31);
+    @Test
+    void 날짜가_같은_방문날짜는_서로_같은_객체이다() {
+        VisitDate visitDate = VisitDate.from(2023, 12, 1);
+        VisitDate sameVisitDate = VisitDate.from(2023, 12, 1);
+
+        assertThat(visitDate).isEqualTo(sameVisitDate);
+    }
+
+    @Test
+    void 날짜가_다른_방문날짜는_서로_다른_객체이다() {
+        VisitDate visitDate = VisitDate.from(2023, 12, 1);
+        VisitDate differentVisitDate = VisitDate.from(2023, 12, 2);
+
+        assertThat(visitDate).isNotEqualTo(differentVisitDate);
+    }
+
+    @Test
+    void 날짜가_같은_방문날짜는_서로_같은_해시코드를_가진다() {
+        VisitDate visitDate = VisitDate.from(2023, 12, 1);
+        VisitDate sameVisitDate = VisitDate.from(2023, 12, 1);
+
+        assertThat(visitDate).hasSameHashCodeAs(sameVisitDate);
+    }
+
+    private static Stream<Arguments> 방문날짜_시작날짜_종료날짜_기간범위_포함_여부() {
+        LocalDate startDate = java.time.LocalDate.of(2023, 12, 2);
+        LocalDate endDate = LocalDate.of(2023, 12, 30);
 
         return Stream.of(
-                Arguments.of(LocalDate.of(2023, 12, 15), startDate, endDate, true),
-                Arguments.of(LocalDate.of(2023, 11, 30), startDate, endDate, false),
-                Arguments.of(LocalDate.of(2024, 1, 1), startDate, endDate, false),
-                Arguments.of(startDate, startDate, endDate, true),
-                Arguments.of(endDate, startDate, endDate, true)
-
+                Arguments.of(LocalDate.of(2023, 12, 1), startDate, endDate, false),
+                Arguments.of(LocalDate.of(2023, 12, 2), startDate, endDate, true),
+                Arguments.of(LocalDate.of(2023, 12, 30), startDate, endDate, true),
+                Arguments.of(LocalDate.of(2023, 12, 31), startDate, endDate, false)
         );
     }
 
@@ -105,18 +126,22 @@ class VisitDateTest {
         );
     }
 
-    private static Stream<Arguments> 방문일자_특정요일_특저일자에_속한_여부() {
-        return java.util.stream.Stream.of(
+    private static Stream<Arguments> 방문일자_특정요일_특정요일에_속한_여부() {
+        LocalDate friday = LocalDate.of(2023, 12, 1);
+        LocalDate saturday = LocalDate.of(2023, 12, 2);
+        LocalDate sunday = LocalDate.of(2023, 12, 3);
+
+        return Stream.of(
                 Arguments.of(
-                        LocalDate.of(2023, 12, 1),
-                        EnumSet.of(DayOfWeek.FRIDAY),
+                        friday,
+                        EnumSet.of(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY),
                         true),
                 Arguments.of(
-                        LocalDate.of(2023, 12, 2),
+                        saturday,
                         EnumSet.of(DayOfWeek.FRIDAY),
                         false),
                 Arguments.of(
-                        LocalDate.of(2023, 12, 3),
+                        sunday,
                         EnumSet.noneOf(DayOfWeek.class),
                         false)
         );

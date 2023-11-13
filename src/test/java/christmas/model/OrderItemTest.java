@@ -15,41 +15,35 @@ class OrderItemTest {
 
     @Test
     void 사용자_주문_항목_입력_값으로_주문_항목을_생성하는_경우_존재하지_않는_메뉴_이름이면_예외가_발생한다() {
-        OrderItemMapper nonExistentMenuOfOrderItemMapper = new OrderItemMapper("없는 메뉴", 1);
-
-        assertThatThrownBy(() -> OrderItem.from(nonExistentMenuOfOrderItemMapper))
+        assertThatThrownBy(() -> new OrderItem("없는 메뉴", 1))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, -1})
     void 사용자_주문_항목_입력_값으로_주문_항목을_생성하는_경우_음수_및_0값이면_예외가_발생한다(int quantity) {
-        OrderItemMapper negativeQuantityOfOrderItemMapper = new OrderItemMapper("초코케이크", quantity);
-
-        assertThatThrownBy(() -> OrderItem.from(negativeQuantityOfOrderItemMapper))
+        assertThatThrownBy(() -> new OrderItem("초코케이크", quantity))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void 사용자_주문_항목_입력_값으로_올바른_메뉴와_수량으로_주문_항목을_생성하는_경우_예외가_발생하지_않는다() {
-        OrderItemMapper orderItemMapper = new OrderItemMapper("초코케이크", 1);
-
-        assertDoesNotThrow(() -> OrderItem.from(orderItemMapper));
+        assertDoesNotThrow(() -> new OrderItem("초코케이크", 1));
     }
 
     @ParameterizedTest
     @MethodSource("메뉴_수량_예상금액")
-    void 주문_항목이_가지는_금액을_계산할_수_있다(Menu menu, int quantity, int expectedTotal) {
+    void 주문_항목으로부터_지불해야할_금액을_계산할_수_있다(Menu menu, int quantity, int expectedTotalOrderItemAmounts) {
         OrderItem orderItem = new OrderItem(menu, Quantity.from(quantity));
 
-        int totalAmount = orderItem.calculateAmounts();
+        int totalOrderItemAmounts = orderItem.calculateAmounts();
 
-        assertThat(totalAmount).isEqualTo(expectedTotal);
+        assertThat(totalOrderItemAmounts).isEqualTo(expectedTotalOrderItemAmounts);
     }
 
     @ParameterizedTest
     @MethodSource("메뉴_메뉴와일치하는카테고리")
-    void 주문_항목이_카테고리에_속하는_경우는_참을_응답한다(Menu menu, Category category) {
+    void 주문_항목이_특정_카테고리에_속하는_경우는_참을_응답한다(Menu menu, Category category) {
         OrderItem orderItem = new OrderItem(menu, Quantity.from(1));
 
         boolean belongsToCategory = orderItem.belongsTo(category);
