@@ -22,7 +22,7 @@ class WeekendDiscountTest {
 
         DiscountAmounts discountAmounts = weekendDiscount.applyDiscount(orderInfo);
 
-        assertThat(discountAmounts).isEqualTo(DiscountAmounts.from(2_000));
+        assertThat(discountAmounts).isEqualTo(DiscountAmounts.from(4_046));
     }
 
     @ParameterizedTest
@@ -38,7 +38,7 @@ class WeekendDiscountTest {
 
         DiscountAmounts discountAmounts = weekendDiscount.applyDiscount(orderInfo);
 
-        assertThat(discountAmounts).isEqualTo(DiscountAmounts.from(3_000));
+        assertThat(discountAmounts).isEqualTo(DiscountAmounts.from(6_069));
     }
 
     @ParameterizedTest

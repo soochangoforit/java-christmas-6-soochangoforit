@@ -6,7 +6,7 @@ import java.util.Set;
 
 public final class WeekendDiscount implements DiscountPolicy {
     private static final Set<DayOfWeek> DISCOUNT_DAYS_OF_WEEK = EnumSet.of(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY);
-    private static final int DISCOUNT_AMOUNT_FOR_EACH_MAIN = 1000;
+    private static final int DISCOUNT_AMOUNT_FOR_EACH_MAIN = 2_023;
     private static final Category MAIN_CATEGORY = Category.MAIN;
 
     @Override
