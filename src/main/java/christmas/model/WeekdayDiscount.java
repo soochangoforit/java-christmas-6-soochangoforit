@@ -15,7 +15,7 @@ public final class WeekdayDiscount implements DiscountPolicy {
 
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
-        if (isOrderedInWeekday(orderInfo) && orderInfo.isOrderedBetween(START_DATE, END_DATE)) {
+        if (isOrderedInEventPeriod(orderInfo) && isOrderedInWeekday(orderInfo)) {
             int totalDessertQuantity = orderInfo.sumTotalOrderItemQuantityIn(DESSERT_CATEGORY);
             int discountAmounts = calculateDiscountAmounts(totalDessertQuantity);
 
@@ -23,6 +23,10 @@ public final class WeekdayDiscount implements DiscountPolicy {
         }
 
         return DiscountAmounts.noDiscount();
+    }
+
+    private boolean isOrderedInEventPeriod(OrderInfo orderInfo) {
+        return orderInfo.isOrderedBetween(START_DATE, END_DATE);
     }
 
     private boolean isOrderedInWeekday(OrderInfo orderInfo) {

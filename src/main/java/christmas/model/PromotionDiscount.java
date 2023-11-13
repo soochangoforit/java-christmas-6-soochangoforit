@@ -9,12 +9,16 @@ public final class PromotionDiscount implements DiscountPolicy {
 
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
-        if (isEligibleForPromotion(orderInfo) && orderInfo.isOrderedBetween(START_DATE, END_DATE)) {
+        if (isOrderedInEventPeriod(orderInfo) && isEligibleForPromotion(orderInfo)) {
             int discountAmounts = PROMOTION_ITEM.calculateDiscountAmounts();
             return DiscountAmounts.from(discountAmounts);
         }
 
         return DiscountAmounts.noDiscount();
+    }
+
+    private boolean isOrderedInEventPeriod(OrderInfo orderInfo) {
+        return orderInfo.isOrderedBetween(START_DATE, END_DATE);
     }
 
     private boolean isEligibleForPromotion(OrderInfo orderInfo) {

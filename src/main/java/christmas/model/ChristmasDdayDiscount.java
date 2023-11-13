@@ -10,7 +10,7 @@ public final class ChristmasDdayDiscount implements DiscountPolicy {
 
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
-        if (orderInfo.isOrderedBetween(START_DATE, END_DATE)) {
+        if (isOrderedInEventPeriod(orderInfo)) {
             int daysElapsed = orderInfo.daysSinceStartDate(START_DATE);
             int discountAmounts = calculateDiscountAmount(daysElapsed);
 
@@ -18,6 +18,10 @@ public final class ChristmasDdayDiscount implements DiscountPolicy {
         }
 
         return DiscountAmounts.noDiscount();
+    }
+
+    private boolean isOrderedInEventPeriod(OrderInfo orderInfo) {
+        return orderInfo.isOrderedBetween(START_DATE, END_DATE);
     }
 
     private int calculateDiscountAmount(int daysElapsed) {

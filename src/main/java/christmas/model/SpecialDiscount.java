@@ -11,11 +11,15 @@ public final class SpecialDiscount implements DiscountPolicy {
 
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
-        if (isOrderedInSpecialDay(orderInfo) && orderInfo.isOrderedBetween(START_DATE, END_DATE)) {
+        if (isOrderedInEventPeriod(orderInfo) && isOrderedInSpecialDay(orderInfo)) {
             return DiscountAmounts.from(DISCOUNT_AMOUNT);
         }
 
         return DiscountAmounts.noDiscount();
+    }
+
+    private boolean isOrderedInEventPeriod(OrderInfo orderInfo) {
+        return orderInfo.isOrderedBetween(START_DATE, END_DATE);
     }
 
     private boolean isOrderedInSpecialDay(OrderInfo orderInfo) {
