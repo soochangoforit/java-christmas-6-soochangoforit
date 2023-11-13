@@ -15,8 +15,7 @@ public final class Quantity {
 
     private void validate(int count) {
         if (count < MIN_COUNT) {
-            // TODO : Exception Message 수정 필요
-            throw new IllegalArgumentException("주문 하시는 메뉴 수량은 1 이상이어야 합니다.\n" + COUNT_IS_BELOW_MIN_COUNT);
+            throw new IllegalArgumentException(COUNT_IS_BELOW_MIN_COUNT);
         }
     }
 

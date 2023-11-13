@@ -1,17 +1,20 @@
 package christmas.model;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.Set;
 
 public final class WeekendDiscount implements DiscountPolicy {
+    private static final LocalDate START_DATE = EventSchedule.MAIN_EVENT_SEASON.getStartDate(1);
+    private static final LocalDate END_DATE = EventSchedule.MAIN_EVENT_SEASON.getEndDate(31);
     private static final Set<DayOfWeek> DISCOUNT_DAYS_OF_WEEK = EnumSet.of(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY);
     private static final int DISCOUNT_AMOUNT_FOR_EACH_MAIN = 2_023;
     private static final Category MAIN_CATEGORY = Category.MAIN;
 
     @Override
     public DiscountAmounts applyDiscount(OrderInfo orderInfo) {
-        if (isOrderedInWeekend(orderInfo)) {
+        if (isOrderedInWeekend(orderInfo) && orderInfo.isOrderedBetween(START_DATE, END_DATE)) {
             int totalMainQuantity = orderInfo.sumTotalOrderItemQuantityIn(MAIN_CATEGORY);
             int discountAmounts = calculateDiscountAmounts(totalMainQuantity);
 

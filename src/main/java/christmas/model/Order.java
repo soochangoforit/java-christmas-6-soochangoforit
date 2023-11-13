@@ -32,8 +32,7 @@ public final class Order {
 
     private void validateDuplicateMenu(List<OrderItem> orderItems) {
         if (hasDuplicateMenu(orderItems)) {
-            // TODO : Exception Message 수정 필요
-            throw new IllegalArgumentException("중복된 메뉴 이름이 있습니다.\n" + DUPLICATED_MENU);
+            throw new IllegalArgumentException(DUPLICATED_MENU);
         }
     }
 

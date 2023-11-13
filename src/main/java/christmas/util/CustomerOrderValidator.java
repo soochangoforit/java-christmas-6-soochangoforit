@@ -11,8 +11,7 @@ public final class CustomerOrderValidator {
 
     public static void validate(String input) {
         if (!matchesPattern(input, ORDER_PATTERN)) {
-            // TODO : exception 수정 필요
-            throw new IllegalArgumentException("{메뉴 이름}-{수량} 형식으로 입력해 주세요.\n" + INVALID_ORDER);
+            throw new IllegalArgumentException(INVALID_ORDER);
         }
     }
 

@@ -59,8 +59,7 @@ public enum Menu {
         return Stream.of(values())
                 .filter(menu -> menu.name.equals(menuName))
                 .findFirst()
-                // TODO : Exception Message 수정 필요
-                .orElseThrow(() -> new IllegalArgumentException("메뉴에 해당하는 이름이 없습니다.\n" + MENU_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException(MENU_NOT_FOUND));
     }
 
     public int calculateAmounts(Quantity quantity) {

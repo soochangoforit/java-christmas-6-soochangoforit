@@ -7,7 +7,7 @@ import christmas.dto.request.OrderItemInfoDto;
 import christmas.dto.request.VisitDayDto;
 import christmas.util.BlankValidator;
 import christmas.util.CustomerOrderValidator;
-import christmas.util.DigitsOnlyValidator;
+import christmas.util.VisitDateValidator;
 
 public class InputView {
     private static final String VISIT_DAY_MESSAGE = "%d월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)";
@@ -38,7 +38,7 @@ public class InputView {
 
     private void validateVisitDay(String rawVisitDay) {
         BlankValidator.validate(rawVisitDay);
-        DigitsOnlyValidator.validate(rawVisitDay);
+        VisitDateValidator.validate(rawVisitDay);
     }
 
     private int convertToInt(String input) {
