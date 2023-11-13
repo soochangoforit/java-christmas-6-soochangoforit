@@ -3,8 +3,8 @@ package christmas.model;
 import java.time.LocalDate;
 
 public final class PromotionDiscount implements DiscountPolicy {
-    private static final LocalDate START_DATE = EventSchedule.MAIN_EVENT_SEASON.getStartDate(1);
-    private static final LocalDate END_DATE = EventSchedule.MAIN_EVENT_SEASON.getEndDate(31);
+    private static final LocalDate START_DATE = EventSchedule.MAIN_EVENT_SEASON.createDateForDay(1);
+    private static final LocalDate END_DATE = EventSchedule.MAIN_EVENT_SEASON.createDateForDay(31);
     private static final PromotionItem PROMOTION_ITEM = PromotionItem.FREE_CHAMPAGNE;
 
     @Override

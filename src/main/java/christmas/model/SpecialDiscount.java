@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public final class SpecialDiscount implements DiscountPolicy {
-    private static final LocalDate START_DATE = EventSchedule.MAIN_EVENT_SEASON.getStartDate(1);
-    private static final LocalDate END_DATE = EventSchedule.MAIN_EVENT_SEASON.getEndDate(31);
+    private static final LocalDate START_DATE = EventSchedule.MAIN_EVENT_SEASON.createDateForDay(1);
+    private static final LocalDate END_DATE = EventSchedule.MAIN_EVENT_SEASON.createDateForDay(31);
     private static final Set<Integer> SPECIAL_DAYS_FOR_DISCOUNT = Set.of(3, 10, 17, 24, 25, 31);
     private static final int DISCOUNT_AMOUNT = 1_000;
 
