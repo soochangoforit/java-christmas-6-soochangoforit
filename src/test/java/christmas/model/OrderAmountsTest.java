@@ -42,11 +42,11 @@ class OrderAmountsTest {
     }
 
     @Test
-    void 총주문금액에서_총할인_혜택금액을_차감할_수_있다() {
+    void 총주문금액에서_총할인_금액을_차감할_수_있다() {
         OrderAmounts orderAmounts = OrderAmounts.from(10_000);
-        TotalDiscountAmounts totalDiscountAmounts = TotalDiscountAmounts.from(1_000);
+        DiscountAmounts totalDiscountAmounts = DiscountAmounts.from(1_000);
 
-        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(totalDiscountAmounts);
+        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductTotalDiscountAmounts(totalDiscountAmounts);
 
         OrderAmounts expectedOrderAmounts = OrderAmounts.from(9_000);
         assertThat(orderAmountsAfterDiscount).usingRecursiveComparison()
@@ -56,9 +56,9 @@ class OrderAmountsTest {
     @Test
     void 총주문금액만큼_할인_혜택금액을_차감함으로서_총주문금액은_0원을_가질_수_있다() {
         OrderAmounts orderAmounts = OrderAmounts.from(10_000);
-        TotalDiscountAmounts totalDiscountAmounts = TotalDiscountAmounts.from(10_000);
+        DiscountAmounts totalDiscountAmounts = DiscountAmounts.from(10_000);
 
-        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(totalDiscountAmounts);
+        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductTotalDiscountAmounts(totalDiscountAmounts);
 
         OrderAmounts expectedOrderAmounts = OrderAmounts.from(0);
         assertThat(orderAmountsAfterDiscount).usingRecursiveComparison()

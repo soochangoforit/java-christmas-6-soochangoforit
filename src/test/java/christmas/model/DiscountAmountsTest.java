@@ -41,6 +41,16 @@ class DiscountAmountsTest {
     }
 
     @Test
+    void 총주문금액에서_할인금액을_뺀_금액을_계산할_수_있다() {
+        int orderAmounts = 10_000;
+        DiscountAmounts totalDiscountAmounts = DiscountAmounts.from(1_000);
+
+        int orderAmountsAfterDiscount = totalDiscountAmounts.calculateOrderAmountsAfterDiscount(orderAmounts);
+
+        assertThat(orderAmountsAfterDiscount).isEqualTo(9_000);
+    }
+
+    @Test
     void 할인금액이_0원_아하의_값을_가지면_거짓을_반환한다() {
         DiscountAmounts discountAmounts = DiscountAmounts.from(0);
 

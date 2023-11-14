@@ -9,9 +9,10 @@ import christmas.dto.response.EventBadgeDto;
 import christmas.dto.response.OrderAmountsDto;
 import christmas.dto.response.OrderDto;
 import christmas.dto.response.PromotionItemDto;
-import christmas.dto.response.TotalDiscountAmountsDto;
+import christmas.dto.response.TotalBenefitAmountsDto;
 import christmas.dto.response.VisitDateDto;
 import christmas.model.AppliedDiscountEventResult;
+import christmas.model.DiscountAmounts;
 import christmas.model.DiscountEventManager;
 import christmas.model.EventBadge;
 import christmas.model.EventSchedule;
@@ -20,7 +21,7 @@ import christmas.model.OrderAmounts;
 import christmas.model.OrderInfo;
 import christmas.model.OrderItemMapper;
 import christmas.model.PromotionItem;
-import christmas.model.TotalDiscountAmounts;
+import christmas.model.TotalBenefitAmounts;
 import christmas.model.VisitDate;
 import christmas.view.InputView;
 import christmas.view.OutputView;
@@ -47,11 +48,11 @@ public class ChristmasEventController {
         printOrderDetails(orderInfo, orderAmounts);
 
         AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
-        TotalDiscountAmounts totalDiscountAmounts = appliedDiscountEventResult.calculateTotalDiscountAmounts();
+        TotalBenefitAmounts totalBenefitAmounts = appliedDiscountEventResult.calculateTotalBenefitAmounts();
         printAppliedDiscounts(appliedDiscountEventResult);
-        printTotalDiscountAmounts(totalDiscountAmounts);
-        printOrderAmountsAfterDiscount(orderAmounts, totalDiscountAmounts);
-        printEventBadge(totalDiscountAmounts);
+        printTotalBenefitAmounts(totalBenefitAmounts);
+        printOrderAmountsAfterDiscount(orderAmounts, appliedDiscountEventResult.calculateTotalDiscountAmounts());
+        printEventBadge(totalBenefitAmounts);
     }
 
     private void printWelcomeMessage() {
@@ -138,18 +139,18 @@ public class ChristmasEventController {
         outputView.printAppliedDiscountEventResult(appliedDiscountEventResultDto);
     }
 
-    private void printTotalDiscountAmounts(TotalDiscountAmounts totalDiscountedAmounts) {
-        TotalDiscountAmountsDto totalDiscountAmountsDto = TotalDiscountAmountsDto.from(totalDiscountedAmounts);
-        outputView.printTotalDiscountAmounts(totalDiscountAmountsDto);
+    private void printTotalBenefitAmounts(TotalBenefitAmounts totalBenefitAmounts) {
+        TotalBenefitAmountsDto totalBenefitAmountsDto = TotalBenefitAmountsDto.from(totalBenefitAmounts);
+        outputView.printTotalBenefitAmounts(totalBenefitAmountsDto);
     }
 
-    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmounts, TotalDiscountAmounts discountAmounts) {
-        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductDiscount(discountAmounts);
+    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmounts, DiscountAmounts totalDiscountAmounts) {
+        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductTotalDiscountAmounts(totalDiscountAmounts);
         OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
         outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
     }
 
-    private void printEventBadge(TotalDiscountAmounts totalDiscountedAmounts) {
+    private void printEventBadge(TotalBenefitAmounts totalDiscountedAmounts) {
         EventBadge eventBadge = EventBadge.findMatchingEventBadge(totalDiscountedAmounts);
         EventBadgeDto eventBadgeDto = EventBadgeDto.from(EventSchedule.MAIN_EVENT_SEASON.getMonth(), eventBadge);
         outputView.printEventBadge(eventBadgeDto);

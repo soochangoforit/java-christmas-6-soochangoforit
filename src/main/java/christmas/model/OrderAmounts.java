@@ -24,7 +24,7 @@ public final class OrderAmounts {
         return amounts >= minimumAmountForEligibility;
     }
 
-    public OrderAmounts deductDiscount(TotalDiscountAmounts totalDiscountedAmounts) {
+    public OrderAmounts deductTotalDiscountAmounts(DiscountAmounts totalDiscountedAmounts) {
         int orderAmountsAfterDiscount = totalDiscountedAmounts.calculateOrderAmountsAfterDiscount(amounts);
 
         return OrderAmounts.from(orderAmountsAfterDiscount);

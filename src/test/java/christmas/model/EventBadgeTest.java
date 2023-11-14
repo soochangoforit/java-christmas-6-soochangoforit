@@ -12,9 +12,9 @@ class EventBadgeTest {
 
     @ParameterizedTest
     @MethodSource("이벤트_배지_찾기_테스트_데이터")
-    void 총할인_혜택_금액에_따라_이벤트_배지를_찾을_수_있다(TotalDiscountAmounts totalDiscountAmounts,
+    void 총할인_혜택_금액에_따라_이벤트_배지를_찾을_수_있다(TotalBenefitAmounts totalBenefitAmounts,
                                        EventBadge expectedEventBadge) {
-        EventBadge actualEventBadge = EventBadge.findMatchingEventBadge(totalDiscountAmounts);
+        EventBadge actualEventBadge = EventBadge.findMatchingEventBadge(totalBenefitAmounts);
 
         assertThat(actualEventBadge).isEqualTo(expectedEventBadge);
     }
@@ -45,13 +45,13 @@ class EventBadgeTest {
 
     private static Stream<Arguments> 이벤트_배지_찾기_테스트_데이터() {
         return Stream.of(
-                Arguments.of(TotalDiscountAmounts.from(25_000), EventBadge.SANTA),
-                Arguments.of(TotalDiscountAmounts.from(20_000), EventBadge.SANTA),
-                Arguments.of(TotalDiscountAmounts.from(15_000), EventBadge.TREE),
-                Arguments.of(TotalDiscountAmounts.from(10_000), EventBadge.TREE),
-                Arguments.of(TotalDiscountAmounts.from(7_500), EventBadge.STAR),
-                Arguments.of(TotalDiscountAmounts.from(5_000), EventBadge.STAR),
-                Arguments.of(TotalDiscountAmounts.from(500), EventBadge.NONE)
+                Arguments.of(TotalBenefitAmounts.from(25_000), EventBadge.SANTA),
+                Arguments.of(TotalBenefitAmounts.from(20_000), EventBadge.SANTA),
+                Arguments.of(TotalBenefitAmounts.from(15_000), EventBadge.TREE),
+                Arguments.of(TotalBenefitAmounts.from(10_000), EventBadge.TREE),
+                Arguments.of(TotalBenefitAmounts.from(7_500), EventBadge.STAR),
+                Arguments.of(TotalBenefitAmounts.from(5_000), EventBadge.STAR),
+                Arguments.of(TotalBenefitAmounts.from(500), EventBadge.NONE)
         );
     }
 }

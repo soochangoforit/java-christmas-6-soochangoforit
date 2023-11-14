@@ -39,15 +39,15 @@ public enum EventBadge {
         }
     }
 
-    public static EventBadge findMatchingEventBadge(TotalDiscountAmounts totalDiscountedAmount) {
+    public static EventBadge findMatchingEventBadge(TotalBenefitAmounts totalBenefitAmount) {
         return Stream.of(values())
-                .filter(eventBadge -> eventBadge.isEligibleFor(totalDiscountedAmount))
+                .filter(eventBadge -> eventBadge.isEligibleFor(totalBenefitAmount))
                 .findFirst()
                 .orElse(NONE);
     }
 
-    private boolean isEligibleFor(TotalDiscountAmounts totalDiscountedAmount) {
-        return totalDiscountedAmount.isEligibleFor(minimumAmountForEligibility);
+    private boolean isEligibleFor(TotalBenefitAmounts totalBenefitAmount) {
+        return totalBenefitAmount.isEligibleFor(minimumAmountForEligibility);
     }
 
     public String getName() {

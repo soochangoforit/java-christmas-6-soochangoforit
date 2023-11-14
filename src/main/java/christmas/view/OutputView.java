@@ -8,33 +8,26 @@ import christmas.dto.response.OrderAmountsDto;
 import christmas.dto.response.OrderDto;
 import christmas.dto.response.OrderItemDto;
 import christmas.dto.response.PromotionItemDto;
-import christmas.dto.response.TotalDiscountAmountsDto;
+import christmas.dto.response.TotalBenefitAmountsDto;
 import christmas.dto.response.VisitDateDto;
 
 public class OutputView {
-    private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
     public static final String WELCOME_MESSAGE_FORMAT = "안녕하세요! 우테코 식당 %d월 이벤트 플래너입니다.";
-    private static final String EVENT_PREVIEW_MESSAGE = "%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
-
     public static final String ORDER_MENU_START_MESSAGE = "<주문 메뉴>";
     public static final String NAME_WITH_QUANTITY_FORMAT = "%s %d개";
-
+    public static final String EVENT_BADGE_MESSAGE = "<%d월 이벤트 배지>";
+    private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
+    private static final String EVENT_PREVIEW_MESSAGE = "%d월 %d일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
     private static final String ORDER_AMOUNTS_BEFORE_DISCOUNT_MESSAGE = "<할인 전 총주문 금액>";
     private static final String POSITIVE_AMOUNTS_FORMAT = "%,d원";
-
     private static final String PROMOTION_RESULT_MESSAGE = "<증정 메뉴>";
     private static final String NOTHING_MESSAGE = "없음";
     private static final int ZERO_VALUE = 0;
-
     private static final String APPLIED_DISCOUNTS_RESULT_MESSAGE = "<혜택 내역>";
     private static final String APPLIED_DISCOUNT_FORMAT = "%s: %s";
-
-    private static final String TOTAL_DISCOUNT_AMOUNTS_MESSAGE = "<총혜택 금액>";
+    private static final String TOTAL_BENEFIT_AMOUNTS_MESSAGE = "<총혜택 금액>";
     private static final String NEGATIVE_AMOUNTS_FORMAT = "-%,d원";
-
     private static final String ORDER_AMOUNTS_AFTER_DISCOUNT_MESSAGE = "<할인 후 예상 결제 금액>";
-
-    public static final String EVENT_BADGE_MESSAGE = "<%d월 이벤트 배지>";
 
     public void printExceptionMessage(String message) {
         String exceptionMessage = String.format(EXCEPTION_FORMAT, message);
@@ -103,6 +96,10 @@ public class OutputView {
         printEmptyLine();
     }
 
+    private String formatPositiveAmounts(int totalDiscountedAmount) {
+        return String.format(POSITIVE_AMOUNTS_FORMAT, totalDiscountedAmount);
+    }
+
     public void printPromotionMessage(PromotionItemDto promotionItemDto) {
         String itemName = promotionItemDto.getName();
         int itemQuantity = promotionItemDto.getQuantity();
@@ -144,24 +141,20 @@ public class OutputView {
         return String.format(NEGATIVE_AMOUNTS_FORMAT, amounts);
     }
 
-    public void printTotalDiscountAmounts(TotalDiscountAmountsDto totalDiscountAmountsDto) {
-        int totalDiscountAmounts = totalDiscountAmountsDto.getTotalDiscountAmounts();
-        print(TOTAL_DISCOUNT_AMOUNTS_MESSAGE);
-        String discountAmountMessage = formatTotalDiscountAmountsMessage(totalDiscountAmounts);
-        print(discountAmountMessage);
+    public void printTotalBenefitAmounts(TotalBenefitAmountsDto totalBenefitAmountsDto) {
+        int totalBenefitAmounts = totalBenefitAmountsDto.getTotalBenefitAmounts();
+        print(TOTAL_BENEFIT_AMOUNTS_MESSAGE);
+        String benefitAmountsMessage = formatTotalBenefitAmountsMessage(totalBenefitAmounts);
+        print(benefitAmountsMessage);
         printEmptyLine();
     }
 
-    private String formatTotalDiscountAmountsMessage(int totalDiscountedAmount) {
-        if (totalDiscountedAmount == ZERO_VALUE) {
-            return formatPositiveAmounts(totalDiscountedAmount);
+    private String formatTotalBenefitAmountsMessage(int totalBenefitAmounts) {
+        if (totalBenefitAmounts == ZERO_VALUE) {
+            return formatPositiveAmounts(totalBenefitAmounts);
         }
 
-        return formatNegativeAmounts(totalDiscountedAmount);
-    }
-
-    private String formatPositiveAmounts(int totalDiscountedAmount) {
-        return String.format(POSITIVE_AMOUNTS_FORMAT, totalDiscountedAmount);
+        return formatNegativeAmounts(totalBenefitAmounts);
     }
 
     public void printOrderAmountsAfterDiscount(OrderAmountsDto orderAmountsAfterDiscountDto) {

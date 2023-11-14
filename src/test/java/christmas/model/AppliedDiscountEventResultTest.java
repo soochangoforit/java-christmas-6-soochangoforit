@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class AppliedDiscountEventResultTest {
 
     @Test
-    void 할인_이벤트_결과내역에서_총할인된_금액을_계산할_수_있다() {
+    void 할인_이벤트_결과내역에서_총혜택_금액을_계산할_수_있다() {
         AppliedDiscountEventResult appliedDiscountEventResult = AppliedDiscountEventResult.from(
                 Map.of(
                         DiscountEventType.CHRISTMAS_DDAY_EVENT, DiscountAmounts.from(1_800),
@@ -18,9 +18,9 @@ class AppliedDiscountEventResultTest {
                 )
         );
 
-        TotalDiscountAmounts totalDiscountAmounts = appliedDiscountEventResult.calculateTotalDiscountAmounts();
+        TotalBenefitAmounts totalBenefitAmounts = appliedDiscountEventResult.calculateTotalBenefitAmounts();
 
-        assertThat(totalDiscountAmounts).isEqualTo(TotalDiscountAmounts.from(6_846));
+        assertThat(totalBenefitAmounts).isEqualTo(TotalBenefitAmounts.from(6_846));
     }
 
     @Test
