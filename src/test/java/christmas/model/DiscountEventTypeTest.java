@@ -11,10 +11,12 @@ class DiscountEventTypeTest {
 
     @ParameterizedTest
     @MethodSource("provideDiscountEventTypes")
-    void 이벤트_타입이_할인_이벤트인지_확인할_수_있다(DiscountEventType discountEventType, boolean isDiscountEvent) {
-        boolean expectedDiscountEvent = discountEventType.isDiscountEvent();
+    void 이벤트_할인_금액이_총주문금액을_차감할_수_있을지_확인할_수_있다(
+            DiscountEventType eventType, boolean isOrderAmountsReducible
+    ) {
+        boolean expectedDiscountEvent = eventType.isOrderAmountsReducible();
 
-        assertThat(expectedDiscountEvent).isEqualTo(isDiscountEvent);
+        assertThat(expectedDiscountEvent).isEqualTo(isOrderAmountsReducible);
     }
 
     private static Stream<Arguments> provideDiscountEventTypes() {

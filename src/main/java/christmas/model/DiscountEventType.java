@@ -10,12 +10,12 @@ public enum DiscountEventType {
     private static final String BLANK_DISCOUNT_EVENT_NAME = "할인 이벤트 이름은 공백일 수 없습니다.";
 
     private final String name;
-    private final boolean isDiscountEvent;
-
-    DiscountEventType(String name, boolean isDiscountEvent) {
+    private final boolean isOrderAmountsReducible;
+    
+    DiscountEventType(String name, boolean isOrderAmountsReducible) {
         validateBlank(name);
         this.name = name;
-        this.isDiscountEvent = isDiscountEvent;
+        this.isOrderAmountsReducible = isOrderAmountsReducible;
     }
 
     private void validateBlank(String name) {
@@ -24,8 +24,8 @@ public enum DiscountEventType {
         }
     }
 
-    public boolean isDiscountEvent() {
-        return this.isDiscountEvent;
+    public boolean isOrderAmountsReducible() {
+        return this.isOrderAmountsReducible;
     }
 
     public String getName() {

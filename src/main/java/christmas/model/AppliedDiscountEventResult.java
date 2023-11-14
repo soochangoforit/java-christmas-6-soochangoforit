@@ -39,13 +39,13 @@ public final class AppliedDiscountEventResult {
     private int sumTotalDiscountAmounts() {
         return discountEventResult.entrySet()
                 .stream()
-                .filter(isDiscountEvent())
+                .filter(isOrderAmountsReducible())
                 .mapToInt(getDiscountAmounts())
                 .sum();
     }
 
-    private Predicate<Entry<DiscountEventType, DiscountAmounts>> isDiscountEvent() {
-        return entry -> entry.getKey().isDiscountEvent();
+    private Predicate<Entry<DiscountEventType, DiscountAmounts>> isOrderAmountsReducible() {
+        return entry -> entry.getKey().isOrderAmountsReducible();
     }
 
     private ToIntFunction<Entry<DiscountEventType, DiscountAmounts>> getDiscountAmounts() {
