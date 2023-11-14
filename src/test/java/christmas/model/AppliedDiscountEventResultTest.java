@@ -9,18 +9,38 @@ import org.junit.jupiter.api.Test;
 class AppliedDiscountEventResultTest {
 
     @Test
+    void 할인_이벤트_결과_내역에서_총할인_금액을_계산할_수_있다() {
+        AppliedDiscountEventResult appliedDiscountEventResult = AppliedDiscountEventResult.from(
+                Map.of(
+                        DiscountEventType.CHRISTMAS_DDAY_EVENT, DiscountAmounts.from(1_800),
+                        DiscountEventType.WEEKDAY_EVENT, DiscountAmounts.from(4_046),
+                        DiscountEventType.WEEKEND_EVENT, DiscountAmounts.from(4_046),
+                        DiscountEventType.SPECIAL_EVENT, DiscountAmounts.from(1_000),
+                        DiscountEventType.PROMOTION_EVENT, DiscountAmounts.from(25_000)
+
+                )
+        );
+
+        DiscountAmounts discountAmounts = appliedDiscountEventResult.calculateTotalDiscountAmounts();
+
+        assertThat(discountAmounts).isEqualTo(DiscountAmounts.from(10_892));
+    }
+
+    @Test
     void 할인_이벤트_결과내역에서_총혜택_금액을_계산할_수_있다() {
         AppliedDiscountEventResult appliedDiscountEventResult = AppliedDiscountEventResult.from(
                 Map.of(
                         DiscountEventType.CHRISTMAS_DDAY_EVENT, DiscountAmounts.from(1_800),
                         DiscountEventType.WEEKDAY_EVENT, DiscountAmounts.from(4_046),
-                        DiscountEventType.SPECIAL_EVENT, DiscountAmounts.from(1_000)
+                        DiscountEventType.WEEKEND_EVENT, DiscountAmounts.from(4_046),
+                        DiscountEventType.SPECIAL_EVENT, DiscountAmounts.from(1_000),
+                        DiscountEventType.PROMOTION_EVENT, DiscountAmounts.from(25_000)
                 )
         );
 
         TotalBenefitAmounts totalBenefitAmounts = appliedDiscountEventResult.calculateTotalBenefitAmounts();
 
-        assertThat(totalBenefitAmounts).isEqualTo(TotalBenefitAmounts.from(6_846));
+        assertThat(totalBenefitAmounts).isEqualTo(TotalBenefitAmounts.from(35_892));
     }
 
     @Test
