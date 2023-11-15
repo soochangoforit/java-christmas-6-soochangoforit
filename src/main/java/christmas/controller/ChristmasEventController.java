@@ -44,14 +44,15 @@ public class ChristmasEventController {
         Order order = fetchOrderFromCustomer();
 
         OrderInfo orderInfo = createOrderInfo(order, visitDate);
-        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
-        printOrderDetails(orderInfo, orderAmounts);
+        OrderAmounts orderAmountsBeforeDiscount = orderInfo.calculateOrderAmounts();
+        printOrderDetails(orderInfo, orderAmountsBeforeDiscount);
 
         AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
         TotalBenefitAmounts totalBenefitAmounts = appliedDiscountEventResult.calculateTotalBenefitAmounts();
         printAppliedDiscounts(appliedDiscountEventResult);
         printTotalBenefitAmounts(totalBenefitAmounts);
-        printOrderAmountsAfterDiscount(orderAmounts, appliedDiscountEventResult.calculateTotalDiscountAmounts());
+        printOrderAmountsAfterDiscount(orderAmountsBeforeDiscount,
+                appliedDiscountEventResult.calculateTotalDiscountAmounts());
         printEventBadge(totalBenefitAmounts);
     }
 
@@ -100,11 +101,11 @@ public class ChristmasEventController {
         return OrderInfo.of(order, visitDate);
     }
 
-    private void printOrderDetails(OrderInfo orderInfo, OrderAmounts orderAmounts) {
+    private void printOrderDetails(OrderInfo orderInfo, OrderAmounts orderAmountsBeforeDiscount) {
         printDiscountEventPreviewMessage(orderInfo.getVisitDate());
         printCustomerOrder(orderInfo);
-        printOrderAmountsBeforeDiscount(orderAmounts);
-        printPromotionMessage(orderInfo);
+        printOrderAmountsBeforeDiscount(orderAmountsBeforeDiscount);
+        printPromotionMessage(orderAmountsBeforeDiscount);
     }
 
     private void printDiscountEventPreviewMessage(VisitDate visitDate) {
@@ -122,10 +123,9 @@ public class ChristmasEventController {
         outputView.printOrderAmountsBeforeDiscount(orderAmountsDto);
     }
 
-    private void printPromotionMessage(OrderInfo orderInfo) {
-        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
-        PromotionItem matchingPromotion = PromotionItem.findMatchingPromotion(orderAmounts);
-        PromotionItemDto promotionItemDto = PromotionItemDto.from(matchingPromotion);
+    private void printPromotionMessage(OrderAmounts orderAmountsBeforeDiscount) {
+        PromotionItem matchingPromotionItem = PromotionItem.findMatchingPromotion(orderAmountsBeforeDiscount);
+        PromotionItemDto promotionItemDto = PromotionItemDto.from(matchingPromotionItem);
         outputView.printPromotionMessage(promotionItemDto);
     }
 
@@ -144,8 +144,10 @@ public class ChristmasEventController {
         outputView.printTotalBenefitAmounts(totalBenefitAmountsDto);
     }
 
-    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmounts, DiscountAmounts totalDiscountAmounts) {
-        OrderAmounts orderAmountsAfterDiscount = orderAmounts.deductTotalDiscountAmounts(totalDiscountAmounts);
+    private void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsBeforeDiscount,
+                                                DiscountAmounts totalDiscountAmounts) {
+        OrderAmounts orderAmountsAfterDiscount = orderAmountsBeforeDiscount.deductTotalDiscountAmounts(
+                totalDiscountAmounts);
         OrderAmountsDto orderAmountsAfterDiscountDto = OrderAmountsDto.from(orderAmountsAfterDiscount);
         outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscountDto);
     }

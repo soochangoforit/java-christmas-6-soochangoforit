@@ -30,27 +30,27 @@ public final class DiscountEventManager {
         return emptyDiscountEventResult();
     }
 
-    private Map<DiscountEventType, DiscountAmounts> emptyDiscountEventResult() {
-        return new EnumMap<>(DiscountEventType.class);
-    }
-
     private boolean isEligibleForDiscount(OrderInfo orderInfo) {
-        OrderAmounts orderAmounts = orderInfo.calculateOrderAmounts();
+        OrderAmounts orderAmountsBeforeDiscount = orderInfo.calculateOrderAmounts();
 
-        return orderAmounts.isEligibleFor(MINIMUM_AMOUNT_FOR_DISCOUNT);
+        return orderAmountsBeforeDiscount.isEligibleFor(MINIMUM_AMOUNT_FOR_DISCOUNT);
     }
 
     private Map<DiscountEventType, DiscountAmounts> applyDiscounts(OrderInfo orderInfo) {
         Map<DiscountEventType, DiscountAmounts> appliedDiscountEventResult = new EnumMap<>(DiscountEventType.class);
         discountEventRegistry.forEach((discountEventType, discountPolicy) -> {
-            DiscountAmounts discountAmounts = applyDiscountPolicy(orderInfo, discountPolicy);
+            DiscountAmounts discountAmounts = applyDiscountPolicy(discountPolicy, orderInfo);
             appliedDiscountEventResult.put(discountEventType, discountAmounts);
         });
 
         return appliedDiscountEventResult;
     }
 
-    private DiscountAmounts applyDiscountPolicy(OrderInfo orderInfo, DiscountPolicy discountPolicy) {
+    private DiscountAmounts applyDiscountPolicy(DiscountPolicy discountPolicy, OrderInfo orderInfo) {
         return discountPolicy.applyDiscount(orderInfo);
+    }
+
+    private Map<DiscountEventType, DiscountAmounts> emptyDiscountEventResult() {
+        return new EnumMap<>(DiscountEventType.class);
     }
 }

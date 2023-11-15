@@ -7,11 +7,11 @@ import christmas.dto.request.OrderItemInfoDto;
 import christmas.dto.request.VisitDayDto;
 import christmas.util.BlankValidator;
 import christmas.util.CustomerOrderValidator;
-import christmas.util.VisitDateValidator;
+import christmas.util.VisitDayValidator;
 
 public class InputView {
     private static final String VISIT_DAY_MESSAGE = "%d월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해 주세요!)";
-    private static final String NUMBER_FORMAT_EXCEPTION = "숫자 형식의 문자만 입력할 수 있습니다.";
+    private static final String NUMBER_FORMAT_EXCEPTION = "유효하지 않은 날짜입니다. 다시 입력해 주세요.";
     private static final String CUSTOMER_ORDERS_MESSAGE =
             "주문하실 메뉴를 메뉴와 개수를 알려 주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1)";
     private static final String ORDER_ITEM_SEPARATOR = ",";
@@ -38,7 +38,7 @@ public class InputView {
 
     private void validateVisitDay(String rawVisitDay) {
         BlankValidator.validate(rawVisitDay);
-        VisitDateValidator.validate(rawVisitDay);
+        VisitDayValidator.validate(rawVisitDay);
     }
 
     private int convertToInt(String input) {
