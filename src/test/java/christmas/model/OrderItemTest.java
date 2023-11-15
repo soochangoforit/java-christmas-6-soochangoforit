@@ -14,6 +14,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 class OrderItemTest {
 
     @Test
+    void 정상적인_사용자_주문_입력값을_갖는_매퍼클래스를_통해서_주문항목을_생성하면_예외가_발생하지_않는다() {
+        OrderItemMapper orderItemMapper = new OrderItemMapper("초코케이크", 1);
+
+        assertDoesNotThrow(() -> OrderItem.from(orderItemMapper));
+    }
+
+    @Test
     void 사용자_주문_항목_입력_값으로_주문_항목을_생성하는_경우_존재하지_않는_메뉴_이름이면_예외가_발생한다() {
         assertThatThrownBy(() -> new OrderItem("없는 메뉴", 1))
                 .isInstanceOf(IllegalArgumentException.class);
