@@ -42,17 +42,16 @@ public class ChristmasEventController {
         printWelcomeMessage();
         VisitDate visitDate = fetchVisitDateFromCustomer();
         Order order = fetchOrderFromCustomer();
-
         OrderInfo orderInfo = createOrderInfo(order, visitDate);
         OrderAmounts orderAmountsBeforeDiscount = orderInfo.calculateOrderAmounts();
         printOrderDetails(orderInfo, orderAmountsBeforeDiscount);
 
-        AppliedDiscountEventResult appliedDiscountEventResult = applyDiscountEvents(orderInfo);
-        TotalBenefitAmounts totalBenefitAmounts = appliedDiscountEventResult.calculateTotalBenefitAmounts();
-        printAppliedDiscounts(appliedDiscountEventResult);
+        AppliedDiscountEventResult appliedDiscountResult = applyDiscountEvents(orderInfo);
+        TotalBenefitAmounts totalBenefitAmounts = appliedDiscountResult.calculateTotalBenefitAmounts();
+        DiscountAmounts totalDiscountAmounts = appliedDiscountResult.calculateTotalDiscountAmounts();
+        printAppliedDiscounts(appliedDiscountResult);
         printTotalBenefitAmounts(totalBenefitAmounts);
-        printOrderAmountsAfterDiscount(orderAmountsBeforeDiscount,
-                appliedDiscountEventResult.calculateTotalDiscountAmounts());
+        printOrderAmountsAfterDiscount(orderAmountsBeforeDiscount, totalDiscountAmounts);
         printEventBadge(totalBenefitAmounts);
     }
 
