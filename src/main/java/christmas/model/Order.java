@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Order {
-    private static final String ORDERS_ARE_EMPTY = "주문 목록은 비어있을 수 없습니다.";
-    private static final String DUPLICATED_MENU = "유효하지 않은 주문입니다.";
-    private static final String OVER_MAX_TOTAL_ORDER_ITEM_QUANTITY = "총 주문 가능한 메뉴 수량은 %d개 이하입니다.";
-    private static final String ONLY_BEVERAGE = "음료만 주문할 수 없습니다.";
+    private static final String ORDERS_ARE_EMPTY = "[ERROR] 주문 목록은 비어있을 수 없습니다.";
+    private static final String DUPLICATED_MENU = "[ERROR] 유효하지 않은 주문입니다.";
+    private static final String OVER_MAX_TOTAL_ORDER_ITEM_QUANTITY = "[ERROR] 총 주문 가능한 메뉴 수량은 %d개 이하입니다.";
+    private static final String ONLY_BEVERAGE = "[ERROR] 음료만 주문할 수 없습니다.";
     private static final int MAX_TOTAL_ORDER_ITEM_QUANTITY = 20;
 
     private final List<OrderItem> orderItems;

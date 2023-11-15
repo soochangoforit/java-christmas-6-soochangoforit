@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public final class VisitDayValidator {
     private static final Pattern DIGITS_ONLY = Pattern.compile("[0-9]+");
-    private static final String FORMAT_EXCEPTION_MESSAGE = "유효하지 않은 날짜입니다.";
+    private static final String FORMAT_EXCEPTION_MESSAGE = "[ERROR] 유효하지 않은 날짜입니다.";
 
     private VisitDayValidator() {
     }

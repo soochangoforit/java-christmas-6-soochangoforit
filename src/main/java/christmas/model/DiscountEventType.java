@@ -7,11 +7,11 @@ public enum DiscountEventType {
     SPECIAL_EVENT("특별 할인", true),
     PROMOTION_EVENT("증정 이벤트", false);
 
-    private static final String BLANK_DISCOUNT_EVENT_NAME = "할인 이벤트 이름은 공백일 수 없습니다.";
+    private static final String BLANK_DISCOUNT_EVENT_NAME = "[ERROR] 할인 이벤트 이름은 공백일 수 없습니다.";
 
     private final String name;
     private final boolean isOrderAmountsReducible;
-    
+
     DiscountEventType(String name, boolean isOrderAmountsReducible) {
         validateBlank(name);
         this.name = name;

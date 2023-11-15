@@ -1,7 +1,7 @@
 package christmas.util;
 
 public final class BlankValidator {
-    private static final String BLANK_EXCEPTION = "공백 문자는 입력할 수 없습니다.";
+    private static final String BLANK_EXCEPTION = "[ERROR] 공백 문자는 입력할 수 없습니다.";
 
     private BlankValidator() {
     }

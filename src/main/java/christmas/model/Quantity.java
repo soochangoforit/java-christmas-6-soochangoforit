@@ -3,7 +3,7 @@ package christmas.model;
 import java.util.Objects;
 
 public final class Quantity {
-    private static final String COUNT_IS_BELOW_MIN_COUNT = "유효하지 않은 주문입니다.";
+    private static final String COUNT_IS_BELOW_MIN_COUNT = "[ERROR] 유효하지 않은 주문입니다.";
     private static final int MIN_COUNT = 1;
 
     private final int count;

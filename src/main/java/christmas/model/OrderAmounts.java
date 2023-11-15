@@ -3,7 +3,7 @@ package christmas.model;
 import java.util.Objects;
 
 public final class OrderAmounts {
-    private static final String AMOUNTS_IS_BELOW_MIN_AMOUNTS = "결과 주문 총액은 %d원 이상이어야 합니다.";
+    private static final String AMOUNTS_IS_BELOW_MIN_AMOUNTS = "[ERROR] 결과 주문 총액은 %d원 이상이어야 합니다.";
     private static final int MINIMUM_AMOUNTS = 0;
 
     private final int amounts;

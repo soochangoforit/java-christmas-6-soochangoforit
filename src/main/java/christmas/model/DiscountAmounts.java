@@ -3,7 +3,7 @@ package christmas.model;
 import java.util.Objects;
 
 public final class DiscountAmounts {
-    private static final String INVALID_DISCOUNT = "할인 금액은 %d원 이상이어야 합니다.";
+    private static final String INVALID_DISCOUNT = "[ERROR] 할인 금액은 %d원 이상이어야 합니다.";
     private static final int ZERO_DISCOUNT_AMOUNTS = 0;
 
     private final int amounts;

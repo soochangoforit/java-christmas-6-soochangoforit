@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public final class VisitDate {
-    private static final String INVALID_DATE = "유효하지 않은 날짜입니다.";
+    private static final String INVALID_DATE = "[ERROR] 유효하지 않은 날짜입니다.";
 
     private final LocalDate date;
 

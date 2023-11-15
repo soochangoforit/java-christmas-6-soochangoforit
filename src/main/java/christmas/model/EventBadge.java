@@ -8,8 +8,8 @@ public enum EventBadge {
     STAR("별", 5_000),
     NONE("없음", 0);
 
-    private static final String BLANK_NAME = "이벤트 배지 이름은 공백일 수 없습니다.";
-    private static final String INVALID_MIN_AMOUNT_FOR_ELIGIBILITY = "이벤트 배지 최소 금액은 %d원 이상이어야 합니다.";
+    private static final String BLANK_NAME = "[ERROR] 이벤트 배지 이름은 공백일 수 없습니다.";
+    private static final String INVALID_MIN_AMOUNT_FOR_ELIGIBILITY = "[ERROR] 이벤트 배지 최소 금액은 %d원 이상이어야 합니다.";
     private static final int MIN_AMOUNT_FOR_ELIGIBILITY = 0;
 
     private final String name;

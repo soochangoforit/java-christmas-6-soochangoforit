@@ -6,7 +6,7 @@ import java.time.LocalDate;
 public enum EventSchedule {
     MAIN_EVENT_SEASON(2023, 12);
 
-    private static final String INVALID_DATE = "유효하지 않은 날짜입니다.";
+    private static final String INVALID_DATE = "[ERROR] 유효하지 않은 날짜입니다.";
     private final int year;
     private final int month;
 
