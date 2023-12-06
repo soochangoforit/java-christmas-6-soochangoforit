@@ -4,10 +4,10 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class VisitDate {
-    private final LocalDate visitDate;
+    private final LocalDate date;
 
-    public VisitDate(LocalDate visitDate) {
-        this.visitDate = visitDate;
+    public VisitDate(LocalDate date) {
+        this.date = date;
     }
 
     public static VisitDate from(int visitDay) {
@@ -16,5 +16,9 @@ public class VisitDate {
         } catch (DateTimeException e) {
             throw new IllegalArgumentException("유효하지 않은 날짜입니다.");
         }
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }

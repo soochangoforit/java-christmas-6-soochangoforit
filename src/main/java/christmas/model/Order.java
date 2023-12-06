@@ -56,4 +56,8 @@ public class Order {
     public static Order from(List<OrderItem> orderItems) {
         return new Order(orderItems);
     }
+
+    public List<OrderItem> getOrderItems() {
+        return new ArrayList<>(orderItems);
+    }
 }

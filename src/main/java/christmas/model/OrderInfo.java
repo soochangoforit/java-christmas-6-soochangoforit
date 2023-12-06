@@ -12,4 +12,12 @@ public class OrderInfo {
     public static OrderInfo from(VisitDate visitDate, Order order) {
         return new OrderInfo(visitDate, order);
     }
+
+    public VisitDate getVisitDate() {
+        return visitDate;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
 }
