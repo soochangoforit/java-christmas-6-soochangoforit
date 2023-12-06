@@ -1,6 +1,11 @@
 package christmas.controller;
 
+import java.util.List;
 import java.util.function.Supplier;
+import christmas.dto.request.OrderItemDto;
+import christmas.model.Order;
+import christmas.model.OrderFactory;
+import christmas.model.OrderInfo;
 import christmas.model.VisitDate;
 import christmas.view.InputView;
 import christmas.view.OutputView;
@@ -17,7 +22,14 @@ public class EventController {
     public void run() {
         outputView.printStartMessage();
         VisitDate visitDate = fetch(this::readVisitDate);
+        Order order = fetch(this::createOrder);
+        OrderInfo orderInfo = OrderInfo.from(visitDate, order);
 
+    }
+
+    private Order createOrder() {
+        List<OrderItemDto> orderItemDtos = inputView.readOrder();
+        return OrderFactory.create(orderItemDtos);
     }
 
     private VisitDate readVisitDate() {

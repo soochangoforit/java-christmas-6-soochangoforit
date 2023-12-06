@@ -1,7 +1,7 @@
 package christmas.view;
 
 public class OutputView {
-    private static final String EXCEPTION_FORMAT = "[ERROR] %s  다시 입력해 주세요.";
+    private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
 
     public void printExceptionMessage(String message) {
         println(String.format(EXCEPTION_FORMAT, message));

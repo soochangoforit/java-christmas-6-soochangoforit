@@ -3,6 +3,7 @@ package christmas.view;
 import java.util.List;
 import java.util.stream.Stream;
 import camp.nextstep.edu.missionutils.Console;
+import christmas.dto.request.OrderItemDto;
 import christmas.view.validator.BlankValidator;
 import christmas.view.validator.DigitsOnlyValidator;
 
@@ -35,16 +36,38 @@ public class InputView {
         }
     }
 
+    public List<OrderItemDto> readOrder() {
+        println("주문하실 메뉴를 메뉴와 개수를 알려 주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1)");
+        String rawOrder = readLine();
+        validateOrder(rawOrder);
+        List<String> rawOrderItems = split(",", rawOrder);
+        return rawOrderItems.stream()
+                .map(this::convertToOrderItem)
+                .toList();
+    }
+
+    private OrderItemDto convertToOrderItem(String rawOrderItem) {
+        List<String> rawOrderItemInfo = split("-", rawOrderItem);
+        String name = rawOrderItemInfo.get(0);
+        int count = convertToInt(rawOrderItemInfo.get(1));
+        return new OrderItemDto(name, count);
+    }
+
+    private void validateOrder(String rawOrder) {
+        BlankValidator.validate(rawOrder);
+
+    }
+
+    private List<String> split(String format, String input) {
+        return List.of(input.split(format));
+    }
+
     private void print(String message) {
         System.out.print(message);
     }
 
     private void printEmptyLine() {
         System.out.println();
-    }
-
-    private List<String> split(String format, String input) {
-        return List.of(input.split(format));
     }
 
     private List<Integer> splitToInt(String delimiter, String input) {
