@@ -13,6 +13,11 @@ public class OutputView {
         System.out.println(message);
     }
 
+    public void printOrderAmounts(int orderAmounts) {
+        println("<할인 전 총주문 금액>");
+        println(String.format("%,d원", orderAmounts));
+    }
+
     public void printOrder(OrderInfo orderInfo) {
         println("<주문 메뉴>");
         orderInfo.getOrder().getOrderItems().forEach(orderItem -> {

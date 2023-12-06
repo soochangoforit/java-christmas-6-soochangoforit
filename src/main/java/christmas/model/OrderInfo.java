@@ -13,6 +13,10 @@ public class OrderInfo {
         return new OrderInfo(visitDate, order);
     }
 
+    public int calculateOrderAmounts() {
+        return order.calculateTotalAmount();
+    }
+
     public VisitDate getVisitDate() {
         return visitDate;
     }

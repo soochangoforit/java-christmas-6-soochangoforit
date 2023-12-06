@@ -13,6 +13,10 @@ public class OrderItem {
         return new OrderItem(menu, quantity);
     }
 
+    public int calculateAmount() {
+        return menu.calculateAmount(quantity);
+    }
+
     public boolean isBeverage() {
         return menu.isBeverage();
     }

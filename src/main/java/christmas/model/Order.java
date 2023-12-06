@@ -57,6 +57,12 @@ public class Order {
         return new Order(orderItems);
     }
 
+    public int calculateTotalAmount() {
+        return orderItems.stream()
+                .mapToInt(OrderItem::calculateAmount)
+                .sum();
+    }
+
     public List<OrderItem> getOrderItems() {
         return new ArrayList<>(orderItems);
     }

@@ -40,6 +40,10 @@ public enum Menu {
         return name;
     }
 
+    public int calculateAmount(Quantity quantity) {
+        return price * quantity.getValue();
+    }
+
     public boolean isBeverage() {
         return category.isBeverage();
     }

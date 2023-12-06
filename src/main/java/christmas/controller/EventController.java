@@ -26,6 +26,7 @@ public class EventController {
         OrderInfo orderInfo = OrderInfo.from(visitDate, order);
         outputView.printPreviewMessage(orderInfo);
         outputView.printOrder(orderInfo);
+        outputView.printOrderAmounts(orderInfo.calculateOrderAmounts());
     }
 
     private Order createOrder() {
