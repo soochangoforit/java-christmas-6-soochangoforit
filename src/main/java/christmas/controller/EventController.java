@@ -24,7 +24,7 @@ public class EventController {
         VisitDate visitDate = fetch(this::readVisitDate);
         Order order = fetch(this::createOrder);
         OrderInfo orderInfo = OrderInfo.from(visitDate, order);
-
+        outputView.printPreviewMessage();
     }
 
     private Order createOrder() {
