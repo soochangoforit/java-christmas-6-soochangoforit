@@ -17,7 +17,9 @@ public enum Menu {
 
     ZERO_COLA("제로콜라", 3_000, Category.BEVERAGE),
     RED_WINE("레드와인", 60_000, Category.BEVERAGE),
-    CHAMPAGNE("샴페인", 25_000, Category.BEVERAGE);
+    CHAMPAGNE("샴페인", 25_000, Category.BEVERAGE),
+
+    NONE("없음", 0, Category.NONE);
 
     private final String name;
     private final int price;

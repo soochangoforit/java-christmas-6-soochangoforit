@@ -6,6 +6,7 @@ import christmas.dto.request.OrderItemDto;
 import christmas.model.Order;
 import christmas.model.OrderFactory;
 import christmas.model.OrderInfo;
+import christmas.model.PromotionItem;
 import christmas.model.VisitDate;
 import christmas.view.InputView;
 import christmas.view.OutputView;
@@ -26,7 +27,10 @@ public class EventController {
         OrderInfo orderInfo = OrderInfo.from(visitDate, order);
         outputView.printPreviewMessage(orderInfo);
         outputView.printOrder(orderInfo);
-        outputView.printOrderAmounts(orderInfo.calculateOrderAmounts());
+        int orderAmounts = orderInfo.calculateOrderAmounts();
+        outputView.printOrderAmounts(orderAmounts);
+        outputView.printPromotionItem(PromotionItem.determinePromotionItem(orderAmounts));
+
     }
 
     private Order createOrder() {

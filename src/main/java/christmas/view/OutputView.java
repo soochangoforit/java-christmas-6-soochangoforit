@@ -1,6 +1,7 @@
 package christmas.view;
 
 import christmas.model.OrderInfo;
+import christmas.model.PromotionItem;
 
 public class OutputView {
     private static final String EXCEPTION_FORMAT = "[ERROR] %s 다시 입력해 주세요.";
@@ -13,9 +14,25 @@ public class OutputView {
         System.out.println(message);
     }
 
+    public void printPromotionItem(PromotionItem promotionItem) {
+        println("<증정 메뉴>");
+        if (promotionItem.isNone()) {
+            println("없음");
+            printEmptyLine();
+            return;
+        }
+        println(String.format("%s %d개", promotionItem.getItem().getName(), promotionItem.getQuantity()));
+        printEmptyLine();
+    }
+
+    private void printEmptyLine() {
+        System.out.println();
+    }
+
     public void printOrderAmounts(int orderAmounts) {
         println("<할인 전 총주문 금액>");
         println(String.format("%,d원", orderAmounts));
+        printEmptyLine();
     }
 
     public void printOrder(OrderInfo orderInfo) {
@@ -26,10 +43,6 @@ public class OutputView {
             println(formattedOrder);
         });
         printEmptyLine();
-    }
-
-    private void printEmptyLine() {
-        System.out.println();
     }
 
     public void printPreviewMessage(OrderInfo orderInfo) {

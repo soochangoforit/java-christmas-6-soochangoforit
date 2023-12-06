@@ -4,7 +4,7 @@ public enum Category {
     APPETIZER,
     MAIN,
     DESSERT,
-    BEVERAGE;
+    BEVERAGE, NONE;
 
     public boolean isBeverage() {
         return this == BEVERAGE;
