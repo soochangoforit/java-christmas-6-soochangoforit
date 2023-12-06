@@ -1,6 +1,7 @@
 package christmas.controller;
 
 import java.util.function.Supplier;
+import christmas.model.VisitDate;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
@@ -15,6 +16,13 @@ public class EventController {
 
     public void run() {
         outputView.printStartMessage();
+        VisitDate visitDate = fetch(this::readVisitDate);
+
+    }
+
+    private VisitDate readVisitDate() {
+        int rawVisitDay = inputView.readVisitDay();
+        return VisitDate.from(rawVisitDay);
     }
 
     private <T> T fetch(Supplier<T> supplier) {
