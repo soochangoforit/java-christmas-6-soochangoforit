@@ -1,5 +1,6 @@
 package christmas.model;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 public class BenefitResult {
@@ -11,5 +12,14 @@ public class BenefitResult {
 
     public static BenefitResult from(Map<BenefitType, BenefitAmounts> result) {
         return new BenefitResult(result);
+    }
+
+    public boolean hasNotAnyBenefit() {
+        return result.values().stream()
+                .allMatch(BenefitAmounts::hasNotAnyBenefit);
+    }
+
+    public Map<BenefitType, BenefitAmounts> getResult() {
+        return new EnumMap<>(result);
     }
 }

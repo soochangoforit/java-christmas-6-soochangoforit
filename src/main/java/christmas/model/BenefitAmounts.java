@@ -14,4 +14,16 @@ public class BenefitAmounts {
     public static BenefitAmounts from(int amounts) {
         return new BenefitAmounts(amounts);
     }
+
+    public boolean hasNotAnyBenefit() {
+        return amounts == 0;
+    }
+
+    public boolean hasAnyBenefit() {
+        return amounts > 0;
+    }
+
+    public int getAmounts() {
+        return amounts;
+    }
 }

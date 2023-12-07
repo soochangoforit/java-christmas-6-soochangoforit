@@ -1,5 +1,6 @@
 package christmas.view;
 
+import christmas.model.BenefitResult;
 import christmas.model.OrderInfo;
 import christmas.model.PromotionItem;
 
@@ -14,6 +15,26 @@ public class OutputView {
         System.out.println(message);
     }
 
+    public void printBenefitResult(BenefitResult result) {
+        println("<혜택 내역>");
+        if (result.hasNotAnyBenefit()) {
+            println("없음");
+            printEmptyLine();
+            return;
+        }
+        result.getResult().forEach((type, amounts) -> {
+            if (amounts.hasAnyBenefit()) {
+                String formattedBenefit = String.format("%s: %,d원", type.getName(), amounts.getAmounts());
+                println(formattedBenefit);
+            }
+        });
+        printEmptyLine();
+    }
+
+    private void printEmptyLine() {
+        System.out.println();
+    }
+
     public void printPromotionItem(PromotionItem promotionItem) {
         println("<증정 메뉴>");
         if (promotionItem.isNone()) {
@@ -23,10 +44,6 @@ public class OutputView {
         }
         println(String.format("%s %d개", promotionItem.getItem().getName(), promotionItem.getQuantity()));
         printEmptyLine();
-    }
-
-    private void printEmptyLine() {
-        System.out.println();
     }
 
     public void printOrderAmounts(int orderAmounts) {

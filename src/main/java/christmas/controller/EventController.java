@@ -35,7 +35,7 @@ public class EventController {
         outputView.printOrderAmounts(orderAmounts);
         outputView.printPromotionItem(PromotionItem.determinePromotionItem(orderAmounts));
         BenefitResult result = benefitStorage.applyBenefits(orderInfo);
-
+        outputView.printBenefitResult(result);
     }
 
     private Order createOrder() {
