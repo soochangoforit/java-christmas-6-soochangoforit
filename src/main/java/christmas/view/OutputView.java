@@ -19,7 +19,7 @@ public class OutputView {
     }
 
     public void printEventBadge(EventBadge eventBadge) {
-        println("<이벤트 배지>");
+        println("<12월 이벤트 배지>");
         println(eventBadge.getName());
         printEmptyLine();
     }

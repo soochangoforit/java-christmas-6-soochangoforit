@@ -31,18 +31,26 @@ public class EventController {
         VisitDate visitDate = fetch(this::readVisitDate);
         Order order = fetch(this::createOrder);
         OrderInfo orderInfo = OrderInfo.from(visitDate, order);
+        printOderDetail(orderInfo);
+        BenefitResult result = benefitStorage.applyBenefits(orderInfo);
+        printBenefitResultDetail(result, orderInfo);
+
+    }
+
+    private void printOderDetail(OrderInfo orderInfo) {
         outputView.printPreviewMessage(orderInfo);
         outputView.printOrder(orderInfo);
         OrderAmounts orderAmountsBeforeDiscount = orderInfo.calculateOrderAmounts();
         outputView.printOrderAmounts(orderAmountsBeforeDiscount);
         outputView.printPromotionItem(PromotionItem.determinePromotionItem(orderAmountsBeforeDiscount));
-        BenefitResult result = benefitStorage.applyBenefits(orderInfo);
+    }
+
+    private void printBenefitResultDetail(BenefitResult result, OrderInfo orderInfo) {
         outputView.printBenefitResult(result);
         outputView.printTotalBenefitAmounts(result.calculateTotalBenefitAmounts());
         OrderAmounts orderAmountsAfterDiscount = orderInfo.calculateOrderAmountsAfterDiscount(result);
         outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscount);
         outputView.printEventBadge(EventBadge.findEventBadge(result.calculateTotalBenefitAmounts()));
-
     }
 
     private Order createOrder() {

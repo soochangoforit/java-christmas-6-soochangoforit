@@ -6,6 +6,7 @@ import camp.nextstep.edu.missionutils.Console;
 import christmas.dto.request.OrderItemDto;
 import christmas.view.validator.BlankValidator;
 import christmas.view.validator.DigitsOnlyValidator;
+import christmas.view.validator.OrderValidator;
 
 public class InputView {
     public int readVisitDay() {
@@ -15,24 +16,24 @@ public class InputView {
         return convertToInt(visitDay);
     }
 
-    private void validateVisitDay(String visitDay) {
-        BlankValidator.validate(visitDay);
-        DigitsOnlyValidator.validate(visitDay);
+    private void println(String message) {
+        System.out.println(message);
     }
 
     private String readLine() {
         return Console.readLine().trim();
     }
 
-    private void println(String message) {
-        System.out.println(message);
+    private void validateVisitDay(String visitDay) {
+        BlankValidator.validate(visitDay);
+        DigitsOnlyValidator.validate(visitDay);
     }
 
     private int convertToInt(String input) {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자로 변환할 수 없는 문자입니다.");
+            throw new IllegalArgumentException("유효하지 않은 날짜입니다.");
         }
     }
 
@@ -46,20 +47,20 @@ public class InputView {
                 .toList();
     }
 
+    private void validateOrder(String rawOrder) {
+        BlankValidator.validate(rawOrder);
+        OrderValidator.validate(rawOrder);
+    }
+
+    private List<String> split(String format, String input) {
+        return List.of(input.split(format));
+    }
+
     private OrderItemDto convertToOrderItem(String rawOrderItem) {
         List<String> rawOrderItemInfo = split("-", rawOrderItem);
         String name = rawOrderItemInfo.get(0);
         int count = convertToInt(rawOrderItemInfo.get(1));
         return new OrderItemDto(name, count);
-    }
-
-    private void validateOrder(String rawOrder) {
-        BlankValidator.validate(rawOrder);
-
-    }
-
-    private List<String> split(String format, String input) {
-        return List.of(input.split(format));
     }
 
     private void print(String message) {
