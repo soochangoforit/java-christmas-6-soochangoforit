@@ -1,7 +1,6 @@
 package christmas.view;
 
 import java.util.List;
-import java.util.stream.Stream;
 import camp.nextstep.edu.missionutils.Console;
 import christmas.dto.request.OrderItemDto;
 import christmas.view.validator.BlankValidator;
@@ -25,15 +24,15 @@ public class InputView {
     }
 
     private void validateVisitDay(String visitDay) {
-        BlankValidator.validate(visitDay);
-        DigitsOnlyValidator.validate(visitDay);
+        BlankValidator.validate(visitDay, "공백 문자는 입력할 수 없습니다.");
+        DigitsOnlyValidator.validate(visitDay, "유효하지 않은 날짜입니다.");
     }
 
     private int convertToInt(String input) {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("유효하지 않은 날짜입니다.");
+            throw new IllegalArgumentException("숫자로 변환할 수 없는 문자입니다.");
         }
     }
 
@@ -48,8 +47,8 @@ public class InputView {
     }
 
     private void validateOrder(String rawOrder) {
-        BlankValidator.validate(rawOrder);
-        OrderValidator.validate(rawOrder);
+        BlankValidator.validate(rawOrder, "공백 문자는 입력할 수 없습니다.");
+        OrderValidator.validate(rawOrder, "유효하지 않은 주문입니다.");
     }
 
     private List<String> split(String format, String input) {
@@ -63,17 +62,4 @@ public class InputView {
         return new OrderItemDto(name, count);
     }
 
-    private void print(String message) {
-        System.out.print(message);
-    }
-
-    private void printEmptyLine() {
-        System.out.println();
-    }
-
-    private List<Integer> splitToInt(String delimiter, String input) {
-        return Stream.of(input.split(delimiter))
-                .map(Integer::parseInt)
-                .toList();
-    }
 }

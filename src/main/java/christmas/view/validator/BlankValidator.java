@@ -1,18 +1,17 @@
 package christmas.view.validator;
 
 public class BlankValidator {
-    private static final String BLANK_EXCEPTION = "공백 문자는 입력할 수 없습니다.";
 
     private BlankValidator() {
     }
 
-    public static void validate(String input) {
-        validateBlank(input);
+    public static void validate(String input, String exceptionMessage) {
+        validateBlank(input, exceptionMessage);
     }
 
-    private static void validateBlank(String input) {
+    private static void validateBlank(String input, String exceptionMessage) {
         if (isBlank(input)) {
-            throw new IllegalArgumentException(BLANK_EXCEPTION);
+            throw new IllegalArgumentException(exceptionMessage);
         }
     }
 
