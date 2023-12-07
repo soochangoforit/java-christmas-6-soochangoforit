@@ -1,5 +1,6 @@
 package christmas.view;
 
+import christmas.model.BenefitAmounts;
 import christmas.model.BenefitResult;
 import christmas.model.OrderInfo;
 import christmas.model.PromotionItem;
@@ -13,6 +14,20 @@ public class OutputView {
 
     private void println(String message) {
         System.out.println(message);
+    }
+
+    public void printTotalBenefitAmounts(BenefitAmounts totalBenefitAmounts) {
+        println("<총혜택 금액>");
+        if (totalBenefitAmounts.hasNotAnyBenefit()) {
+            println("0원");
+            printEmptyLine();
+            return;
+        }
+        println(String.format("-%,d원", totalBenefitAmounts.getAmounts()));
+    }
+
+    private void printEmptyLine() {
+        System.out.println();
     }
 
     public void printBenefitResult(BenefitResult result) {
@@ -29,10 +44,6 @@ public class OutputView {
             }
         });
         printEmptyLine();
-    }
-
-    private void printEmptyLine() {
-        System.out.println();
     }
 
     public void printPromotionItem(PromotionItem promotionItem) {

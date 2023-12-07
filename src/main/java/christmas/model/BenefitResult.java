@@ -19,6 +19,18 @@ public class BenefitResult {
                 .allMatch(BenefitAmounts::hasNotAnyBenefit);
     }
 
+    public BenefitAmounts calculateTotalBenefitAmounts() {
+        int benefitAmounts = calculateBenefitAmounts();
+
+        return BenefitAmounts.from(benefitAmounts);
+    }
+
+    private int calculateBenefitAmounts() {
+        return result.values().stream()
+                .mapToInt(BenefitAmounts::getAmounts)
+                .sum();
+    }
+
     public Map<BenefitType, BenefitAmounts> getResult() {
         return new EnumMap<>(result);
     }
