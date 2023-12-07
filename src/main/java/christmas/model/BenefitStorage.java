@@ -11,8 +11,11 @@ public class BenefitStorage {
     }
 
     public BenefitResult applyBenefits(OrderInfo orderInfo) {
-        Map<BenefitType, BenefitAmounts> result = new EnumMap<>(BenefitType.class);
-        discountPolicies.forEach((type, policy) -> result.put(type, policy.applyBenefit(orderInfo)));
-        return BenefitResult.from(result);
+        if (orderInfo.orderAmountsIsGreaterThanOrEqualTo(10_000)) {
+            Map<BenefitType, BenefitAmounts> result = new EnumMap<>(BenefitType.class);
+            discountPolicies.forEach((type, policy) -> result.put(type, policy.applyBenefit(orderInfo)));
+            return BenefitResult.from(result);
+        }
+        return BenefitResult.empty();
     }
 }

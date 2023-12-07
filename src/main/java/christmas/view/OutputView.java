@@ -54,7 +54,7 @@ public class OutputView {
         }
         result.getResult().forEach((type, amounts) -> {
             if (amounts.hasAnyBenefit()) {
-                String formattedBenefit = String.format("%s: %,d원", type.getName(), amounts.getAmounts());
+                String formattedBenefit = String.format("%s: -%,d원", type.getName(), amounts.getAmounts());
                 println(formattedBenefit);
             }
         });

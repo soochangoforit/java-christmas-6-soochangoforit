@@ -14,6 +14,10 @@ public class BenefitResult {
         return new BenefitResult(result);
     }
 
+    public static BenefitResult empty() {
+        return new BenefitResult(Map.of());
+    }
+
     public boolean hasNotAnyBenefit() {
         return result.values().stream()
                 .allMatch(BenefitAmounts::hasNotAnyBenefit);
