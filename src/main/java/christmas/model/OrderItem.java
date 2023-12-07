@@ -17,6 +17,10 @@ public class OrderItem {
         return menu.calculateAmount(quantity);
     }
 
+    public boolean isCategoryOf(Category category) {
+        return menu.isCategoryOf(category);
+    }
+
     public boolean isBeverage() {
         return menu.isBeverage();
     }

@@ -42,6 +42,14 @@ public enum Menu {
         return name;
     }
 
+    public int calculateAmount(int quantity) {
+        return price * quantity;
+    }
+
+    public boolean isCategoryOf(Category category) {
+        return this.category == category;
+    }
+
     public int calculateAmount(Quantity quantity) {
         return price * quantity.getValue();
     }

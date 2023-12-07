@@ -3,6 +3,8 @@ package christmas.controller;
 import java.util.List;
 import java.util.function.Supplier;
 import christmas.dto.request.OrderItemDto;
+import christmas.model.BenefitResult;
+import christmas.model.BenefitStorage;
 import christmas.model.Order;
 import christmas.model.OrderFactory;
 import christmas.model.OrderInfo;
@@ -14,10 +16,12 @@ import christmas.view.OutputView;
 public class EventController {
     private final InputView inputView;
     private final OutputView outputView;
+    private final BenefitStorage benefitStorage;
 
-    public EventController(InputView inputView, OutputView outputView) {
+    public EventController(InputView inputView, OutputView outputView, BenefitStorage benefitStorage) {
         this.inputView = inputView;
         this.outputView = outputView;
+        this.benefitStorage = benefitStorage;
     }
 
     public void run() {
@@ -30,6 +34,7 @@ public class EventController {
         int orderAmounts = orderInfo.calculateOrderAmounts();
         outputView.printOrderAmounts(orderAmounts);
         outputView.printPromotionItem(PromotionItem.determinePromotionItem(orderAmounts));
+        BenefitResult result = benefitStorage.applyBenefits(orderInfo);
 
     }
 

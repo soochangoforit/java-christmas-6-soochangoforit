@@ -29,6 +29,14 @@ public enum PromotionItem {
         return minimumOrderAmount;
     }
 
+    public boolean isEligible(int orderAmounts) {
+        return orderAmounts >= minimumOrderAmount;
+    }
+
+    public int calculateBenefitAmounts() {
+        return item.calculateAmount(quantity);
+    }
+
     public boolean isNone() {
         return this == NONE;
     }

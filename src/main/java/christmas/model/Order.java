@@ -57,9 +57,22 @@ public class Order {
         return new Order(orderItems);
     }
 
+    public boolean isEligibleFor(PromotionItem promotionItem) {
+        int orderAmounts = calculateTotalAmount();
+
+        return promotionItem.isEligible(orderAmounts);
+    }
+
     public int calculateTotalAmount() {
         return orderItems.stream()
                 .mapToInt(OrderItem::calculateAmount)
+                .sum();
+    }
+
+    public int calculateItemCountOf(Category category) {
+        return orderItems.stream()
+                .filter(orderItem -> orderItem.isCategoryOf(category))
+                .mapToInt(orderItem -> orderItem.getQuantity().getValue())
                 .sum();
     }
 
