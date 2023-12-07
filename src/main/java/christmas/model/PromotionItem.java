@@ -17,10 +17,11 @@ public enum PromotionItem {
         this.item = item;
     }
 
-    public static PromotionItem determinePromotionItem(int totalOrderAmount) {
+    public static PromotionItem determinePromotionItem(OrderAmounts orderAmountsBeforeDiscount) {
         return Stream.of(PromotionItem.values())
                 .sorted(Comparator.comparing(PromotionItem::getMinimumOrderAmount).reversed())
-                .filter(promotionItem -> totalOrderAmount >= promotionItem.minimumOrderAmount)
+                .filter(promotionItem -> orderAmountsBeforeDiscount.isGreaterThanOrEqualTo(
+                        promotionItem.getMinimumOrderAmount()))
                 .findFirst()
                 .orElse(NONE);
     }
@@ -29,8 +30,8 @@ public enum PromotionItem {
         return minimumOrderAmount;
     }
 
-    public boolean isEligible(int orderAmounts) {
-        return orderAmounts >= minimumOrderAmount;
+    public boolean isEligible(OrderAmounts orderAmountsBeforeDiscount) {
+        return orderAmountsBeforeDiscount.isGreaterThanOrEqualTo(minimumOrderAmount);
     }
 
     public int calculateBenefitAmounts() {

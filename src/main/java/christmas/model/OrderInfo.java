@@ -38,16 +38,22 @@ public class OrderInfo {
         return visitDate.isInDays(eventDays);
     }
 
-    public boolean orderAmountsIsOver(int minimumOrderAmounts) {
-        return calculateOrderAmounts() >= minimumOrderAmounts;
+    public boolean orderAmountsIsGreaterThanOrEqualTo(int minimumOrderAmounts) {
+        OrderAmounts orderAmounts = calculateOrderAmounts();
+
+        return orderAmounts.isGreaterThanOrEqualTo(minimumOrderAmounts);
     }
 
-    public int calculateOrderAmounts() {
+    public OrderAmounts calculateOrderAmounts() {
         return order.calculateTotalAmount();
     }
 
     public boolean isEligibleFor(PromotionItem promotionItem) {
         return order.isEligibleFor(promotionItem);
+    }
+
+    public OrderAmounts calculateOrderAmountsAfterDiscount(BenefitResult result) {
+        return order.calculateOrderAmountsAfterDiscount(result);
     }
 
     public VisitDate getVisitDate() {

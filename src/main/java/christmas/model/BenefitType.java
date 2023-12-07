@@ -13,6 +13,10 @@ public enum BenefitType {
         this.name = name;
     }
 
+    public boolean isDiscountEvent() {
+        return this != PROMOTION_EVENT;
+    }
+
     public String getName() {
         return name;
     }

@@ -6,6 +6,7 @@ import christmas.dto.request.OrderItemDto;
 import christmas.model.BenefitResult;
 import christmas.model.BenefitStorage;
 import christmas.model.Order;
+import christmas.model.OrderAmounts;
 import christmas.model.OrderFactory;
 import christmas.model.OrderInfo;
 import christmas.model.PromotionItem;
@@ -31,12 +32,14 @@ public class EventController {
         OrderInfo orderInfo = OrderInfo.from(visitDate, order);
         outputView.printPreviewMessage(orderInfo);
         outputView.printOrder(orderInfo);
-        int orderAmounts = orderInfo.calculateOrderAmounts();
-        outputView.printOrderAmounts(orderAmounts);
-        outputView.printPromotionItem(PromotionItem.determinePromotionItem(orderAmounts));
+        OrderAmounts orderAmountsBeforeDiscount = orderInfo.calculateOrderAmounts();
+        outputView.printOrderAmounts(orderAmountsBeforeDiscount);
+        outputView.printPromotionItem(PromotionItem.determinePromotionItem(orderAmountsBeforeDiscount));
         BenefitResult result = benefitStorage.applyBenefits(orderInfo);
         outputView.printBenefitResult(result);
         outputView.printTotalBenefitAmounts(result.calculateTotalBenefitAmounts());
+        OrderAmounts orderAmountsAfterDiscount = orderInfo.calculateOrderAmountsAfterDiscount(result);
+        outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscount);
     }
 
     private Order createOrder() {

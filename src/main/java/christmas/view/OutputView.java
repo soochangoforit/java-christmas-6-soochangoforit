@@ -2,6 +2,7 @@ package christmas.view;
 
 import christmas.model.BenefitAmounts;
 import christmas.model.BenefitResult;
+import christmas.model.OrderAmounts;
 import christmas.model.OrderInfo;
 import christmas.model.PromotionItem;
 
@@ -16,6 +17,16 @@ public class OutputView {
         System.out.println(message);
     }
 
+    public void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsAfterDiscount) {
+        println("<할인 후 예상 결제 금액>");
+        println(String.format("%,d원", orderAmountsAfterDiscount.getAmounts()));
+        printEmptyLine();
+    }
+
+    private void printEmptyLine() {
+        System.out.println();
+    }
+
     public void printTotalBenefitAmounts(BenefitAmounts totalBenefitAmounts) {
         println("<총혜택 금액>");
         if (totalBenefitAmounts.hasNotAnyBenefit()) {
@@ -24,10 +35,7 @@ public class OutputView {
             return;
         }
         println(String.format("-%,d원", totalBenefitAmounts.getAmounts()));
-    }
-
-    private void printEmptyLine() {
-        System.out.println();
+        printEmptyLine();
     }
 
     public void printBenefitResult(BenefitResult result) {
@@ -57,9 +65,9 @@ public class OutputView {
         printEmptyLine();
     }
 
-    public void printOrderAmounts(int orderAmounts) {
+    public void printOrderAmounts(OrderAmounts orderAmountsBeforeDiscount) {
         println("<할인 전 총주문 금액>");
-        println(String.format("%,d원", orderAmounts));
+        println(String.format("%,d원", orderAmountsBeforeDiscount.getAmounts()));
         printEmptyLine();
     }
 

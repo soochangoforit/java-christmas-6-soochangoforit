@@ -31,6 +31,14 @@ public class BenefitResult {
                 .sum();
     }
 
+    public int calculateTotalDiscountAmounts() {
+        return result.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().isDiscountEvent())
+                .mapToInt(entry -> entry.getValue().getAmounts())
+                .sum();
+    }
+
     public Map<BenefitType, BenefitAmounts> getResult() {
         return new EnumMap<>(result);
     }

@@ -57,16 +57,26 @@ public class Order {
         return new Order(orderItems);
     }
 
-    public boolean isEligibleFor(PromotionItem promotionItem) {
-        int orderAmounts = calculateTotalAmount();
+    public OrderAmounts calculateOrderAmountsAfterDiscount(BenefitResult result) {
+        OrderAmounts totalOrderAmounts = calculateTotalAmount();
 
-        return promotionItem.isEligible(orderAmounts);
+        int totalDiscountAmounts = result.calculateTotalDiscountAmounts();
+
+        return totalOrderAmounts.minus(totalDiscountAmounts);
     }
 
-    public int calculateTotalAmount() {
-        return orderItems.stream()
+    public OrderAmounts calculateTotalAmount() {
+        int orderAmountsBeforeDiscount = orderItems.stream()
                 .mapToInt(OrderItem::calculateAmount)
                 .sum();
+
+        return OrderAmounts.from(orderAmountsBeforeDiscount);
+    }
+
+    public boolean isEligibleFor(PromotionItem promotionItem) {
+        OrderAmounts orderAmounts = calculateTotalAmount();
+
+        return promotionItem.isEligible(orderAmounts);
     }
 
     public int calculateItemCountOf(Category category) {
