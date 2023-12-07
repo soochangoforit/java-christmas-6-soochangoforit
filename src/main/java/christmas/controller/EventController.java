@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import christmas.dto.request.OrderItemDto;
 import christmas.model.BenefitResult;
 import christmas.model.BenefitStorage;
+import christmas.model.EventBadge;
 import christmas.model.Order;
 import christmas.model.OrderAmounts;
 import christmas.model.OrderFactory;
@@ -40,6 +41,8 @@ public class EventController {
         outputView.printTotalBenefitAmounts(result.calculateTotalBenefitAmounts());
         OrderAmounts orderAmountsAfterDiscount = orderInfo.calculateOrderAmountsAfterDiscount(result);
         outputView.printOrderAmountsAfterDiscount(orderAmountsAfterDiscount);
+        outputView.printEventBadge(EventBadge.findEventBadge(result.calculateTotalBenefitAmounts()));
+
     }
 
     private Order createOrder() {

@@ -23,6 +23,10 @@ public class BenefitAmounts {
         return amounts > 0;
     }
 
+    public boolean isGreaterThanOrEqualTo(int amounts) {
+        return this.amounts >= amounts;
+    }
+
     public int getAmounts() {
         return amounts;
     }

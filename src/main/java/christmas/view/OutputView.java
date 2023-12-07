@@ -2,6 +2,7 @@ package christmas.view;
 
 import christmas.model.BenefitAmounts;
 import christmas.model.BenefitResult;
+import christmas.model.EventBadge;
 import christmas.model.OrderAmounts;
 import christmas.model.OrderInfo;
 import christmas.model.PromotionItem;
@@ -17,14 +18,20 @@ public class OutputView {
         System.out.println(message);
     }
 
-    public void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsAfterDiscount) {
-        println("<할인 후 예상 결제 금액>");
-        println(String.format("%,d원", orderAmountsAfterDiscount.getAmounts()));
+    public void printEventBadge(EventBadge eventBadge) {
+        println("<이벤트 배지>");
+        println(eventBadge.getName());
         printEmptyLine();
     }
 
     private void printEmptyLine() {
         System.out.println();
+    }
+
+    public void printOrderAmountsAfterDiscount(OrderAmounts orderAmountsAfterDiscount) {
+        println("<할인 후 예상 결제 금액>");
+        println(String.format("%,d원", orderAmountsAfterDiscount.getAmounts()));
+        printEmptyLine();
     }
 
     public void printTotalBenefitAmounts(BenefitAmounts totalBenefitAmounts) {
